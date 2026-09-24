@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tin tức & Cảm hứng thiết kế - Lịch Nông Nghiệp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { 
+            font-family: 'Be Vietnam Pro', sans-serif; 
+            color: #1e293b;
+            background-color: #fdfdfd;
+        }
+        .text-brand-green { color: #34a853; }
+        .bg-brand-green { background-color: #34a853; }
+        .bg-brand-orange { background-color: #f9a825; }
+        
+        /* Chỉnh chữ nhỏ và mảnh cho phần nội dung */
+        p, .post-meta {
+            font-size: 14px !important;
+            font-weight: 300;
+            line-height: 1.6;
+            color: #64748b;
+        }
+        
+        .blog-card img {
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .blog-card:hover img {
+            transform: scale(1.08);
+        }
+    </style>
+</head>
+<body>
+
+     <header class="bg-white sticky top-0 z-50 shadow-sm px-4 md:px-16 py-4 flex items-center justify-between">
+        <button id="menuBtn" type="button" class="lg:hidden w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition order-last" aria-label="Mở menu" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+
+        <div class="flex items-center">
+    <a href="index.html">
+        <img src="image/x2Mf_logo (1).png" alt="Logo LICH Nông Nghiệp" class="h-12 w-auto object-contain">
+    </a>
+</div>
+        <nav class="hidden lg:flex space-x-8 font-medium text-gray-600">
+            <a href="index.html" class="hover:text-green-600 transition-all0">Trang chủ</a>
+            <a href="catalogue.html" class="hover:text-green-600 transition-all">catalogue lịch </a>
+            <a href="dich-vu.html" class="hover:text-green-600 transition-all">Dịch vụ</a>
+            <a href="san-pham.html" class="hover:text-green-600 transition-all">Sản phẩm</a>
+            <a href="in-lich-tet.html" class="hover:text-green-600 transition-all">In lịch Tết</a>
+            <a href="blog.html" class="text-green-600 border-b-2 border-green-600">Blog</a>
+            <a href="About.html" class="hover:text-green-600 transition-all">Về chúng tôi</a>
+        </nav>
+
+        <div class="relative">
+            <button id="searchToggleBtn" type="button" class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 transition" aria-label="Tìm kiếm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </button>
+            <div id="searchPanel" class="hidden absolute right-0 mt-3 w-[92vw] max-w-sm bg-white rounded-2xl shadow-2xl border border-gray-100 z-[999] overflow-hidden">
+                <div class="flex items-center gap-2 px-4 py-3 border-b border-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input id="searchInput" type="text" placeholder="Tìm dịch vụ, sản phẩm, bài viết..." class="flex-1 text-sm outline-none">
+                    <button id="searchCloseBtn" type="button" class="text-gray-300 hover:text-gray-500 text-lg leading-none">✕</button>
+                </div>
+                <div id="searchResults" class="max-h-96 overflow-y-auto"></div>
+            </div>
+        </div>
+        <button class="hidden lg:inline-flex bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-all shadow-md">
+            <a href="lien-he.html" class="text-white">Liên hệ</a>
+        </button>
+    </header>
+
+    <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-4">
+        <nav class="flex flex-col gap-1">
+                <a href="index.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Trang chủ</a>
+                <a href="catalogue.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">catalogue lịch</a>
+                <a href="dich-vu.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Dịch vụ</a>
+                <a href="san-pham.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Sản phẩm</a>
+                <a href="in-lich-tet.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">In lịch Tết</a>
+                <a href="blog.html" class="block px-4 py-3 rounded-xl bg-green-50 text-green-600 font-bold">Blog</a>
+                <a href="About.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Về chúng tôi</a>
+        </nav>
+        <a href="lien-he.html" class="mt-3 block text-center bg-green-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-all shadow-md">Liên hệ</a>
+    </div>
+
+
+    <main class="container mx-auto px-6 lg:px-20 py-16">
+        <div class="text-center mb-20" data-aos="fade-up">
+            <span class="text-brand-green font-bold text-xs uppercase tracking-[0.2em] mb-4 block">Cảm hứng & Chia sẻ</span>
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6">Blog <span class="text-brand-green">Thiết Kế</span> & In Ấn</h1>
+            <p class="max-w-2xl mx-auto italic">Cập nhật những xu hướng thiết kế lịch Tết, bao bì cao cấp và những kiến thức chuyên sâu về ngành in ấn.</p>
+        </div>
+
+        <div id="featuredPostWrap" class="mb-24"></div>
+
+         <section class="py-16">
+        <div class="container-compact px-4">
+           <section class="py-20">
+    <div class="container-compact">
+        <div id="postGrid" class="grid grid-cols-1 md:grid-cols-3 gap-10"></div>
+    </div>
+</section>
+
+
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-gray-100 pt-16 pb-8 px-4 md:px-16">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            <div class="col-span-1 md:col-span-1">
+              <div class="flex items-center">
+                <a href="index.html">
+             <img src="image/x2Mf_logo (1).png" alt="Logo LICH Nông Nghiệp" class="h-12 w-auto object-contain">
+                 </a>
+            </div>
+                <p class="text-gray-500 text-sm">Giải pháp in ấn chuyên nghiệp cho nông nghiệp và doanh nghiệp.</p>
+            </div>
+            <div>
+                <h5 class="font-bold mb-6">Liên kết nhanh</h5>
+                <ul class="space-y-4 text-gray-500 text-sm">
+                    <li><a href="index.html" class="hover:text-green-600">Trang chủ</a></li>
+                    <li><a href="catalogue.html" class="hover:text-green-600">catalogue lịch</a></li>
+                    <li><a href="dich-vu.html" class="hover:text-green-600">Dịch vụ</a></li>
+                    <li><a href="san-pham.html" class="hover:text-green-600">Sản phẩm</a></li>
+                    <li><a href="blog.html" class="hover:text-green-600">In Lịch Tết</a></li>
+                    <li><a href="blog.html" class="hover:text-green-600">Blog</a></li>
+                    <li><a href="About.html" class="hover:text-green-600">về chúng tôi</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-6">Thông tin liên hệ</h5>
+                <ul class="space-y-4 text-gray-500 text-sm">
+                    <li> Xưởng: Số 54, Ngõ 459 phố Bạch Mai, TP.Hà Nội </li>
+                    <li>0976 585 945 - 0972 666 111 - 0396 294 628</li>
+                    <li>Ketoan.inbaobinn2022@gmail.com</li>
+                </ul>
+            </div>
+            <div>
+    <h5 class="font-bold mb-6">Theo dõi chúng tôi</h5>
+    <div class="flex space-x-4">
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/share/1EkdKF6Cta/?mibextid=wwXIfr" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-green-600 transition-all cursor-pointer p-2.5">
+            <img src="https://cdn.simpleicons.org/facebook/1877F2" alt="Facebook" class="w-full h-full object-contain">
+        </a>
+
+        <!-- TikTok -->
+        <a href="https://www.tiktok.com/@lichnongnghiep?_r=1&_t=ZS-99nEB0zeRcN" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-green-600 transition-all cursor-pointer p-2.5">
+            <img src="https://cdn.simpleicons.org/tiktok/000000" alt="TikTok" class="w-full h-full object-contain">
+        </a>
+
+        <!-- Zalo -->
+        <a href="https://zalo.me/0972666111" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-green-600 transition-all cursor-pointer p-2.5">
+            <img src="https://cdn.simpleicons.org/zalo/0068FF" alt="Zalo" class="w-full h-full object-contain">
+        </a>
+    </div>
+</div>
+        <div class="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-400 text-xs">
+            <p>© 2026 LICH nông nghiệp. Tất cả quyền được bảo lưu.</p>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+                <a href="#">Chính sách bảo mật</a>
+                <a href="#">Điều khoản dịch vụ</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="config.js"></script>
+    <script src="data.js"></script>
+    <script src="mongo-sync.js"></script>
+    <script>
+        function lnnRenderBlogList() {
+            const posts = lnnGetPosts().slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+            const featured = posts.find(p => p.featured) || posts[0] || null;
+            const rest = posts.filter(p => p !== featured);
+
+            const featWrap = document.getElementById('featuredPostWrap');
+            if (featured) {
+                featWrap.innerHTML = `
+                    <div class="flex flex-col lg:flex-row bg-white rounded-[40px] overflow-hidden shadow-sm border border-gray-100 group" data-aos="fade-up">
+                        <div class="lg:w-2/3 overflow-hidden">
+                            <img src="${lnnEscape(featured.image)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-1000" alt="${lnnEscape(featured.title)}" onerror="this.style.opacity=0.3">
+                        </div>
+                        <div class="lg:w-1/3 p-12 flex flex-col justify-center">
+                            <span class="post-meta mb-4 block font-medium text-brand-orange uppercase tracking-widest">${lnnEscape(featured.tag || 'Nổi bật')}</span>
+                            <h2 class="text-3xl font-bold mb-6 hover:text-brand-green transition cursor-pointer">${lnnEscape(featured.title)}</h2>
+                            <p class="mb-8">${lnnEscape(featured.excerpt || '')}</p>
+                            <a href="post.html?id=${encodeURIComponent(featured.id)}" class="text-brand-green font-bold flex items-center group">
+                                Đọc tiếp <span class="ml-2 group-hover:translate-x-2 transition-transform">→</span>
+                            </a>
+                        </div>
+                    </div>`;
+            } else {
+                featWrap.innerHTML = '';
+            }
+
+            const gridEl = document.getElementById('postGrid');
+            gridEl.innerHTML = rest.map(p => `
+                <div class="hover-card group cursor-pointer" data-aos="fade-up">
+                    <a href="post.html?id=${encodeURIComponent(p.id)}" class="block">
+                        <div class="aspect-ratio-box mb-5">
+                            <img src="${lnnEscape(p.image)}" alt="${lnnEscape(p.title)}" onerror="this.style.opacity=0.3">
+                        </div>
+                        <div class="flex items-center text-xs text-gray-400 mb-3 font-medium">
+                            <span class="mr-2">📅</span> ${lnnFormatDate(p.date)}
+                        </div>
+                        <h3 class="font-bold text-xl mb-3 group-hover:text-green-600 transition-colors line-clamp-title">
+                            ${lnnEscape(p.title)}
+                        </h3>
+                        <p class="text-gray-500 text-sm leading-relaxed line-clamp-desc">
+                            ${lnnEscape(p.excerpt || '')}
+                        </p>
+                        <div class="mt-auto pt-4">
+                            <span class="text-green-600 font-bold text-sm flex items-center group-hover:gap-2 transition-all">
+                                Đọc thêm <span class="ml-1">→</span>
+                            </span>
+                        </div>
+                    </a>
+                </div>`).join('') || '<p class="col-span-full text-center text-gray-400 py-10">Chưa có bài viết nào khác.</p>';
+
+            if (window.AOS) AOS.init({ duration: 1000, once: true });
+        }
+        lnnRenderBlogList();
+    </script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+    </script>
+    <script src="search.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sản Phẩm - Lịch Nông Nghiệp</title>
+    <meta name="description" content="Danh mục toàn bộ sản phẩm: túi giấy, lịch Tết, hộp cứng, sổ quà tặng và các ấn phẩm khác do Lịch Nông Nghiệp sản xuất.">
+    <link rel="icon" href="image/x2Mf_logo (1).png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { brand: { green:'#34a853', dark:'#278a41', orange:'#f9a825' } }, fontFamily: { sans:['Be Vietnam Pro','sans-serif'] } } } }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .filter-pill { transition: all .2s ease; }
+        .filter-pill.active { background: var(--brand-green); color: #fff; border-color: var(--brand-green); }
+        .service-pill { transition: all .2s ease; }
+        .service-pill.active { background: #0f172a; color: #fff; border-color: #0f172a; }
+        .product-modal-backdrop { background: rgba(15,23,42,.6); backdrop-filter: blur(2px); }
+    </style>
+</head>
+<body class="bg-white">
+
+  <header class="bg-white sticky top-0 z-50 shadow-sm px-4 md:px-16 py-4 flex items-center justify-between">
+        <button id="menuBtn" type="button" class="lg:hidden w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition order-last" aria-label="Mở menu" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+
+        <div class="flex items-center">
+    <a href="index.html">
+        <img src="image/x2Mf_logo (1).png" alt="Logo LICH Nông Nghiệp" class="h-12 w-auto object-contain">
+    </a>
+</div>
+        <nav class="hidden lg:flex space-x-8 font-medium text-gray-600">
+            <a href="index.html" class="hover:text-green-600 transition-all">Trang chủ</a>
+            <a href="catalogue.html" class="hover:text-green-600 transition-all">catalogue lịch </a>
+            <a href="dich-vu.html" class="hover:text-green-600 transition-all">Dịch vụ</a>
+            <a href="san-pham.html" class="text-green-600 border-b-2 border-green-600">Sản phẩm</a>
+            <a href="in-lich-tet.html" class="hover:text-green-600 transition-all">In lịch Tết</a>
+            <a href="blog.html" class="hover:text-green-600 transition-all">Blog</a>
+            <a href="About.html" class="hover:text-green-600 transition-all">Về chúng tôi</a>
+        </nav>
+
+        <div class="relative">
+            <button id="searchToggleBtn" type="button" class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 transition" aria-label="Tìm kiếm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </button>
+            <div id="searchPanel" class="hidden absolute right-0 mt-3 w-[92vw] max-w-sm bg-white rounded-2xl shadow-2xl border border-gray-100 z-[999] overflow-hidden">
+                <div class="flex items-center gap-2 px-4 py-3 border-b border-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input id="searchInput" type="text" placeholder="Tìm dịch vụ, sản phẩm, bài viết..." class="flex-1 text-sm outline-none">
+                    <button id="searchCloseBtn" type="button" class="text-gray-300 hover:text-gray-500 text-lg leading-none">✕</button>
+                </div>
+                <div id="searchResults" class="max-h-96 overflow-y-auto"></div>
+            </div>
+        </div>
+        <button class="hidden lg:inline-flex bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-all shadow-md">
+            <a href="lien-he.html" class="text-white">Liên hệ</a>
+        </button>
+    </header>
+
+    <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-4">
+        <nav class="flex flex-col gap-1">
+                <a href="index.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Trang chủ</a>
+                <a href="catalogue.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">catalogue lịch</a>
+                <a href="dich-vu.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Dịch vụ</a>
+                <a href="san-pham.html" class="block px-4 py-3 rounded-xl bg-green-50 text-green-600 font-bold">Sản phẩm</a>
+                <a href="in-lich-tet.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">In lịch Tết</a>
+                <a href="blog.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Blog</a>
+                <a href="About.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Về chúng tôi</a>
+        </nav>
+        <a href="lien-he.html" class="mt-3 block text-center bg-green-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-all shadow-md">Liên hệ</a>
+    </div>
+
+
+<section class="container-page py-14" data-aos="fade-up">
+    <div class="flex items-center text-sm text-gray-400 mb-6 space-x-2">
+        <a href="index.html" class="hover:text-brand-green">Trang chủ</a>
+        <span>&rsaquo;</span>
+        <span class="text-gray-600">Sản phẩm</span>
+    </div>
+    <h1 class="text-4xl lg:text-[46px] font-extrabold leading-[1.1] mb-4">
+        Toàn Bộ <span class="text-brand-green">Sản Phẩm</span>
+    </h1>
+    <p class="text-[17px] text-gray-500 max-w-2xl leading-relaxed">
+        Duyệt nhanh mọi sản phẩm đã sản xuất theo từng mục — chọn một danh mục bên dưới để lọc, hoặc bấm vào sản phẩm bất kỳ để xem chi tiết.
+    </p>
+</section>
+
+<section class="container-page pb-20" data-aos="fade-up">
+    <!-- Tầng 1: chọn loại dịch vụ / nhóm sản phẩm lớn -->
+    <div id="serviceFilters" class="flex flex-wrap gap-2 mb-4"></div>
+    <!-- Tầng 2: mục sản phẩm con của loại đang chọn -->
+    <div id="groupFilters" class="flex flex-wrap gap-2 mb-4"></div>
+    <!-- Tầng 3: lọc theo năm -->
+    <div class="flex items-center gap-2 mb-10 pb-6 border-b border-gray-100">
+        <label class="text-xs font-bold uppercase text-gray-400">Năm:</label>
+        <div id="yearFilters" class="flex flex-wrap gap-2"></div>
+    </div>
+
+    <div id="emptyState" class="hidden text-center py-20">
+        <p class="text-gray-400 text-lg">Chưa có sản phẩm nào — hãy thêm trong trang Admin.</p>
+    </div>
+    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7"></div>
+</section>
+
+<section class="container-page py-10" data-aos="fade-up">
+    <div class="bg-brand-green rounded-[40px] py-16 px-10 text-center text-white relative overflow-hidden shadow-xl">
+        <div class="absolute inset-0 opacity-10 pointer-events-none">
+            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0 100 L100 0 L100 100 Z" fill="white"></path></svg>
+        </div>
+        <div class="relative z-10">
+            <h2 class="text-white text-3xl md:text-5xl font-bold mb-6">Bạn Cần Báo Giá Sản Xuất Số Lượng Lớn?</h2>
+            <p class="!text-white opacity-90 max-w-3xl mx-auto mb-10 leading-relaxed text-base md:text-lg">
+                Liên hệ với chúng tôi để được tư vấn chất liệu, quy cách đóng gói và nhận báo giá chi tiết nhất cho dự án của bạn.
+            </p>
+            <a href="bao-gia.html" class="btn-orange !text-xl">Nhận báo giá ngay</a>
+        </div>
+    </div>
+</section>
+
+<footer class="bg-white border-t border-gray-100 pt-16 pb-8 px-4 md:px-16">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            <div class="col-span-1 md:col-span-1">
+              <div class="flex items-center">
+                <a href="index.html">
+             <img src="image/x2Mf_logo (1).png" alt="Logo LICH Nông Nghiệp" class="h-12 w-auto object-contain">
+                 </a>
+            </div>
+                <p class="text-gray-500 text-sm">Giải pháp in ấn chuyên nghiệp cho nông nghiệp và doanh nghiệp.</p>
+            </div>
+            <div>
+                <h5 class="font-bold mb-6">Liên kết nhanh</h5>
+                <ul class="space-y-4 text-gray-500 text-sm">
+                    <li><a href="index.html" class="hover:text-green-600">Trang chủ</a></li>
+                    <li><a href="catalogue.html" class="hover:text-green-600">catalogue lịch</a></li>
+                    <li><a href="dich-vu.html" class="hover:text-green-600">Dịch vụ</a></li>
+                    <li><a href="san-pham.html" class="hover:text-green-600">Sản phẩm</a></li>
+                    <li><a href="blog.html" class="hover:text-green-600">In Lịch Tết</a></li>
+                    <li><a href="blog.html" class="hover:text-green-600">Blog</a></li>
+                    <li><a href="About.html" class="hover:text-green-600">về chúng tôi</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-6">Thông tin liên hệ</h5>
+                <ul class="space-y-4 text-gray-500 text-sm">
+                    <li> Văn phòng: Nhà lô 4, tập thể Tin học, phường Cầu Giấy, TP.Hà Nội</li>
+                    <li> Xưởng: Số 54, Ngõ 459 phố Bạch Mai, TP.Hà Nội </li>
+                    <li>0976 585 945 - 0972 666 111 - 0396 294 628</li>
+                    <li>Ketoan.inbaobinn2022@gmail.com</li>
+                </ul>
+            </div>
+            <div>
+    <h5 class="font-bold mb-6">Theo dõi chúng tôi</h5>
+    <div class="flex space-x-4">
+        <a href="https://www.facebook.com/share/1EkdKF6Cta/?mibextid=wwXIfr" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-green-600 transition-all cursor-pointer p-2.5">
+            <img src="https://cdn.simpleicons.org/facebook/1877F2" alt="Facebook" class="w-full h-full object-contain">
+        </a>
+        <a href="https://www.tiktok.com/@lichnongnghiep?_r=1&_t=ZS-99nEB0zeRcN" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-green-600 transition-all cursor-pointer p-2.5">
+            <img src="https://cdn.simpleicons.org/tiktok/000000" alt="TikTok" class="w-full h-full object-contain">
+        </a>
+        <a href="https://zalo.me/0972666111" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-green-600 transition-all cursor-pointer p-2.5">
+            <img src="https://cdn.simpleicons.org/zalo/0068FF" alt="Zalo" class="w-full h-full object-contain">
+        </a>
+    </div>
+</div>
+        <div class="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-400 text-xs">
+            <p>© 2026 LICH nông nghiệp. Tất cả quyền được bảo lưu.</p>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+                <a href="#">Chính sách bảo mật</a>
+                <a href="#">Điều khoản dịch vụ</a>
+            </div>
+        </div>
+    </footer>
+
+<div class="floating-actions">
+    <a href="tel:0976585945" class="floating-phone" aria-label="Gọi điện"><svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.61 21 3 13.39 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/></svg></a>
+    <a href="https://zalo.me/0972666111" target="_blank" rel="noopener" class="floating-zalo" aria-label="Chat Zalo"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo" class="w-7 h-7"></a>
+    <a href="https://www.facebook.com/share/1EkdKF6Cta/?mibextid=wwXIfr" target="_blank" rel="noopener" class="floating-messenger" aria-label="Chat Messenger"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.477 2 2 6.145 2 11.258c0 2.908 1.462 5.497 3.746 7.158V22l3.418-1.875c.875.243 1.8.375 2.836.375 5.523 0 10-4.145 10-9.258S17.523 2 12 2zm1.091 12.116l-2.582-2.753-5.045 2.753 5.545-5.889 2.582 2.753 5.045-2.753-5.545 5.889z"/></svg></a>
+</div>
+
+<!-- ========== MODAL: CHI TIẾT SẢN PHẨM ========== -->
+<div id="productDetailModal" class="fixed inset-0 z-[200] hidden product-modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-2xl rounded-[32px] overflow-hidden max-h-[90vh] overflow-y-auto relative">
+        <button onclick="closeProductDetail()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/90 hover:bg-white shadow flex items-center justify-center z-20">✕</button>
+
+        <div class="relative bg-gray-100">
+            <img id="pdImage" src="" alt="" class="w-full h-72 object-cover bg-gray-100">
+            <button id="pdPrev" onclick="pdShowImage(pdCurrentIndex - 1)" class="hidden absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white shadow flex items-center justify-center text-lg">‹</button>
+            <button id="pdNext" onclick="pdShowImage(pdCurrentIndex + 1)" class="hidden absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white shadow flex items-center justify-center text-lg">›</button>
+            <span id="pdCounter" class="hidden absolute bottom-3 right-3 bg-slate-900/80 text-white text-[11px] font-bold px-2.5 py-1 rounded-full"></span>
+        </div>
+        <div id="pdThumbs" class="hidden flex gap-2 px-8 pt-4 overflow-x-auto"></div>
+
+        <div class="p-8">
+            <p id="pdGroup" class="text-xs font-bold uppercase tracking-wide text-brand-green mb-2"></p>
+            <h3 id="pdTitle" class="text-2xl font-extrabold text-slate-900 mb-4"></h3>
+            <p id="pdDesc" class="text-gray-500 leading-relaxed mb-8"></p>
+            <a href="lien-he.html" class="btn-primary !px-8 !py-3">Nhận tư vấn / báo giá sản phẩm này</a>
+        </div>
+    </div>
+</div>
+
+<script src="config.js"></script>
+    <script src="data.js"></script>
+    <script src="mongo-sync.js"></script>
+<script>
+    let spActiveService = 'all';  // 'all' hoặc id của 1 dịch vụ
+    let spActiveGroup = 'all';    // 'all' hoặc id của 1 mục sản phẩm
+    let spActiveYear = 'all';     // 'all' hoặc 1 năm cụ thể, VD '2026'
+
+    function spBuildCatalog() {
+        const groups = lnnGetGroups();
+        const services = lnnGetServices();
+        const serviceMap = {};
+        services.forEach(s => serviceMap[s.id] = s.title);
+        const groupMap = {};
+        groups.forEach(g => groupMap[g.id] = Object.assign({}, g, { serviceTitle: serviceMap[g.serviceId] || '' }));
+        return { services, groups, groupMap };
+    }
+
+    /* ---------- Tầng 1: loại dịch vụ ---------- */
+    function spRenderServiceFilters(data) {
+        const wrap = document.getElementById('serviceFilters');
+        const pills = [`<button data-service="all" class="service-pill px-5 py-2.5 rounded-full text-sm font-extrabold border border-gray-200 text-gray-600 ${spActiveService === 'all' ? 'active' : ''}">Tất cả</button>`]
+            .concat(data.services.map(s => `
+                <button data-service="${s.id}" class="service-pill px-5 py-2.5 rounded-full text-sm font-extrabold border border-gray-200 text-gray-600 ${spActiveService === s.id ? 'active' : ''}">
+                    ${lnnEscape(s.title)}
+                </button>`));
+        wrap.innerHTML = pills.join('');
+        wrap.querySelectorAll('.service-pill').forEach(btn => {
+            btn.addEventListener('click', () => {
+                spActiveService = btn.dataset.service;
+                spActiveGroup = 'all';
+                spRenderServiceFilters(data);
+                spRenderGroupFilters(data);
+                spRenderGrid(data);
+            });
+        });
+    }
+
+    /* ---------- Tầng 2: mục sản phẩm con — CHỈ hiện sau khi đã chọn 1 dịch vụ cụ thể ---------- */
+    function spRenderGroupFilters(data) {
+        const wrap = document.getElementById('groupFilters');
+
+        // Chọn "Tất cả" dịch vụ -> không hiện hàng mục con, tránh rối mắt
+        if (spActiveService === 'all') {
+            wrap.innerHTML = '';
+            wrap.classList.add('hidden');
+            return;
+        }
+
+        const visibleGroups = data.groups.filter(g => g.serviceId === spActiveService);
+        if (!visibleGroups.length) {
+            wrap.innerHTML = '';
+            wrap.classList.add('hidden');
+            return;
+        }
+        wrap.classList.remove('hidden');
+
+        const pills = [`<button data-group="all" class="filter-pill px-4 py-2 rounded-full text-xs font-bold border border-gray-200 text-gray-500 ${spActiveGroup === 'all' ? 'active' : ''}">Tất cả mục</button>`]
+            .concat(visibleGroups.map(g => `
+                <button data-group="${g.id}" class="filter-pill px-4 py-2 rounded-full text-xs font-bold border border-gray-200 text-gray-500 ${spActiveGroup === g.id ? 'active' : ''}">
+                    ${lnnEscape(g.title)}
+                </button>`));
+        wrap.innerHTML = pills.join('');
+        wrap.querySelectorAll('.filter-pill').forEach(btn => {
+            btn.addEventListener('click', () => {
+                spActiveGroup = btn.dataset.group;
+                spRenderGroupFilters(data);
+                spRenderGrid(data);
+            });
+        });
+    }
+
+    /* ---------- Tầng 3: lọc theo năm ---------- */
+    function spRenderYearFilters() {
+        const wrap = document.getElementById('yearFilters');
+        const years = lnnGetProductYears();
+        const pills = [`<button data-year="all" class="filter-pill px-4 py-2 rounded-full text-xs font-bold border border-gray-200 text-gray-500 ${spActiveYear === 'all' ? 'active' : ''}">Tất cả</button>`]
+            .concat(years.map(y => `
+                <button data-year="${y}" class="filter-pill px-4 py-2 rounded-full text-xs font-bold border border-gray-200 text-gray-500 ${spActiveYear === y ? 'active' : ''}">${y}</button>`));
+        wrap.innerHTML = pills.join('');
+        wrap.querySelectorAll('.filter-pill').forEach(btn => {
+            btn.addEventListener('click', () => {
+                spActiveYear = btn.dataset.year;
+                spRenderYearFilters();
+                spRenderGrid(spBuildCatalog());
+            });
+        });
+    }
+
+    /* ---------- Lưới sản phẩm theo bộ lọc hiện tại ---------- */
+    function spRenderGrid(data) {
+        const allProducts = lnnGetProducts();
+        const groupIdsInScope = spActiveService === 'all'
+            ? null
+            : data.groups.filter(g => g.serviceId === spActiveService).map(g => g.id);
+
+        let filtered = allProducts;
+        if (spActiveGroup !== 'all') {
+            filtered = filtered.filter(p => p.groupId === spActiveGroup);
+        } else if (groupIdsInScope) {
+            filtered = filtered.filter(p => groupIdsInScope.includes(p.groupId));
+        }
+        if (spActiveYear !== 'all') {
+            filtered = filtered.filter(p => (p.year || '2026') === spActiveYear);
+        }
+
+        const grid = document.getElementById('productGrid');
+        const empty = document.getElementById('emptyState');
+
+        if (!filtered.length) {
+            grid.innerHTML = '';
+            empty.classList.remove('hidden');
+            return;
+        }
+        empty.classList.add('hidden');
+
+        grid.innerHTML = filtered.map(p => {
+            const group = data.groupMap[p.groupId];
+            const groupTitle = group ? group.title : '';
+            const imgs = lnnProductImages(p);
+            const cover = imgs[0] || '';
+            return `
+            <div class="card p-4 cursor-pointer" onclick='spOpenProduct(${JSON.stringify(p).replace(/'/g, "&#39;")})'>
+                <div class="relative mb-4">
+                    <img src="${lnnEscape(cover)}" alt="${lnnEscape(p.title)}" class="rounded-xl w-full h-44 object-cover bg-gray-100" onerror="this.style.opacity=0.3">
+                    ${imgs.length > 1 ? `<span class="absolute bottom-2 right-2 bg-slate-900/80 text-white text-[10px] font-bold px-2 py-1 rounded-full">🖼️ ${imgs.length} ảnh</span>` : ''}
+                </div>
+                <div class="flex items-center justify-between mb-1">
+                    <p class="text-[11px] font-bold uppercase tracking-wide text-brand-green">${lnnEscape(groupTitle)}</p>
+                    <span class="text-[10px] font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full shrink-0">${lnnEscape(p.year || '2026')}</span>
+                </div>
+                <h4 class="font-bold mb-1">${lnnEscape(p.title)}</h4>
+                <p class="text-xs text-gray-500 leading-relaxed line-clamp-desc">${lnnEscape(p.desc || '')}</p>
+            </div>`;
+        }).join('');
+    }
+
+    /* ---------- Modal chi tiết sản phẩm: thư viện nhiều ảnh ---------- */
+    let pdImages = [];
+    let pdCurrentIndex = 0;
+
+    function spOpenProduct(p) {
+        const data = spBuildCatalog();
+        const group = data.groupMap[p.groupId];
+        pdImages = lnnProductImages(p);
+        pdCurrentIndex = 0;
+
+        document.getElementById('pdGroup').textContent = group ? (group.serviceTitle ? group.serviceTitle + ' • ' + group.title : group.title) : '';
+        document.getElementById('pdTitle').textContent = p.title || '';
+        document.getElementById('pdDesc').textContent = p.desc || 'Đang cập nhật mô tả chi tiết.';
+
+        pdRenderThumbs();
+        pdShowImage(0);
+        document.getElementById('productDetailModal').classList.remove('hidden');
+    }
+
+    function pdShowImage(index) {
+        if (!pdImages.length) return;
+        pdCurrentIndex = (index + pdImages.length) % pdImages.length;
+        document.getElementById('pdImage').src = pdImages[pdCurrentIndex];
+        document.getElementById('pdImage').alt = document.getElementById('pdTitle').textContent;
+
+        const multi = pdImages.length > 1;
+        document.getElementById('pdPrev').classList.toggle('hidden', !multi);
+        document.getElementById('pdNext').classList.toggle('hidden', !multi);
+        const counter = document.getElementById('pdCounter');
+        counter.classList.toggle('hidden', !multi);
+        if (multi) counter.textContent = (pdCurrentIndex + 1) + ' / ' + pdImages.length;
+
+        document.querySelectorAll('#pdThumbs .pd-thumb').forEach((el, i) => {
+            el.classList.toggle('ring-2', i === pdCurrentIndex);
+            el.classList.toggle('ring-brand-green', i === pdCurrentIndex);
+            el.classList.toggle('opacity-50', i !== pdCurrentIndex);
+        });
+    }
+
+    function pdRenderThumbs() {
+        const wrap = document.getElementById('pdThumbs');
+        if (pdImages.length <= 1) {
+            wrap.classList.add('hidden');
+            wrap.innerHTML = '';
+            return;
+        }
+        wrap.classList.remove('hidden');
+        wrap.innerHTML = pdImages.map((src, i) => `
+            <img src="${lnnEscape(src)}" onclick="pdShowImage(${i})" class="pd-thumb w-16 h-16 rounded-xl object-cover bg-gray-100 cursor-pointer shrink-0 opacity-50" onerror="this.style.opacity=0.2">`).join('');
+    }
+
+    function closeProductDetail() {
+        document.getElementById('productDetailModal').classList.add('hidden');
+    }
+    document.getElementById('productDetailModal').addEventListener('click', (e) => {
+        if (e.target.id === 'productDetailModal') closeProductDetail();
+    });
+
+    (function initSanPham() {
+        const params = new URLSearchParams(window.location.search);
+        const groupParam = params.get('group');
+        const serviceParam = params.get('service');
+        const productParam = params.get('product');
+        const data = spBuildCatalog();
+
+        if (productParam) {
+            const targetProduct = lnnGetProducts().find(pr => pr.id === productParam);
+            if (targetProduct) {
+                const targetGroup = data.groupMap[targetProduct.groupId];
+                if (targetGroup) { spActiveGroup = targetGroup.id; spActiveService = targetGroup.serviceId; }
+                spRenderServiceFilters(data);
+                spRenderGroupFilters(data);
+                spRenderYearFilters();
+                spRenderGrid(data);
+                spOpenProduct(targetProduct);
+                return;
+            }
+        }
+
+        if (groupParam && data.groupMap[groupParam]) {
+            spActiveGroup = groupParam;
+            spActiveService = data.groupMap[groupParam].serviceId;
+        } else if (serviceParam) {
+            spActiveService = serviceParam;
+        }
+
+        spRenderServiceFilters(data);
+        spRenderGroupFilters(data);
+        spRenderYearFilters();
+        spRenderGrid(data);
+    })();
+</script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="script.js"></script>
+    <script src="search.js"></script>
+</body>
+</html>

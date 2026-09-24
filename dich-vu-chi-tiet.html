@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Chi tiết dịch vụ - Lịch Nông Nghiệp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; color: #1e293b; }
+        p { font-size: 14px; font-weight: 300; line-height: 1.6; color: #64748b; }
+        h1, h2, h3 { color: #0f172a; }
+        .product-modal-backdrop { background: rgba(15,23,42,.6); backdrop-filter: blur(2px); }
+    </style>
+</head>
+<body class="bg-white">
+
+   <header class="bg-white sticky top-0 z-50 shadow-sm px-4 md:px-16 py-4 flex items-center justify-between">
+        <button id="menuBtn" type="button" class="lg:hidden w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition order-last" aria-label="Mở menu" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+
+        <div class="flex items-center">
+            <a href="index.html"><img src="image/x2Mf_logo (1).png" alt="Logo LICH Nông Nghiệp" class="h-12 w-auto object-contain"></a>
+        </div>
+        <nav class="hidden lg:flex space-x-8 font-medium text-gray-600">
+            <a href="index.html" class="hover:text-green-600 transition-all">Trang chủ</a>
+            <a href="catalogue.html" class="hover:text-green-600 transition-all">catalogue lịch </a>
+            <a href="dich-vu.html" class="text-green-600 border-b-2 border-green-600">Dịch vụ</a>
+            <a href="san-pham.html" class="hover:text-green-600 transition-all">Sản phẩm</a>
+            <a href="in-lich-tet.html" class="hover:text-green-600 transition-all">In lịch Tết</a>
+            <a href="blog.html" class="hover:text-green-600 transition-all">Blog</a>
+            <a href="About.html" class="hover:text-green-600 transition-all">Về chúng tôi</a>
+        </nav>
+        <div class="relative">
+            <button id="searchToggleBtn" type="button" class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 transition" aria-label="Tìm kiếm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </button>
+            <div id="searchPanel" class="hidden absolute right-0 mt-3 w-[92vw] max-w-sm bg-white rounded-2xl shadow-2xl border border-gray-100 z-[999] overflow-hidden">
+                <div class="flex items-center gap-2 px-4 py-3 border-b border-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input id="searchInput" type="text" placeholder="Tìm dịch vụ, sản phẩm, bài viết..." class="flex-1 text-sm outline-none">
+                    <button id="searchCloseBtn" type="button" class="text-gray-300 hover:text-gray-500 text-lg leading-none">✕</button>
+                </div>
+                <div id="searchResults" class="max-h-96 overflow-y-auto"></div>
+            </div>
+        </div>
+        <button class="hidden lg:inline-flex bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-all shadow-md">
+            <a href="lien-he.html" class="text-white">Liên hệ</a>
+        </button>
+    </header>
+
+    <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-4">
+        <nav class="flex flex-col gap-1">
+                <a href="index.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Trang chủ</a>
+                <a href="catalogue.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">catalogue lịch</a>
+                <a href="dich-vu.html" class="block px-4 py-3 rounded-xl bg-green-50 text-green-600 font-bold">Dịch vụ</a>
+                <a href="san-pham.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Sản phẩm</a>
+                <a href="in-lich-tet.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">In lịch Tết</a>
+                <a href="blog.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Blog</a>
+                <a href="About.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Về chúng tôi</a>
+        </nav>
+        <a href="lien-he.html" class="mt-3 block text-center bg-green-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-all shadow-md">Liên hệ</a>
+    </div>
+
+
+<main class="py-16 bg-white">
+    <div class="container-page">
+        <nav class="flex text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-8 gap-2">
+            <a href="index.html" class="hover:text-[#34a853]">Trang chủ</a><span>/</span>
+            <a href="dich-vu.html" class="hover:text-[#34a853]">Dịch vụ</a><span>/</span>
+            <span class="text-slate-900">Chi tiết</span>
+        </nav>
+
+        <div id="notFound" class="hidden text-center py-20">
+            <p class="text-2xl font-bold text-slate-900 mb-3">Không tìm thấy dịch vụ</p>
+            <p class="text-gray-500 mb-8">Dịch vụ này có thể đã bị xoá hoặc chưa được thêm trên trình duyệt này.</p>
+            <a href="dich-vu.html" class="inline-block bg-[#34a853] text-white px-8 py-3 rounded-2xl font-bold hover:scale-105 transition-transform">← Quay lại Dịch vụ</a>
+        </div>
+
+        <div id="contentWrap" class="hidden">
+            <div class="flex flex-col lg:flex-row gap-10 mb-16">
+                <div class="lg:w-1/2 rounded-[32px] overflow-hidden shadow-xl">
+                    <img id="svcImage" src="" class="w-full h-full object-cover" alt="">
+                </div>
+                <div class="lg:w-1/2 flex flex-col justify-center">
+                    <h1 id="svcTitle" class="text-4xl font-extrabold text-slate-900 mb-6"></h1>
+                    <div id="svcBody" class="prose prose-slate max-w-none font-light text-gray-600 leading-[1.8]"></div>
+                    <a href="lien-he.html" class="mt-8 inline-block bg-[#34a853] text-white px-8 py-3.5 rounded-2xl font-bold hover:scale-105 transition-transform w-fit">NHẬN TƯ VẤN NGAY</a>
+                </div>
+            </div>
+
+            <div id="groupSection" class="hidden">
+                <h3 class="text-xl font-bold mb-6">Danh mục sản phẩm</h3>
+                <div id="groupPills" class="flex flex-wrap gap-2 mb-8"></div>
+                <h4 id="productGroupTitle" class="font-bold text-slate-900 mb-4"></h4>
+                <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"></div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- ========== MODAL: CHI TIẾT SẢN PHẨM (nhiều ảnh) ========== -->
+<div id="productDetailModal" class="fixed inset-0 z-[200] hidden product-modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-2xl rounded-[32px] overflow-hidden max-h-[90vh] overflow-y-auto relative">
+        <button onclick="closeProductDetail()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/90 hover:bg-white shadow flex items-center justify-center z-20">✕</button>
+        <div class="relative bg-gray-100">
+            <img id="pdImage" src="" alt="" class="w-full h-72 object-cover bg-gray-100">
+            <button id="pdPrev" onclick="pdShowImage(pdCurrentIndex - 1)" class="hidden absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white shadow flex items-center justify-center text-lg">‹</button>
+            <button id="pdNext" onclick="pdShowImage(pdCurrentIndex + 1)" class="hidden absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white shadow flex items-center justify-center text-lg">›</button>
+            <span id="pdCounter" class="hidden absolute bottom-3 right-3 bg-slate-900/80 text-white text-[11px] font-bold px-2.5 py-1 rounded-full"></span>
+        </div>
+        <div id="pdThumbs" class="hidden flex gap-2 px-8 pt-4 overflow-x-auto"></div>
+        <div class="p-8">
+            <h3 id="pdTitle" class="text-2xl font-extrabold text-slate-900 mb-4"></h3>
+            <p id="pdDesc" class="text-gray-500 leading-relaxed mb-8"></p>
+            <a href="lien-he.html" class="btn-primary !px-8 !py-3">Nhận tư vấn / báo giá sản phẩm này</a>
+        </div>
+    </div>
+</div>
+
+    <footer class="bg-white border-t border-gray-100 pt-16 pb-8 px-4 md:px-16">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            <div class="col-span-1 md:col-span-1">
+                <div class="flex items-center"><a href="index.html"><img src="image/x2Mf_logo (1).png" alt="Logo LICH Nông Nghiệp" class="h-12 w-auto object-contain"></a></div>
+                <p class="text-gray-500 text-sm">Giải pháp in ấn chuyên nghiệp cho nông nghiệp và doanh nghiệp.</p>
+            </div>
+            <div>
+                <h5 class="font-bold mb-6">Liên kết nhanh</h5>
+                <ul class="space-y-4 text-gray-500 text-sm">
+                    <li><a href="index.html" class="hover:text-green-600">Trang chủ</a></li>
+                    <li><a href="catalogue.html" class="hover:text-green-600">catalogue lịch</a></li>
+                    <li><a href="dich-vu.html" class="hover:text-green-600">Dịch vụ</a></li>
+                    <li><a href="san-pham.html" class="hover:text-green-600">Sản phẩm</a></li>
+                    <li><a href="in-lich-tet.html" class="hover:text-green-600">In Lịch Tết</a></li>
+                    <li><a href="blog.html" class="hover:text-green-600">Blog</a></li>
+                    <li><a href="About.html" class="hover:text-green-600">về chúng tôi</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-6">Thông tin liên hệ</h5>
+                <ul class="space-y-4 text-gray-500 text-sm">
+                    <li> Văn phòng: Nhà lô 4, tập thể Tin học, phường Cầu Giấy, TP.Hà Nội</li>
+                    <li> Xưởng: Số 54, Ngõ 459 phố Bạch Mai, TP.Hà Nội </li>
+                    <li>0976 585 945 - 0972 666 111 - 0396 294 628</li>
+                    <li>Ketoan.inbaobinn2022@gmail.com</li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-6">Theo dõi chúng tôi</h5>
+                <div class="flex space-x-4">
+                    <a href="https://www.facebook.com/share/1EkdKF6Cta/?mibextid=wwXIfr" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-green-600 transition-all cursor-pointer p-2.5"><img src="https://cdn.simpleicons.org/facebook/1877F2" alt="Facebook" class="w-full h-full object-contain"></a>
+                    <a href="https://www.tiktok.com/@lichnongnghiep?_r=1&_t=ZS-99nEB0zeRcN" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-green-600 transition-all cursor-pointer p-2.5"><img src="https://cdn.simpleicons.org/tiktok/000000" alt="TikTok" class="w-full h-full object-contain"></a>
+                    <a href="https://zalo.me/0972666111" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-green-600 transition-all cursor-pointer p-2.5"><img src="https://cdn.simpleicons.org/zalo/0068FF" alt="Zalo" class="w-full h-full object-contain"></a>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-400 text-xs">
+            <p>© 2026 LICH nông nghiệp. Tất cả quyền được bảo lưu.</p>
+            <div class="flex space-x-6 mt-4 md:mt-0"><a href="#">Chính sách bảo mật</a><a href="#">Điều khoản dịch vụ</a></div>
+        </div>
+    </footer>
+
+    <script src="config.js"></script>
+    <script src="data.js"></script>
+    <script src="mongo-sync.js"></script>
+    <script>
+        function getParam(name) { return new URLSearchParams(window.location.search).get(name); }
+        let activeGroupId = null;
+
+        function renderGroupPills(serviceId) {
+            const groups = lnnGetGroupsByService(serviceId);
+            document.getElementById('groupPills').innerHTML = groups.map(g => `
+                <button onclick="selectGroup('${g.id}')" data-group="${g.id}"
+                    class="pill-btn px-4 py-2 rounded-full text-xs font-bold border transition-all ${g.id === activeGroupId ? 'bg-[#34a853] text-white border-[#34a853]' : 'bg-white text-gray-600 border-gray-200 hover:border-[#34a853]'}">
+                    ${lnnEscape(g.title)}
+                </button>`).join('');
+            return groups;
+        }
+
+        function selectGroup(groupId) {
+            activeGroupId = groupId;
+            document.querySelectorAll('.pill-btn').forEach(btn => {
+                const on = btn.dataset.group === groupId;
+                btn.classList.toggle('bg-[#34a853]', on);
+                btn.classList.toggle('text-white', on);
+                btn.classList.toggle('border-[#34a853]', on);
+                btn.classList.toggle('bg-white', !on);
+                btn.classList.toggle('text-gray-600', !on);
+                btn.classList.toggle('border-gray-200', !on);
+            });
+            const group = lnnGetGroupById(groupId);
+            document.getElementById('productGroupTitle').textContent = group ? group.title : '';
+            const products = lnnGetProductsByGroup(groupId);
+            document.getElementById('productGrid').innerHTML = products.map(p => {
+                const imgs = lnnProductImages(p);
+                const cover = imgs[0] || '';
+                return `
+                <div class="card p-4 cursor-pointer" onclick='dvOpenProduct(${JSON.stringify(p).replace(/'/g, "&#39;")})'>
+                    <div class="relative mb-4">
+                        <img src="${lnnEscape(cover)}" alt="${lnnEscape(p.title)}" class="rounded-xl w-full h-40 object-cover bg-gray-100" onerror="this.style.opacity=0.3">
+                        ${imgs.length > 1 ? `<span class="absolute bottom-2 right-2 bg-slate-900/80 text-white text-[10px] font-bold px-2 py-1 rounded-full">🖼️ ${imgs.length} ảnh</span>` : ''}
+                    </div>
+                    <h4 class="font-bold mb-1">${lnnEscape(p.title)}</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">${lnnEscape(p.desc || '')}</p>
+                </div>`;
+            }).join('') || '<p class="text-gray-400 col-span-full text-center py-10">Chưa có sản phẩm nào trong mục này.</p>';
+        }
+
+        /* ---------- Modal chi tiết sản phẩm: thư viện nhiều ảnh ---------- */
+        let pdImages = [];
+        let pdCurrentIndex = 0;
+
+        function dvOpenProduct(p) {
+            pdImages = lnnProductImages(p);
+            pdCurrentIndex = 0;
+            document.getElementById('pdTitle').textContent = p.title || '';
+            document.getElementById('pdDesc').textContent = p.desc || 'Đang cập nhật mô tả chi tiết.';
+            pdRenderThumbs();
+            pdShowImage(0);
+            document.getElementById('productDetailModal').classList.remove('hidden');
+        }
+
+        function pdShowImage(index) {
+            if (!pdImages.length) return;
+            pdCurrentIndex = (index + pdImages.length) % pdImages.length;
+            document.getElementById('pdImage').src = pdImages[pdCurrentIndex];
+            document.getElementById('pdImage').alt = document.getElementById('pdTitle').textContent;
+            const multi = pdImages.length > 1;
+            document.getElementById('pdPrev').classList.toggle('hidden', !multi);
+            document.getElementById('pdNext').classList.toggle('hidden', !multi);
+            const counter = document.getElementById('pdCounter');
+            counter.classList.toggle('hidden', !multi);
+            if (multi) counter.textContent = (pdCurrentIndex + 1) + ' / ' + pdImages.length;
+            document.querySelectorAll('#pdThumbs .pd-thumb').forEach((elx, i) => {
+                elx.classList.toggle('ring-2', i === pdCurrentIndex);
+                elx.classList.toggle('ring-brand-green', i === pdCurrentIndex);
+                elx.classList.toggle('opacity-50', i !== pdCurrentIndex);
+            });
+        }
+
+        function pdRenderThumbs() {
+            const wrap = document.getElementById('pdThumbs');
+            if (pdImages.length <= 1) { wrap.classList.add('hidden'); wrap.innerHTML = ''; return; }
+            wrap.classList.remove('hidden');
+            wrap.innerHTML = pdImages.map((src, i) => `
+                <img src="${lnnEscape(src)}" onclick="pdShowImage(${i})" class="pd-thumb w-16 h-16 rounded-xl object-cover bg-gray-100 cursor-pointer shrink-0 opacity-50" onerror="this.style.opacity=0.2">`).join('');
+        }
+
+        function closeProductDetail() {
+            document.getElementById('productDetailModal').classList.add('hidden');
+        }
+        document.getElementById('productDetailModal').addEventListener('click', (e) => {
+            if (e.target.id === 'productDetailModal') closeProductDetail();
+        });
+
+        (function render() {
+            const id = getParam('id');
+            const s = id ? lnnGetServiceById(id) : null;
+            if (!s) { document.getElementById('notFound').classList.remove('hidden'); return; }
+
+            document.getElementById('contentWrap').classList.remove('hidden');
+            document.title = s.title + ' - Lịch Nông Nghiệp';
+            document.getElementById('pageTitle').textContent = s.title + ' - Lịch Nông Nghiệp';
+            document.getElementById('svcTitle').textContent = s.title;
+            const img = document.getElementById('svcImage');
+            img.src = s.image; img.alt = s.title;
+            img.onerror = function () { this.style.display = 'none'; };
+            document.getElementById('svcBody').innerHTML = lnnRenderContent(s.detail || s.desc);
+
+            const groups = renderGroupPills(s.id);
+            if (groups.length) {
+                document.getElementById('groupSection').classList.remove('hidden');
+                selectGroup(groups[0].id);
+            }
+        })();
+    </script>
+    <script src="script.js"></script>
+    <script src="search.js"></script>
+</body>
+</html>

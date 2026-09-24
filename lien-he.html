@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liên hệ - LICHnôngnghiệp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        .text-brand { color: #34a853; }
+        .bg-brand { background-color: #34a853; }
+    </style>
+</head>
+<body class="bg-[#fcfdfc]">
+
+   <header class="bg-white sticky top-0 z-50 shadow-sm px-4 md:px-16 py-4 flex items-center justify-between">
+        <button id="menuBtn" type="button" class="lg:hidden w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition order-last" aria-label="Mở menu" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+
+        <div class="flex items-center">
+    <a href="index.html">
+        <img src="image/x2Mf_logo (1).png" alt="Logo LICH Nông Nghiệp" class="h-12 w-auto object-contain">
+    </a>
+</div>
+        <nav class="hidden lg:flex space-x-8 font-medium text-gray-600">
+            <a href="index.html" class="hover:text-green-600 transition-all0">Trang chủ</a>
+            <a href="catalogue.html" class="hover:text-green-600 transition-all">catalogue lịch </a>
+            <a href="dich-vu.html" class="hover:text-green-600 transition-all">Dịch vụ</a>
+            <a href="san-pham.html" class="hover:text-green-600 transition-all">Sản phẩm</a>
+            <a href="in-lich-tet.html" class="hover:text-green-600 transition-all">In lịch Tết</a>
+            <a href="blog.html" class="hover:text-green-600 transition-all">Blog</a>
+            <a href="About.html" class="hover:text-green-600 transition-all">Về chúng tôi</a>
+        </nav>
+
+        <div class="relative">
+            <button id="searchToggleBtn" type="button" class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 transition" aria-label="Tìm kiếm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </button>
+            <div id="searchPanel" class="hidden absolute right-0 mt-3 w-[92vw] max-w-sm bg-white rounded-2xl shadow-2xl border border-gray-100 z-[999] overflow-hidden">
+                <div class="flex items-center gap-2 px-4 py-3 border-b border-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input id="searchInput" type="text" placeholder="Tìm dịch vụ, sản phẩm, bài viết..." class="flex-1 text-sm outline-none">
+                    <button id="searchCloseBtn" type="button" class="text-gray-300 hover:text-gray-500 text-lg leading-none">✕</button>
+                </div>
+                <div id="searchResults" class="max-h-96 overflow-y-auto"></div>
+            </div>
+        </div>
+        <button class="hidden lg:inline-flex bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-all shadow-md">
+            <a href="lien-he.html" class="text-white">Liên hệ</a>
+        </button>
+    </header>
+
+    <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-4">
+        <nav class="flex flex-col gap-1">
+                <a href="index.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Trang chủ</a>
+                <a href="catalogue.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">catalogue lịch</a>
+                <a href="dich-vu.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Dịch vụ</a>
+                <a href="san-pham.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Sản phẩm</a>
+                <a href="in-lich-tet.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">In lịch Tết</a>
+                <a href="blog.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Blog</a>
+                <a href="About.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Về chúng tôi</a>
+        </nav>
+        <a href="lien-he.html" class="mt-3 block text-center bg-green-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-all shadow-md">Liên hệ</a>
+    </div>
+
+
+    <section class="py-20">
+        <div class="container mx-auto px-6 lg:px-20 text-center mb-16">
+            <h1 class="text-4xl lg:text-5xl font-bold text-slate-900 mb-4">Liên hệ với chúng tôi</h1>
+            <p class="text-gray-500 font-light">Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ bạn.</p>
+        </div>
+
+        <div class="container mx-auto px-6 lg:px-20">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                
+                <div class="bg-white p-8 lg:p-12 rounded-[40px] shadow-sm border border-gray-100">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-8">Gửi tin nhắn cho chúng tôi</h2>
+                
+<form action="https://formspree.io/f/YOUR_ENDPOINT" method="POST" class="space-y-6">
+    <div>
+        <label class="block text-xs font-bold uppercase text-slate-400 mb-2">Họ và tên *</label>
+        <input type="text" name="name" required placeholder="Nhập họ và tên của bạn" 
+               class="w-full p-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-green-500 outline-none text-sm">
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+            <label class="block text-xs font-bold uppercase text-slate-400 mb-2">Email *</label>
+            <input type="email" name="email" required placeholder="email@example.com" 
+                   class="w-full p-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-green-500 outline-none text-sm">
+        </div>
+        <div>
+            <label class="block text-xs font-bold uppercase text-slate-400 mb-2">Số điện thoại</label>
+            <input type="tel" name="phone" placeholder="0976 585 945" 
+                   class="w-full p-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-green-500 outline-none text-sm">
+        </div>
+    </div>
+    <div>
+        <label class="block text-xs font-bold uppercase text-slate-400 mb-2">Nội dung *</label>
+        <textarea name="message" required placeholder="Nhập nội dung bạn muốn gửi..." rows="4" 
+                  class="w-full p-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-green-500 outline-none text-sm"></textarea>
+    </div>
+    <!-- Sản phẩm cần tư vấn -->
+<div>
+    <label class="block text-xs font-bold uppercase text-slate-400 mb-3">
+        Sản phẩm cần tư vấn
+    </label>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600">
+        <label class="flex items-center gap-3 bg-slate-50 p-4 rounded-2xl cursor-pointer">
+            <input type="checkbox" name="product[]" value="Lịch Tết" class="accent-green-600">
+            Lịch Tết
+        </label>
+
+        <label class="flex items-center gap-3 bg-slate-50 p-4 rounded-2xl cursor-pointer">
+            <input type="checkbox" name="product[]" value="Hộp cứng" class="accent-green-600">
+            Hộp cứng
+        </label>
+
+        <label class="flex items-center gap-3 bg-slate-50 p-4 rounded-2xl cursor-pointer">
+            <input type="checkbox" name="product[]" value="Túi giấy" class="accent-green-600">
+            Túi giấy
+        </label>
+
+        <label class="flex items-center gap-3 bg-slate-50 p-4 rounded-2xl cursor-pointer">
+            <input type="checkbox" name="product[]" value="Chưa rõ – cần tư vấn" class="accent-green-600">
+            Chưa rõ – cần tư vấn
+        </label>
+    </div>
+</div>
+
+<!-- Mục đích sử dụng -->
+<div>
+    <label class="block text-xs font-bold uppercase text-slate-400 mb-3">
+        Mục đích sử dụng
+    </label>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600">
+        <label class="flex items-center gap-3 bg-slate-50 p-4 rounded-2xl cursor-pointer">
+            <input type="checkbox" name="purpose[]" value="Quà tặng doanh nghiệp" class="accent-green-600">
+            Quà tặng doanh nghiệp
+        </label>
+
+        <label class="flex items-center gap-3 bg-slate-50 p-4 rounded-2xl cursor-pointer">
+            <input type="checkbox" name="purpose[]" value="Bao bì sản phẩm" class="accent-green-600">
+            Bao bì sản phẩm
+        </label>
+
+        <label class="flex items-center gap-3 bg-slate-50 p-4 rounded-2xl cursor-pointer">
+            <input type="checkbox" name="purpose[]" value="Sự kiện / marketing" class="accent-green-600">
+            Sự kiện / marketing
+        </label>
+
+        <label class="flex items-center gap-3 bg-slate-50 p-4 rounded-2xl cursor-pointer">
+            <input type="checkbox" name="purpose[]" value="Khác" class="accent-green-600">
+            Khác
+        </label>
+    </div>
+</div>
+
+<!-- File thiết kế -->
+<div>
+    <label class="block text-xs font-bold uppercase text-slate-400 mb-3">
+        Quý khách đã có file thiết kế chưa?
+    </label>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm text-gray-600">
+        <label class="flex items-center gap-3 bg-slate-50 p-4 rounded-2xl cursor-pointer">
+            <input type="radio" name="design_file" value="Đã có file" class="accent-green-600">
+            Đã có file
+        </label>
+
+        <label class="flex items-center gap-3 bg-slate-50 p-4 rounded-2xl cursor-pointer">
+            <input type="radio" name="design_file" value="Chưa có" class="accent-green-600">
+            Chưa có
+        </label>
+
+        <label class="flex items-center gap-3 bg-slate-50 p-4 rounded-2xl cursor-pointer">
+            <input type="radio" name="design_file" value="Cần hỗ trợ" class="accent-green-600">
+            Cần hỗ trợ
+        </label>
+    </div>
+</div>
+
+<!-- Mô tả thêm -->
+<div>
+    <label class="block text-xs font-bold uppercase text-slate-400 mb-2">
+        Mô tả thêm
+    </label>
+
+    <textarea 
+        name="more_detail"
+        rows="4"
+        placeholder="Ví dụ: số lượng in, kích thước, thời gian cần hoàn thành..."
+        class="w-full p-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-green-500 outline-none text-sm"
+    ></textarea>
+</div>
+    <button type="submit" class="w-full bg-brand text-white py-4 rounded-2xl font-bold hover:bg-green-600 transition shadow-lg shadow-green-100">
+        GỬI TIN NHẮN
+    </button>
+</form>
+                </div>
+                
+
+                <div class="flex flex-col justify-between">
+                    <div class="space-y-8 mb-12">
+                        <h2 class="text-2xl font-bold text-slate-900">Thông tin liên hệ</h2>
+                        
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-brand flex-shrink-0"></div>
+                            <div>
+                                <h4 class="font-bold text-sm text-slate-900 uppercase tracking-wider mb-1">Địa chỉ</h4>
+                                <p class="text-sm font-light text-gray-500">Xưởng: Số 54, Ngõ 459 phố Bạch Mai, TP.Hà Nội</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-brand flex-shrink-0"></div>
+                            <div>
+                                <h4 class="font-bold text-sm text-slate-900 uppercase tracking-wider mb-1">Điện thoại</h4>
+                                <p class="text-sm font-light text-gray-500">0976 585 945 - 0972 666 111 - 0396 294 628</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-brand flex-shrink-0"></div>
+                            <div>
+                                <h4 class="font-bold text-sm text-slate-900 uppercase tracking-wider mb-1">Email</h4>
+                                <p class="text-sm font-light text-gray-500">Ketoan.inbaobinn2022@gmail.com</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-brand flex-shrink-0"></div>
+                            <div>
+                                <h4 class="font-bold text-sm text-slate-900 uppercase tracking-wider mb-1">Giờ làm việc</h4>
+                                <p class="text-sm font-light text-gray-500">Thứ 2 - Thứ 7: 8:00 - 18:00</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-[40px] shadow-sm border border-gray-100 flex-grow overflow-hidden relative">
+                        <div class="flex justify-between items-center mb-4 px-4 pt-2">
+                            <h3 class="text-sm font-bold text-slate-900">Vị trí của chúng tôi</h3>
+                        </div>
+                        <div class="w-full aspect-[4/3] sm:aspect-video rounded-[30px] bg-slate-100 overflow-hidden">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.876854863211!2d105.84839197598497!3d20.997572880644!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ac72ec3df419%3A0x4e08007d1296a744!2zNTQgTmcuIDQ1OSBQLiBC4bqhY2ggTWFpLCBC4bqhY2ggTWFpLCBIw6AgTuG7mWksIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1789973880600!5m2!1svi!2s"
+                                    class="w-full h-full block" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                        </div>
+                        <p class="text-[10px] text-gray-400 mt-4 px-4">Chúng tôi nằm tại trung tâm thành phố, thuận tiện cho việc giao nhận hàng hóa.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-brand py-16">
+        <div class="container mx-auto px-6 text-center text-white">
+            <h2 class="text-3xl font-bold mb-4">Bạn cần hỗ trợ khẩn cấp?</h2>
+            <p class="font-light opacity-90 mb-10">Gọi ngay cho chúng tôi để được tư vấn và hỗ trợ nhanh chóng.</p>
+            <a href="tel:0976585945" class="bg-[#f9a825] text-white px-10 py-4 rounded-2xl font-bold text-xl hover:scale-105 transition shadow-2xl shadow-green-900/20">
+                0976 585 945
+            </a>
+        </div>
+    </section>
+     <footer class="bg-white border-t border-gray-100 pt-16 pb-8 px-4 md:px-16">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            <div class="col-span-1 md:col-span-1">
+              <div class="flex items-center">
+                <a href="index.html">
+             <img src="image/x2Mf_logo (1).png" alt="Logo LICH Nông Nghiệp" class="h-12 w-auto object-contain">
+                 </a>
+            </div>
+                <p class="text-gray-500 text-sm">Giải pháp in ấn chuyên nghiệp cho nông nghiệp và doanh nghiệp.</p>
+            </div>
+            <div>
+                <h5 class="font-bold mb-6">Liên kết nhanh</h5>
+                <ul class="space-y-4 text-gray-500 text-sm">
+                    <li><a href="index.html" class="hover:text-green-600">Trang chủ</a></li>
+                    <li><a href="catalogue.html" class="hover:text-green-600">catalogue lịch</a></li>
+                    <li><a href="dich-vu.html" class="hover:text-green-600">Dịch vụ</a></li>
+                    <li><a href="san-pham.html" class="hover:text-green-600">Sản phẩm</a></li>
+                    <li><a href="blog.html" class="hover:text-green-600">In Lịch Tết</a></li>
+                    <li><a href="blog.html" class="hover:text-green-600">Blog</a></li>
+                    <li><a href="About.html" class="hover:text-green-600">về chúng tôi</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-6">Thông tin liên hệ</h5>
+                <ul class="space-y-4 text-gray-500 text-sm">
+                    <li> Xưởng: Số 54, Ngõ 459 phố Bạch Mai, TP.Hà Nội </li>
+                    <li>0976 585 945 - 0972 666 111 - 0396 294 628</li>
+                    <li>Ketoan.inbaobinn2022@gmail.com</li>
+                </ul>
+            </div>
+            <div>
+    <h5 class="font-bold mb-6">Theo dõi chúng tôi</h5>
+    <div class="flex space-x-4">
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/share/1EkdKF6Cta/?mibextid=wwXIfr" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-green-600 transition-all cursor-pointer p-2.5">
+            <img src="https://cdn.simpleicons.org/facebook/1877F2" alt="Facebook" class="w-full h-full object-contain">
+        </a>
+
+        <!-- TikTok -->
+        <a href="https://www.tiktok.com/@lichnongnghiep?_r=1&_t=ZS-99nEB0zeRcN" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-green-600 transition-all cursor-pointer p-2.5">
+            <img src="https://cdn.simpleicons.org/tiktok/000000" alt="TikTok" class="w-full h-full object-contain">
+        </a>
+
+        <!-- Zalo -->
+        <a href="https://zalo.me/0972666111" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-green-600 transition-all cursor-pointer p-2.5">
+            <img src="https://cdn.simpleicons.org/zalo/0068FF" alt="Zalo" class="w-full h-full object-contain">
+        </a>
+    </div>
+</div>
+        <div class="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-400 text-xs">
+            <p>© 2026 LICH nông nghiệp. Tất cả quyền được bảo lưu.</p>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+                <a href="#">Chính sách bảo mật</a>
+                <a href="#">Điều khoản dịch vụ</a>
+            </div>
+        </div>
+    </footer>
+
+<!-- Floating Social Buttons -->
+<div class="fixed bottom-6 right-6 flex flex-col gap-4 z-[100]">
+    <!-- Zalo -->
+    <a href="https://zalo.me/0972666111" target="_blank" class="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition-transform">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo" class="w-8 h-8">
+    </a>
+    
+    <!-- Facebook Messenger -->
+    <a href="https://www.facebook.com/share/1EkdKF6Cta/?mibextid=wwXIfr" target="_blank" class="w-14 h-14 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition-transform">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white">
+            <path d="M12 2C6.477 2 2 6.145 2 11.258c0 2.908 1.462 5.497 3.746 7.158V22l3.418-1.875c.875.243 1.8.375 2.836.375 5.523 0 10-4.145 10-9.258S17.523 2 12 2zm1.091 12.116l-2.582-2.753-5.045 2.753 5.545-5.889 2.582 2.753 5.045-2.753-5.545 5.889z"/>
+        </svg>
+    </a>
+</div>
+    <script src="config.js"></script>
+    <script src="data.js"></script>
+    <script src="mongo-sync.js"></script>
+    <script src="search.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

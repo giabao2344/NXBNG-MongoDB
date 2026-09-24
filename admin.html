@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Quản Trị - Lịch Nông Nghiệp</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="image/x2Mf_logo (1).png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { brand: { green:'#34a853', dark:'#278a41', orange:'#f9a825' } }, fontFamily: { sans:['Be Vietnam Pro','sans-serif'] } } } }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background:#f4f6f5; }
+        .tab-btn { padding:.75rem 1.25rem; border-radius:.9rem; font-weight:700; font-size:14px; color:#64748b; transition:all .2s ease; }
+        .tab-btn.active { background:var(--brand-green); color:#fff; box-shadow:0 8px 18px rgba(52,168,83,.25); }
+        .admin-card { background:#fff; border:1px solid #eef1f0; border-radius:1.5rem; transition:box-shadow .2s ease; }
+        .admin-card:hover { box-shadow:0 10px 25px rgba(15,23,42,.06); }
+        .modal-backdrop { background:rgba(15,23,42,.55); backdrop-filter:blur(2px); }
+        .icon-btn { width:36px;height:36px;border-radius:.7rem;display:flex;align-items:center;justify-content:center;transition:all .2s ease; }
+        textarea.admin-input { min-height:110px; }
+        .toast { animation: toastIn .25s ease, toastOut .25s ease 2.6s forwards; }
+        @keyframes toastIn { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:translateY(0)} }
+        @keyframes toastOut { to{opacity:0; transform:translateY(10px)} }
+    </style>
+</head>
+<body class="min-h-screen">
+
+<!-- ========== LOGIN GATE ========== -->
+<div id="loginGate" class="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900 px-4">
+    <div class="bg-white w-full max-w-sm rounded-[32px] p-10 shadow-2xl text-center">
+        <img src="image/x2Mf_logo (1).png" alt="Logo" class="h-12 mx-auto mb-6 object-contain">
+        <h1 class="text-xl font-bold mb-2">Đăng nhập quản trị</h1>
+        <p class="text-sm text-gray-500 mb-8">Nhập mật khẩu để quản lý Dịch vụ &amp; Blog</p>
+        <form id="loginForm" class="space-y-4">
+            <input type="password" id="loginPassword" placeholder="Mật khẩu" class="w-full text-center" autocomplete="current-password" required>
+            <button type="submit" class="w-full btn-primary !w-full !py-3">Đăng nhập</button>
+            <p id="loginError" class="text-red-500 text-xs hidden">Sai mật khẩu, vui lòng thử lại.</p>
+        </form>
+        <p class="text-[11px] text-gray-400 mt-6">Mật khẩu mặc định: <strong>lnn2026</strong> — bạn có thể đổi trong phần Cài đặt sau khi đăng nhập.</p>
+    </div>
+</div>
+
+<!-- ========== ADMIN APP (ẩn cho tới khi đăng nhập) ========== -->
+<div id="adminApp" class="hidden">
+
+    <header class="bg-white border-b border-gray-100 sticky top-0 z-40">
+        <div class="container-page flex items-center justify-between py-4">
+            <div class="flex items-center gap-3">
+                <img src="image/x2Mf_logo (1).png" alt="Logo" class="h-9 object-contain">
+                <div>
+                    <p class="font-bold leading-tight">Bảng điều khiển</p>
+                    <p class="text-[11px] text-gray-400 leading-tight">Lịch Nông Nghiệp Admin</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="index.html" target="_blank" class="hidden md:inline-flex btn-outline !px-4 !py-2 text-sm">Xem website chính ↗</a>
+                <button id="logoutBtn" class="text-sm font-semibold text-gray-500 hover:text-red-500 transition">Đăng xuất</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container-page py-10">
+
+        <div class="bg-amber-50 border border-amber-200 text-amber-800 text-sm rounded-2xl p-5 mb-8 flex gap-3">
+            <span class="text-xl">⚠️</span>
+            <div>
+                <p class="font-bold mb-1">Dữ liệu website & MongoDB</p>
+                <p>Dữ liệu vẫn được lưu cục bộ để trang hoạt động nhanh. Khi bạn cấu hình <strong>LNN_API_BASE</strong> trong <strong>config.js</strong>, mọi thao tác thêm/sửa/xóa Dịch vụ, Danh mục, Sản phẩm, Blog, Banner và Sản phẩm nổi bật sẽ đồng bộ lên <strong>MongoDB</strong>. Các trang website sẽ tự lấy dữ liệu MongoDB khi mở.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-5 mb-10">
+            <div class="admin-card p-6">
+                <p class="text-xs text-gray-400 font-bold uppercase mb-2">Dịch vụ</p>
+                <p id="statServices" class="text-3xl font-extrabold text-brand-green">0</p>
+            </div>
+            <div class="admin-card p-6">
+                <p class="text-xs text-gray-400 font-bold uppercase mb-2">Mục sản phẩm</p>
+                <p id="statGroups" class="text-3xl font-extrabold text-brand-green">0</p>
+            </div>
+            <div class="admin-card p-6">
+                <p class="text-xs text-gray-400 font-bold uppercase mb-2">Sản phẩm</p>
+                <p id="statProducts" class="text-3xl font-extrabold text-brand-green">0</p>
+            </div>
+            <div class="admin-card p-6">
+                <p class="text-xs text-gray-400 font-bold uppercase mb-2">Nổi bật trang chủ</p>
+                <p id="statHomeFeatured" class="text-3xl font-extrabold text-brand-green">0</p>
+            </div>
+            <div class="admin-card p-6">
+                <p class="text-xs text-gray-400 font-bold uppercase mb-2">Banner trang chủ</p>
+                <p id="statBanners" class="text-3xl font-extrabold text-brand-green">0</p>
+            </div>
+            <div class="admin-card p-6">
+                <p class="text-xs text-gray-400 font-bold uppercase mb-2">Bài viết Blog</p>
+                <p id="statPosts" class="text-3xl font-extrabold text-brand-green">0</p>
+            </div>
+            <div class="admin-card p-6">
+                <p class="text-xs text-gray-400 font-bold uppercase mb-2">Bài nổi bật</p>
+                <p id="statFeatured" class="text-3xl font-extrabold text-brand-orange">0</p>
+            </div>
+            <div class="admin-card p-6 flex flex-col justify-between">
+                <p class="text-xs text-gray-400 font-bold uppercase mb-2">Dữ liệu</p>
+                <div class="flex gap-2">
+                    <button id="exportBtn" class="text-xs font-bold text-brand-green hover:underline">Xuất JSON</button>
+                    <span class="text-gray-300">|</span>
+                    <button id="importBtn" class="text-xs font-bold text-brand-green hover:underline">Nhập JSON</button>
+                </div>
+                <input type="file" id="importFile" accept=".json" class="hidden">
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3 mb-8 flex-wrap">
+            <button class="tab-btn active" data-tab="services">🧰 Dịch vụ</button>
+            <button class="tab-btn" data-tab="groups">🗂️ Mục sản phẩm</button>
+            <button class="tab-btn" data-tab="featured">🗓️ Nổi bật trang chủ</button>
+            <button class="tab-btn" data-tab="banners">🖼️ Banner trang chủ</button>
+            <button class="tab-btn" data-tab="posts">📰 Bài viết Blog</button>
+        </div>
+
+        <section id="tab-services">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold">Danh sách dịch vụ</h2>
+                <button id="addServiceBtn" class="btn-primary !py-2.5 !px-5 text-sm">+ Thêm dịch vụ</button>
+            </div>
+            <div id="serviceList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+        </section>
+
+        <section id="tab-groups" class="hidden">
+            <div class="bg-white border border-gray-100 rounded-2xl p-6 mb-6">
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Chọn dịch vụ để quản lý mục sản phẩm</label>
+                <select id="groupServiceSelect" class="w-full max-w-md"></select>
+            </div>
+
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold">Mục sản phẩm</h2>
+                <button id="addGroupBtn" class="btn-primary !py-2.5 !px-5 text-sm">+ Thêm mục sản phẩm</button>
+            </div>
+            <div id="groupList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+        </section>
+
+        <section id="tab-featured" class="hidden">
+            <div class="bg-white border border-gray-100 rounded-2xl p-6 mb-6">
+                <p class="text-sm text-gray-500">Danh sách này hiển thị riêng ở mục <strong>"Lịch Mới 2027"</strong> trên <strong>trang chủ</strong> (index.html) — độc lập với Dịch vụ / Mục sản phẩm / Sản phẩm. Mỗi mục gồm: tiêu đề + ảnh sản phẩm.</p>
+            </div>
+
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold">Sản phẩm nổi bật trang chủ</h2>
+                <button id="addFeaturedBtn" class="btn-primary !py-2.5 !px-5 text-sm">+ Thêm sản phẩm nổi bật</button>
+            </div>
+            <div id="featuredList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+        </section>
+
+        <section id="tab-banners" class="hidden">
+            <div class="bg-white border border-gray-100 rounded-2xl p-6 mb-6">
+                <p class="text-sm text-gray-500">Banner lớn xoay vòng ở đầu <strong>trang chủ</strong> (index.html). Thêm/sửa/xóa hoặc đổi ảnh banner tại đây — trang chủ sẽ tự cập nhật, không cần sửa code. Có thể chọn ảnh từ máy (ví dụ banner Tết mới) hoặc dán đường dẫn ảnh có sẵn.</p>
+            </div>
+
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold">Danh sách banner</h2>
+                <button id="addBannerBtn" class="btn-primary !py-2.5 !px-5 text-sm">+ Thêm banner</button>
+            </div>
+            <div id="bannerList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+        </section>
+
+        <section id="tab-posts" class="hidden">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold">Danh sách bài viết</h2>
+                <button id="addPostBtn" class="btn-primary !py-2.5 !px-5 text-sm">+ Đăng bài viết mới</button>
+            </div>
+            <div id="postList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+        </section>
+    </main>
+</div>
+
+<!-- ========== MODAL: FORM DỊCH VỤ ========== -->
+<div id="serviceModal" class="fixed inset-0 z-[150] hidden modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-[32px] p-8 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between mb-6">
+            <h3 id="serviceModalTitle" class="text-xl font-bold">Thêm dịch vụ</h3>
+            <button data-close-modal="serviceModal" class="icon-btn hover:bg-gray-100">✕</button>
+        </div>
+        <form id="serviceForm" class="space-y-4">
+            <input type="hidden" id="svcId">
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Tên dịch vụ *</label>
+                <input type="text" id="svcTitle" required placeholder="VD: In hộp cứng cao cấp" class="w-full">
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Ảnh dịch vụ *</label>
+                <div class="flex items-center gap-4">
+                    <div class="w-20 h-20 rounded-xl bg-gray-100 overflow-hidden flex items-center justify-center shrink-0 border border-gray-100">
+                        <img id="svcImagePreview" src="" class="w-full h-full object-cover hidden">
+                        <span id="svcImagePreviewEmpty" class="text-[10px] text-gray-400 text-center px-1">Chưa có ảnh</span>
+                    </div>
+                    <div class="flex-1">
+                        <input type="file" id="svcImageFile" accept="image/*" class="hidden">
+                        <button type="button" onclick="document.getElementById('svcImageFile').click()" class="btn-outline !py-2 !px-4 text-sm w-full">📤 Chọn ảnh từ máy</button>
+                        <button type="button" id="svcImageManualToggle" class="text-[11px] text-gray-400 hover:text-brand-green mt-2 underline block">hoặc nhập đường dẫn ảnh có sẵn</button>
+                    </div>
+                </div>
+                <input type="text" id="svcImage" required placeholder="image/ten-anh.jpg" class="w-full mt-3 hidden">
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Mô tả ngắn (hiển thị ở danh sách) *</label>
+                <textarea id="svcDesc" required class="w-full admin-input" placeholder="Mô tả ngắn gọn, 1-2 câu"></textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Mô tả chi tiết (trang chi tiết dịch vụ)</label>
+                <textarea id="svcDetail" class="w-full admin-input" placeholder="Nội dung đầy đủ hiển thị ở trang chi tiết"></textarea>
+            </div>
+            <button type="submit" class="w-full btn-primary !w-full !py-3">Lưu dịch vụ</button>
+        </form>
+    </div>
+</div>
+
+<!-- ========== MODAL: FORM BÀI VIẾT ========== -->
+<!-- ========== MODAL: SẢN PHẨM NỔI BẬT TRANG CHỦ ========== -->
+<div id="featuredModal" class="fixed inset-0 z-[150] hidden modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-[32px] p-8 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between mb-6">
+            <h3 id="featuredModalTitle" class="text-xl font-bold">Thêm sản phẩm nổi bật</h3>
+            <button data-close-modal="featuredModal" class="icon-btn hover:bg-gray-100">✕</button>
+        </div>
+        <form id="featuredForm" class="space-y-4">
+            <input type="hidden" id="featuredId">
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Tiêu đề *</label>
+                <input type="text" id="featuredTitle" required placeholder="VD: Lịch Bloc Đại 2027 — Mẫu Hoa Mai" class="w-full">
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Ảnh sản phẩm *</label>
+                <div class="flex items-center gap-4">
+                    <div class="w-20 h-20 rounded-xl bg-gray-100 overflow-hidden flex items-center justify-center shrink-0 border border-gray-100">
+                        <img id="featuredImagePreview" src="" class="w-full h-full object-cover hidden">
+                        <span id="featuredImagePreviewEmpty" class="text-[10px] text-gray-400 text-center px-1">Chưa có ảnh</span>
+                    </div>
+                    <div class="flex-1">
+                        <input type="file" id="featuredImageFile" accept="image/*" class="hidden">
+                        <button type="button" onclick="document.getElementById('featuredImageFile').click()" class="btn-outline !py-2 !px-4 text-sm w-full">📤 Chọn ảnh từ máy</button>
+                        <button type="button" id="featuredImageManualToggle" class="text-[11px] text-gray-400 hover:text-brand-green mt-2 underline block">hoặc nhập đường dẫn ảnh có sẵn</button>
+                    </div>
+                </div>
+                <input type="text" id="featuredImage" required placeholder="image/ten-anh.jpg" class="w-full mt-3 hidden">
+            </div>
+            <button type="submit" class="w-full btn-primary !w-full !py-3">Lưu sản phẩm nổi bật</button>
+        </form>
+    </div>
+</div>
+
+<!-- ========== MODAL: FORM BANNER TRANG CHỦ ========== -->
+<div id="bannerModal" class="fixed inset-0 z-[150] hidden modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-[32px] p-8 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between mb-6">
+            <h3 id="bannerModalTitle" class="text-xl font-bold">Thêm banner</h3>
+            <button data-close-modal="bannerModal" class="icon-btn hover:bg-gray-100">✕</button>
+        </div>
+        <form id="bannerForm" class="space-y-4">
+            <input type="hidden" id="bannerId">
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Ảnh banner *</label>
+                <div class="flex items-center gap-4">
+                    <div class="w-28 h-16 rounded-xl bg-gray-100 overflow-hidden flex items-center justify-center shrink-0 border border-gray-100">
+                        <img id="bannerImagePreview" src="" class="w-full h-full object-cover hidden">
+                        <span id="bannerImagePreviewEmpty" class="text-[10px] text-gray-400 text-center px-1">Chưa có ảnh</span>
+                    </div>
+                    <div class="flex-1">
+                        <input type="file" id="bannerImageFile" accept="image/*" class="hidden">
+                        <button type="button" onclick="document.getElementById('bannerImageFile').click()" class="btn-outline !py-2 !px-4 text-sm w-full">📤 Chọn ảnh từ máy</button>
+                        <button type="button" id="bannerImageManualToggle" class="text-[11px] text-gray-400 hover:text-brand-green mt-2 underline block">hoặc nhập đường dẫn ảnh có sẵn</button>
+                    </div>
+                </div>
+                <input type="text" id="bannerImage" required placeholder="image/ten-anh.jpg" class="w-full mt-3 hidden">
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Tiêu đề hiển thị trên banner *</label>
+                <textarea id="bannerTitle" required class="w-full admin-input" style="min-height:70px" placeholder="VD: Chúc Mừng Năm Mới&#10;Lịch Bloc 2027 (xuống dòng bằng &lt;br&gt; nếu cần chia 2 dòng)"></textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Bấm vào banner sẽ đi tới trang nào? (không bắt buộc)</label>
+                <input type="text" id="bannerLink" placeholder="VD: dich-vu.html" class="w-full">
+            </div>
+            <button type="submit" class="w-full btn-primary !w-full !py-3">Lưu banner</button>
+        </form>
+    </div>
+</div>
+
+<div id="postModal" class="fixed inset-0 z-[150] hidden modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-[32px] p-8 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between mb-6">
+            <h3 id="postModalTitle" class="text-xl font-bold">Đăng bài viết mới</h3>
+            <button data-close-modal="postModal" class="icon-btn hover:bg-gray-100">✕</button>
+        </div>
+        <form id="postForm" class="space-y-4">
+            <input type="hidden" id="postId">
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Tiêu đề bài viết *</label>
+                <input type="text" id="postTitle" required placeholder="VD: 5 xu hướng in ấn nổi bật 2026" class="w-full">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Chuyên mục</label>
+                    <input type="text" id="postTag" placeholder="VD: Xu hướng" class="w-full">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Ngày đăng *</label>
+                    <input type="date" id="postDate" required class="w-full">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Ảnh bài viết *</label>
+                <div class="flex items-center gap-4">
+                    <div class="w-20 h-20 rounded-xl bg-gray-100 overflow-hidden flex items-center justify-center shrink-0 border border-gray-100">
+                        <img id="postImagePreview" src="" class="w-full h-full object-cover hidden">
+                        <span id="postImagePreviewEmpty" class="text-[10px] text-gray-400 text-center px-1">Chưa có ảnh</span>
+                    </div>
+                    <div class="flex-1">
+                        <input type="file" id="postImageFile" accept="image/*" class="hidden">
+                        <button type="button" onclick="document.getElementById('postImageFile').click()" class="btn-outline !py-2 !px-4 text-sm w-full">📤 Chọn ảnh từ máy</button>
+                        <button type="button" id="postImageManualToggle" class="text-[11px] text-gray-400 hover:text-brand-green mt-2 underline block">hoặc nhập đường dẫn ảnh có sẵn</button>
+                    </div>
+                </div>
+                <input type="text" id="postImage" required placeholder="image/ten-anh.jpg" class="w-full mt-3 hidden">
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Mô tả ngắn (excerpt) *</label>
+                <textarea id="postExcerpt" required class="w-full admin-input" placeholder="Đoạn tóm tắt hiển thị ở danh sách bài viết"></textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Nội dung chi tiết *</label>
+                <textarea id="postContent" required class="w-full admin-input" style="min-height:180px" placeholder="Nội dung đầy đủ của bài viết. Cách 1 dòng trống giữa các đoạn.&#10;Dùng ## Tiêu đề để tạo tiêu đề phụ, dùng > Trích dẫn để tạo đoạn trích nổi bật."></textarea>
+                <p class="text-[11px] text-gray-400 mt-2">Mẹo: mỗi đoạn cách nhau 1 dòng trống. Bắt đầu dòng bằng <code>## </code> để tạo tiêu đề phụ, bắt đầu bằng <code>&gt; </code> để tạo trích dẫn nổi bật — bài viết sẽ tự hiển thị theo đúng bố cục mẫu trên trang Blog.</p>
+            </div>
+            <label class="flex items-center gap-3 bg-slate-50 p-4 rounded-2xl cursor-pointer text-sm">
+                <input type="checkbox" id="postFeatured" class="accent-green-600">
+                Đặt làm bài viết nổi bật (hiển thị lớn ở đầu trang Blog)
+            </label>
+            <button type="submit" class="w-full btn-primary !w-full !py-3">Đăng bài viết</button>
+        </form>
+    </div>
+</div>
+
+<!-- ========== MODAL: FORM MỤC SẢN PHẨM ========== -->
+<div id="groupModal" class="fixed inset-0 z-[150] hidden modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-[32px] p-8">
+        <div class="flex items-center justify-between mb-6">
+            <h3 id="groupModalTitle" class="text-xl font-bold">Thêm mục sản phẩm</h3>
+            <button data-close-modal="groupModal" class="icon-btn hover:bg-gray-100">✕</button>
+        </div>
+        <form id="groupForm" class="space-y-4">
+            <input type="hidden" id="groupId">
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Thuộc dịch vụ *</label>
+                <select id="groupServiceIdField" required class="w-full"></select>
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Tên mục sản phẩm *</label>
+                <input type="text" id="groupTitle" required placeholder="VD: IN TÚI GIẤY QUÀ TẶNG, QUÀ TẾT QT" class="w-full">
+            </div>
+            <button type="submit" class="w-full btn-primary !w-full !py-3">Lưu mục sản phẩm</button>
+        </form>
+    </div>
+</div>
+
+<!-- ========== MODAL: DANH SÁCH SẢN PHẨM TRONG 1 MỤC ========== -->
+<div id="productListModal" class="fixed inset-0 z-[150] hidden modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-3xl rounded-[32px] p-8 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between mb-2">
+            <h3 id="productListModalTitle" class="text-xl font-bold">Sản phẩm trong mục</h3>
+            <button data-close-modal="productListModal" class="icon-btn hover:bg-gray-100">✕</button>
+        </div>
+        <div class="flex items-center justify-between mb-4 gap-3 flex-wrap">
+            <p class="text-xs text-gray-400">Quản lý các sản phẩm cụ thể hiển thị khi khách bấm vào mục này.</p>
+            <button id="addProductBtn" class="btn-primary !py-2 !px-4 text-sm shrink-0 ml-4">+ Thêm sản phẩm</button>
+        </div>
+        <div class="flex items-center gap-2 mb-6">
+            <label class="text-xs font-bold uppercase text-gray-400">Lọc theo năm:</label>
+            <select id="productYearFilter" class="!py-1.5 !px-3 text-sm w-auto"></select>
+        </div>
+        <div id="productListInModal" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </div>
+</div>
+
+<!-- ========== MODAL: FORM SẢN PHẨM ========== -->
+<div id="productModal" class="fixed inset-0 z-[160] hidden modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-[32px] p-8 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between mb-6">
+            <h3 id="productModalTitle" class="text-xl font-bold">Thêm sản phẩm</h3>
+            <button data-close-modal="productModal" class="icon-btn hover:bg-gray-100">✕</button>
+        </div>
+        <form id="productForm" class="space-y-4">
+            <input type="hidden" id="productId">
+            <input type="hidden" id="productGroupId">
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Tên sản phẩm *</label>
+                <input type="text" id="productTitle" required placeholder="VD: Túi đựng lịch bloc đại" class="w-full">
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Năm áp dụng *</label>
+                <select id="productYear" required class="w-full"></select>
+                <p class="text-[11px] text-gray-400 mt-1">Dùng để lọc sản phẩm theo từng năm (VD: lịch Tết 2026, catalogue 2027...). Chưa có năm bạn cần? Gõ trực tiếp vào ô "Năm khác" bên dưới.</p>
+                <input type="text" id="productYearCustom" placeholder="Hoặc nhập năm khác, VD: 2029" class="w-full mt-2">
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Ảnh sản phẩm — có thể chọn nhiều ảnh *</label>
+                <div id="productImageThumbs" class="flex flex-wrap gap-3 mb-3"></div>
+                <input type="file" id="productImageFile" accept="image/*" multiple class="hidden">
+                <button type="button" onclick="document.getElementById('productImageFile').click()" class="btn-outline !py-2 !px-4 text-sm w-full">📤 Thêm ảnh từ máy (chọn được nhiều ảnh cùng lúc)</button>
+                <input type="hidden" id="productImages">
+                <input type="text" id="productImage" placeholder="image/ten-anh.jpg" class="w-full mt-3 hidden">
+                <button type="button" id="productImageManualToggle" class="text-[11px] text-gray-400 hover:text-brand-green mt-2 underline block">hoặc thêm 1 ảnh bằng đường dẫn có sẵn</button>
+            </div>
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Mô tả ngắn</label>
+                <textarea id="productDesc" class="w-full admin-input" style="min-height:80px" placeholder="Chất liệu, kích thước, điểm nổi bật..."></textarea>
+            </div>
+            <button type="submit" class="w-full btn-primary !w-full !py-3">Lưu sản phẩm</button>
+        </form>
+    </div>
+</div>
+
+<div id="toastBox" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[300]"></div>
+
+<script src="config.js"></script>
+    <script src="data.js"></script>
+    <script src="mongo-sync.js"></script>
+<script>
+const ADMIN_PASS_KEY = 'lnn_admin_pass';
+function getAdminPass() { return localStorage.getItem(ADMIN_PASS_KEY) || 'lnn2026'; }
+
+document.getElementById('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const val = document.getElementById('loginPassword').value;
+    if (val === getAdminPass()) {
+        sessionStorage.setItem('lnn_admin_authed', '1');
+        showAdmin();
+    } else {
+        document.getElementById('loginError').classList.remove('hidden');
+    }
+});
+document.getElementById('logoutBtn').addEventListener('click', function () {
+    sessionStorage.removeItem('lnn_admin_authed');
+    location.reload();
+});
+function showAdmin() {
+    document.getElementById('loginGate').classList.add('hidden');
+    document.getElementById('adminApp').classList.remove('hidden');
+    refreshAll();
+}
+if (sessionStorage.getItem('lnn_admin_authed') === '1') showAdmin();
+
+function showToast(msg) {
+    const box = document.getElementById('toastBox');
+    const el = document.createElement('div');
+    el.className = 'toast bg-slate-900 text-white text-sm font-medium px-6 py-3 rounded-full shadow-2xl mb-2';
+    el.textContent = msg;
+    box.appendChild(el);
+    setTimeout(() => el.remove(), 3000);
+}
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.dataset.tab;
+        document.getElementById('tab-services').classList.toggle('hidden', tab !== 'services');
+        document.getElementById('tab-groups').classList.toggle('hidden', tab !== 'groups');
+        document.getElementById('tab-featured').classList.toggle('hidden', tab !== 'featured');
+        document.getElementById('tab-banners').classList.toggle('hidden', tab !== 'banners');
+        document.getElementById('tab-posts').classList.toggle('hidden', tab !== 'posts');
+    });
+});
+
+function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+document.querySelectorAll('[data-close-modal]').forEach(btn => {
+    btn.addEventListener('click', () => closeModal(btn.dataset.closeModal));
+});
+
+function refreshAll() {
+    renderServiceList();
+    renderPostList();
+    populateGroupServiceSelect();
+    renderGroupList();
+    renderFeaturedList();
+    renderBannerList();
+    const services = lnnGetServices();
+    const posts = lnnGetPosts();
+    const groups = lnnGetGroups();
+    const products = lnnGetProducts();
+    const homeFeatured = lnnGetFeatured();
+    const banners = lnnGetBanners();
+    document.getElementById('statServices').textContent = services.length;
+    document.getElementById('statGroups').textContent = groups.length;
+    document.getElementById('statProducts').textContent = products.length;
+    document.getElementById('statHomeFeatured').textContent = homeFeatured.length;
+    document.getElementById('statBanners').textContent = banners.length;
+    document.getElementById('statPosts').textContent = posts.length;
+    document.getElementById('statFeatured').textContent = posts.filter(p => p.featured).length;
+}
+
+function renderServiceList() {
+    const items = lnnGetServices();
+    const el = document.getElementById('serviceList');
+    el.innerHTML = items.map(s => `
+        <div class="admin-card p-4">
+            <img src="${lnnEscape(s.image)}" alt="${lnnEscape(s.title)}" class="w-full h-36 object-cover rounded-xl mb-4 bg-gray-100" onerror="this.style.opacity=0.3">
+            <h4 class="font-bold mb-1">${lnnEscape(s.title)}</h4>
+            <p class="text-xs text-gray-500 mb-4 line-clamp-2">${lnnEscape(s.desc)}</p>
+            <div class="flex gap-2">
+                <button class="flex-1 text-xs font-bold bg-slate-50 hover:bg-slate-100 py-2 rounded-xl transition" onclick="editService('${s.id}')">✏️ Sửa</button>
+                <button class="flex-1 text-xs font-bold bg-red-50 text-red-600 hover:bg-red-100 py-2 rounded-xl transition" onclick="deleteService('${s.id}')">🗑️ Xóa</button>
+            </div>
+        </div>`).join('') || '<p class="text-gray-400 col-span-full text-center py-10">Chưa có dịch vụ nào.</p>';
+}
+
+function renderPostList() {
+    const items = lnnGetPosts().slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+    const el = document.getElementById('postList');
+    el.innerHTML = items.map(p => `
+        <div class="admin-card p-4">
+            <div class="relative">
+                <img src="${lnnEscape(p.image)}" alt="${lnnEscape(p.title)}" class="w-full h-36 object-cover rounded-xl mb-4 bg-gray-100" onerror="this.style.opacity=0.3">
+                ${p.featured ? '<span class="absolute top-2 left-2 bg-brand-orange text-white text-[10px] font-bold px-2 py-1 rounded-full">NỔI BẬT</span>' : ''}
+            </div>
+            <p class="text-[11px] text-gray-400 mb-1">${lnnFormatDate(p.date)} • ${lnnEscape(p.tag || 'Tin tức')}</p>
+            <h4 class="font-bold mb-3 line-clamp-2">${lnnEscape(p.title)}</h4>
+            <div class="flex gap-2">
+                <a href="post.html?id=${encodeURIComponent(p.id)}" target="_blank" class="flex-1 text-xs font-bold bg-slate-50 hover:bg-slate-100 py-2 rounded-xl transition text-center">👁️ Xem</a>
+                <button class="flex-1 text-xs font-bold bg-slate-50 hover:bg-slate-100 py-2 rounded-xl transition" onclick="editPost('${p.id}')">✏️ Sửa</button>
+                <button class="flex-1 text-xs font-bold bg-red-50 text-red-600 hover:bg-red-100 py-2 rounded-xl transition" onclick="deletePost('${p.id}')">🗑️ Xóa</button>
+            </div>
+        </div>`).join('') || '<p class="text-gray-400 col-span-full text-center py-10">Chưa có bài viết nào.</p>';
+}
+
+/* ==================== MỤC SẢN PHẨM (GROUPS) ==================== */
+function populateGroupServiceSelect() {
+    const services = lnnGetServices();
+    const select = document.getElementById('groupServiceSelect');
+    const field = document.getElementById('groupServiceIdField');
+    const prevSelect = select.value;
+    const prevField = field.value;
+
+    const options = services.map(s => `<option value="${s.id}">${lnnEscape(s.title)}</option>`).join('')
+        || '<option value="">Chưa có dịch vụ nào</option>';
+
+    select.innerHTML = options;
+    field.innerHTML = options;
+
+    if (services.some(s => s.id === prevSelect)) select.value = prevSelect;
+    if (services.some(s => s.id === prevField)) field.value = prevField;
+}
+
+document.getElementById('groupServiceSelect').addEventListener('change', renderGroupList);
+
+function renderGroupList() {
+    const serviceId = document.getElementById('groupServiceSelect').value;
+    const groups = serviceId ? lnnGetGroupsByService(serviceId) : [];
+    const el = document.getElementById('groupList');
+    el.innerHTML = groups.map(g => {
+        const count = lnnGetProductsByGroup(g.id).length;
+        return `
+        <div class="admin-card p-5">
+            <h4 class="font-bold mb-1">${lnnEscape(g.title)}</h4>
+            <p class="text-xs text-gray-400 mb-4">${count} sản phẩm</p>
+            <div class="flex flex-col gap-2">
+                <button class="w-full text-xs font-bold bg-green-50 text-brand-green hover:bg-green-100 py-2 rounded-xl transition" onclick="openProductListModal('${g.id}')">📦 Quản lý sản phẩm (${count})</button>
+                <div class="flex gap-2">
+                    <button class="flex-1 text-xs font-bold bg-slate-50 hover:bg-slate-100 py-2 rounded-xl transition" onclick="editGroup('${g.id}')">✏️ Sửa</button>
+                    <button class="flex-1 text-xs font-bold bg-red-50 text-red-600 hover:bg-red-100 py-2 rounded-xl transition" onclick="deleteGroup('${g.id}')">🗑️ Xóa</button>
+                </div>
+            </div>
+        </div>`;
+    }).join('') || '<p class="text-gray-400 col-span-full text-center py-10">Dịch vụ này chưa có mục sản phẩm nào. Bấm "+ Thêm mục sản phẩm" để tạo mới.</p>';
+}
+
+document.getElementById('addGroupBtn').addEventListener('click', () => {
+    if (!lnnGetServices().length) { alert('Vui lòng thêm ít nhất một dịch vụ trước khi tạo mục sản phẩm.'); return; }
+    document.getElementById('groupForm').reset();
+    document.getElementById('groupId').value = '';
+    populateGroupServiceSelect();
+    const currentService = document.getElementById('groupServiceSelect').value;
+    if (currentService) document.getElementById('groupServiceIdField').value = currentService;
+    document.getElementById('groupModalTitle').textContent = 'Thêm mục sản phẩm';
+    openModal('groupModal');
+});
+
+function editGroup(id) {
+    const g = lnnGetGroupById(id);
+    if (!g) return;
+    populateGroupServiceSelect();
+    document.getElementById('groupId').value = g.id;
+    document.getElementById('groupServiceIdField').value = g.serviceId;
+    document.getElementById('groupTitle').value = g.title;
+    document.getElementById('groupModalTitle').textContent = 'Sửa mục sản phẩm';
+    openModal('groupModal');
+}
+
+function deleteGroup(id) {
+    if (!confirm('Xóa mục sản phẩm này? Toàn bộ sản phẩm bên trong cũng sẽ bị xóa. Hành động không thể hoàn tác.')) return;
+    lnnDeleteGroupCascade(id);
+    refreshAll();
+    showToast('Đã xóa mục sản phẩm.');
+}
+
+document.getElementById('groupForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const id = document.getElementById('groupId').value;
+    const list = lnnGetGroups();
+    const data = {
+        serviceId: document.getElementById('groupServiceIdField').value,
+        title: document.getElementById('groupTitle').value.trim()
+    };
+    if (id) {
+        const idx = list.findIndex(g => g.id === id);
+        if (idx > -1) list[idx] = Object.assign({}, list[idx], data);
+    } else {
+        list.push(Object.assign({ id: lnnUid('grp') }, data));
+    }
+    lnnSaveGroups(list);
+    document.getElementById('groupServiceSelect').value = data.serviceId;
+    closeModal('groupModal');
+    refreshAll();
+    showToast('Đã lưu mục sản phẩm — trang Dịch vụ / Sản phẩm đã được cập nhật!');
+});
+
+/* ==================== SẢN PHẨM (PRODUCTS TRONG 1 MỤC) ==================== */
+let currentProductGroupId = null;
+let currentProductYearFilter = 'all';
+
+function populateYearSelect(selectEl, includeAllOption) {
+    const years = lnnGetProductYears();
+    let html = includeAllOption ? '<option value="all">Tất cả các năm</option>' : '';
+    html += years.map(y => `<option value="${y}">${y}</option>`).join('');
+    selectEl.innerHTML = html;
+}
+
+function openProductListModal(groupId) {
+    currentProductGroupId = groupId;
+    currentProductYearFilter = 'all';
+    const g = lnnGetGroupById(groupId);
+    document.getElementById('productListModalTitle').textContent = 'Sản phẩm trong: ' + (g ? g.title : '');
+    populateYearSelect(document.getElementById('productYearFilter'), true);
+    document.getElementById('productYearFilter').value = 'all';
+    renderProductListInModal();
+    openModal('productListModal');
+}
+
+document.getElementById('productYearFilter').addEventListener('change', function () {
+    currentProductYearFilter = this.value;
+    renderProductListInModal();
+});
+
+function renderProductListInModal() {
+    const products = lnnGetProductsByGroup(currentProductGroupId, currentProductYearFilter);
+    const el = document.getElementById('productListInModal');
+    el.innerHTML = products.map(p => {
+        const imgCount = (p.images && p.images.length) ? p.images.length : (p.image ? 1 : 0);
+        return `
+        <div class="admin-card p-4">
+            <div class="relative">
+                <img src="${lnnEscape(p.image)}" alt="${lnnEscape(p.title)}" class="w-full h-32 object-cover rounded-xl mb-3 bg-gray-100" onerror="this.style.opacity=0.3">
+                ${imgCount > 1 ? `<span class="absolute top-2 right-2 bg-slate-900/80 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">🖼️ ${imgCount} ảnh</span>` : ''}
+                <span class="absolute top-2 left-2 bg-brand-green text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Năm ${lnnEscape(p.year || '2026')}</span>
+            </div>
+            <h4 class="font-bold text-sm mb-1">${lnnEscape(p.title)}</h4>
+            <p class="text-xs text-gray-500 mb-3 line-clamp-2">${lnnEscape(p.desc || '')}</p>
+            <div class="flex gap-2">
+                <button class="flex-1 text-xs font-bold bg-slate-50 hover:bg-slate-100 py-2 rounded-xl transition" onclick="editProduct('${p.id}')">✏️ Sửa</button>
+                <button class="flex-1 text-xs font-bold bg-red-50 text-red-600 hover:bg-red-100 py-2 rounded-xl transition" onclick="deleteProduct('${p.id}')">🗑️ Xóa</button>
+            </div>
+        </div>`;
+    }).join('') || '<p class="text-gray-400 col-span-full text-center py-10">Chưa có sản phẩm nào trong mục này (với bộ lọc năm hiện tại).</p>';
+}
+
+document.getElementById('addProductBtn').addEventListener('click', () => {
+    document.getElementById('productForm').reset();
+    document.getElementById('productId').value = '';
+    document.getElementById('productGroupId').value = currentProductGroupId;
+    populateYearSelect(document.getElementById('productYear'), false);
+    document.getElementById('productYear').value = (currentProductYearFilter !== 'all') ? currentProductYearFilter : LNN_YEARS[LNN_YEARS.length - 1];
+    document.getElementById('productYearCustom').value = '';
+    productImagePicker.reset();
+    document.getElementById('productModalTitle').textContent = 'Thêm sản phẩm';
+    openModal('productModal');
+});
+
+function editProduct(id) {
+    const p = lnnGetProducts().find(x => x.id === id);
+    if (!p) return;
+    document.getElementById('productId').value = p.id;
+    document.getElementById('productGroupId').value = p.groupId;
+    document.getElementById('productTitle').value = p.title;
+    populateYearSelect(document.getElementById('productYear'), false);
+    const yr = p.year || '2026';
+    const yearSelect = document.getElementById('productYear');
+    if (Array.from(yearSelect.options).some(o => o.value === yr)) {
+        yearSelect.value = yr;
+        document.getElementById('productYearCustom').value = '';
+    } else {
+        document.getElementById('productYearCustom').value = yr;
+    }
+    const existingImages = (p.images && p.images.length) ? p.images : (p.image ? [p.image] : []);
+    productImagePicker.setImages(existingImages);
+    document.getElementById('productDesc').value = p.desc || '';
+    document.getElementById('productModalTitle').textContent = 'Sửa sản phẩm';
+    openModal('productModal');
+}
+
+function deleteProduct(id) {
+    if (!confirm('Xóa sản phẩm này? Hành động không thể hoàn tác.')) return;
+    lnnSaveProducts(lnnGetProducts().filter(p => p.id !== id));
+    renderProductListInModal();
+    refreshAll();
+    showToast('Đã xóa sản phẩm.');
+}
+
+document.getElementById('productForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const images = productImagePicker.getImages();
+    if (!images.length) { alert('Vui lòng thêm ít nhất 1 ảnh cho sản phẩm.'); return; }
+    const id = document.getElementById('productId').value;
+    const list = lnnGetProducts();
+    const customYear = document.getElementById('productYearCustom').value.trim();
+    const year = customYear || document.getElementById('productYear').value || '2026';
+    const data = {
+        groupId: document.getElementById('productGroupId').value,
+        title: document.getElementById('productTitle').value.trim(),
+        images: images,
+        image: images[0],
+        desc: document.getElementById('productDesc').value.trim(),
+        year: year
+    };
+    if (id) {
+        const idx = list.findIndex(p => p.id === id);
+        if (idx > -1) list[idx] = Object.assign({}, list[idx], data);
+    } else {
+        list.push(Object.assign({ id: lnnUid('prod') }, data));
+    }
+    lnnSaveProducts(list);
+    closeModal('productModal');
+    renderProductListInModal();
+    refreshAll();
+    showToast('Đã lưu sản phẩm — trang Dịch vụ / Sản phẩm đã được cập nhật!');
+});
+
+/* ---------- Chọn NHIỀU ảnh từ máy + xem trước dạng thư viện ảnh (dùng cho Sản phẩm) ---------- */
+function lnnSetupGalleryPicker(fileInputId, hiddenInputId, thumbsWrapId, manualToggleId, manualInputId) {
+    const fileInput = document.getElementById(fileInputId);
+    const hidden = document.getElementById(hiddenInputId);
+    const thumbsWrap = document.getElementById(thumbsWrapId);
+    const manualToggle = document.getElementById(manualToggleId);
+    const manualInput = document.getElementById(manualInputId);
+    let images = [];
+
+    function sync() {
+        hidden.value = JSON.stringify(images);
+        renderThumbs();
+    }
+
+    function renderThumbs() {
+        thumbsWrap.innerHTML = images.map((src, i) => `
+            <div class="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-100 bg-gray-100 group">
+                <img src="${lnnEscape(src)}" class="w-full h-full object-cover" onerror="this.style.opacity=0.3">
+                ${i === 0 ? '<span class="absolute bottom-0 left-0 right-0 bg-brand-green text-white text-[9px] font-bold text-center py-0.5">ẢNH CHÍNH</span>' : ''}
+                <button type="button" onclick="lnnGalleryRemove('${thumbsWrapId}', ${i})" class="absolute top-1 right-1 w-5 h-5 rounded-full bg-slate-900/80 text-white text-[11px] leading-5 text-center opacity-0 group-hover:opacity-100 transition">✕</button>
+                ${i !== 0 ? `<button type="button" onclick="lnnGalleryMakeMain('${thumbsWrapId}', ${i})" class="absolute top-1 left-1 w-5 h-5 rounded-full bg-white/90 text-slate-700 text-[10px] leading-5 text-center opacity-0 group-hover:opacity-100 transition" title="Đặt làm ảnh chính">★</button>` : ''}
+            </div>`).join('') || '<p class="text-[11px] text-gray-400">Chưa có ảnh nào — bấm nút bên dưới để thêm.</p>';
+    }
+
+    fileInput.addEventListener('change', function (e) {
+        const files = Array.from(e.target.files || []);
+        if (!files.length) return;
+        Promise.all(files.map(f => lnnFileToDataUrl(f, 1600, 0.82).catch(() => null)))
+            .then(results => {
+                results.filter(Boolean).forEach(dataUrl => images.push(dataUrl));
+                sync();
+            });
+        fileInput.value = '';
+    });
+
+    if (manualToggle && manualInput) {
+        manualToggle.addEventListener('click', function () {
+            manualInput.classList.toggle('hidden');
+            if (!manualInput.classList.contains('hidden')) { manualInput.focus(); return; }
+            const val = manualInput.value.trim();
+            if (val) { images.push(val); manualInput.value = ''; sync(); }
+        });
+    }
+
+    function reset() { images = []; sync(); }
+    function setImages(arr) { images = Array.isArray(arr) ? arr.slice() : []; sync(); }
+    function getImages() { return images.slice(); }
+    function removeAt(i) { images.splice(i, 1); sync(); }
+    function makeMain(i) { const [img] = images.splice(i, 1); images.unshift(img); sync(); }
+
+    window['lnnGallery_' + thumbsWrapId] = { reset, setImages, getImages, removeAt, makeMain };
+    return { reset, setImages, getImages };
+}
+
+function lnnGalleryRemove(thumbsWrapId, index) {
+    window['lnnGallery_' + thumbsWrapId].removeAt(index);
+}
+function lnnGalleryMakeMain(thumbsWrapId, index) {
+    window['lnnGallery_' + thumbsWrapId].makeMain(index);
+}
+
+/* ==================== SẢN PHẨM NỔI BẬT TRANG CHỦ (mục "Lịch Mới 2027") ==================== */
+function renderFeaturedList() {
+    const items = lnnGetFeatured();
+    const el = document.getElementById('featuredList');
+    el.innerHTML = items.map(f => `
+        <div class="admin-card p-4">
+            <img src="${lnnEscape(f.image)}" alt="${lnnEscape(f.title)}" class="w-full h-32 object-cover rounded-xl mb-3 bg-gray-100" onerror="this.style.opacity=0.3">
+            <h4 class="font-bold text-sm mb-3">${lnnEscape(f.title)}</h4>
+            <div class="flex gap-2">
+                <button class="flex-1 text-xs font-bold bg-slate-50 hover:bg-slate-100 py-2 rounded-xl transition" onclick="editFeatured('${f.id}')">✏️ Sửa</button>
+                <button class="flex-1 text-xs font-bold bg-red-50 text-red-600 hover:bg-red-100 py-2 rounded-xl transition" onclick="deleteFeatured('${f.id}')">🗑️ Xóa</button>
+            </div>
+        </div>`).join('') || '<p class="text-gray-400 col-span-full text-center py-10">Chưa có sản phẩm nổi bật nào — bấm "+ Thêm sản phẩm nổi bật" để tạo mới.</p>';
+}
+
+document.getElementById('addFeaturedBtn').addEventListener('click', () => {
+    document.getElementById('featuredForm').reset();
+    document.getElementById('featuredId').value = '';
+    featuredImagePicker.reset();
+    document.getElementById('featuredModalTitle').textContent = 'Thêm sản phẩm nổi bật';
+    openModal('featuredModal');
+});
+
+function editFeatured(id) {
+    const f = lnnGetFeaturedById(id);
+    if (!f) return;
+    document.getElementById('featuredId').value = f.id;
+    document.getElementById('featuredTitle').value = f.title;
+    document.getElementById('featuredImage').value = f.image;
+    featuredImagePicker.updatePreview();
+    document.getElementById('featuredModalTitle').textContent = 'Sửa sản phẩm nổi bật';
+    openModal('featuredModal');
+}
+
+function deleteFeatured(id) {
+    if (!confirm('Xóa sản phẩm nổi bật này khỏi mục "Lịch Mới 2027" trên trang chủ?')) return;
+    lnnSaveFeatured(lnnGetFeatured().filter(f => f.id !== id));
+    refreshAll();
+    showToast('Đã xóa sản phẩm nổi bật.');
+}
+
+document.getElementById('featuredForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const id = document.getElementById('featuredId').value;
+    const list = lnnGetFeatured();
+    const data = {
+        title: document.getElementById('featuredTitle').value.trim(),
+        image: document.getElementById('featuredImage').value.trim()
+    };
+    if (id) {
+        const idx = list.findIndex(f => f.id === id);
+        if (idx > -1) list[idx] = Object.assign({}, list[idx], data);
+    } else {
+        list.push(Object.assign({ id: lnnUid('feat') }, data));
+    }
+    lnnSaveFeatured(list);
+    closeModal('featuredModal');
+    refreshAll();
+    showToast('Đã lưu — mục "Lịch Mới 2027" trên trang chủ đã được cập nhật!');
+});
+
+/* ==================== BANNER TRANG CHỦ ==================== */
+function renderBannerList() {
+    const items = lnnGetBanners();
+    const el = document.getElementById('bannerList');
+    el.innerHTML = items.map((b, i) => `
+        <div class="admin-card p-4">
+            <div class="relative">
+                <img src="${lnnEscape(b.image)}" alt="Banner" class="w-full h-32 object-cover rounded-xl mb-3 bg-gray-100" onerror="this.style.opacity=0.3">
+                <span class="absolute top-2 left-2 bg-slate-900/80 text-white text-[10px] font-bold px-2 py-1 rounded-full">#${i + 1}</span>
+            </div>
+            <h4 class="font-bold text-sm mb-1">${lnnEscape((b.title || '').replace(/<br\s*\/?>/gi, ' — '))}</h4>
+            <p class="text-[11px] text-gray-400 mb-3">${b.link ? 'Liên kết: ' + lnnEscape(b.link) : 'Không có liên kết'}</p>
+            <div class="flex gap-2">
+                <button class="flex-1 text-xs font-bold bg-slate-50 hover:bg-slate-100 py-2 rounded-xl transition" onclick="editBanner('${b.id}')">✏️ Sửa</button>
+                <button class="flex-1 text-xs font-bold bg-red-50 text-red-600 hover:bg-red-100 py-2 rounded-xl transition" onclick="deleteBanner('${b.id}')">🗑️ Xóa</button>
+            </div>
+        </div>`).join('') || '<p class="text-gray-400 col-span-full text-center py-10">Chưa có banner nào — bấm "+ Thêm banner" để tạo mới.</p>';
+}
+
+document.getElementById('addBannerBtn').addEventListener('click', () => {
+    document.getElementById('bannerForm').reset();
+    document.getElementById('bannerId').value = '';
+    bannerImagePicker.reset();
+    document.getElementById('bannerModalTitle').textContent = 'Thêm banner';
+    openModal('bannerModal');
+});
+
+function editBanner(id) {
+    const b = lnnGetBannerById(id);
+    if (!b) return;
+    document.getElementById('bannerId').value = b.id;
+    document.getElementById('bannerImage').value = b.image;
+    bannerImagePicker.updatePreview();
+    document.getElementById('bannerTitle').value = b.title || '';
+    document.getElementById('bannerLink').value = b.link || '';
+    document.getElementById('bannerModalTitle').textContent = 'Sửa banner';
+    openModal('bannerModal');
+}
+
+function deleteBanner(id) {
+    if (!confirm('Xóa banner này khỏi trang chủ?')) return;
+    lnnSaveBanners(lnnGetBanners().filter(b => b.id !== id));
+    refreshAll();
+    showToast('Đã xóa banner.');
+}
+
+document.getElementById('bannerForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const id = document.getElementById('bannerId').value;
+    const list = lnnGetBanners();
+    const data = {
+        image: document.getElementById('bannerImage').value.trim(),
+        title: document.getElementById('bannerTitle').value.trim(),
+        link: document.getElementById('bannerLink').value.trim()
+    };
+    if (id) {
+        const idx = list.findIndex(b => b.id === id);
+        if (idx > -1) list[idx] = Object.assign({}, list[idx], data);
+    } else {
+        list.push(Object.assign({ id: lnnUid('banner') }, data));
+    }
+    lnnSaveBanners(list);
+    closeModal('bannerModal');
+    refreshAll();
+    showToast('Đã lưu banner — trang chủ đã được cập nhật!');
+});
+
+/* ---------- Chọn ảnh từ máy + xem trước (dùng chung cho Dịch vụ & Bài viết) ---------- */
+function lnnSetupImagePicker(fileInputId, hiddenInputId, previewImgId, previewEmptyId, toggleBtnId) {
+    const fileInput = document.getElementById(fileInputId);
+    const hidden = document.getElementById(hiddenInputId);
+    const previewImg = document.getElementById(previewImgId);
+    const previewEmpty = document.getElementById(previewEmptyId);
+    const toggleBtn = document.getElementById(toggleBtnId);
+
+    function updatePreview() {
+        const val = hidden.value.trim();
+        if (!val) {
+            previewImg.classList.add('hidden');
+            previewEmpty.classList.remove('hidden');
+            previewEmpty.textContent = 'Chưa có ảnh';
+            return;
+        }
+        previewImg.onerror = () => {
+            previewImg.classList.add('hidden');
+            previewEmpty.classList.remove('hidden');
+            previewEmpty.textContent = 'Không tải được ảnh';
+        };
+        previewImg.onload = () => {
+            previewImg.classList.remove('hidden');
+            previewEmpty.classList.add('hidden');
+        };
+        previewImg.src = val;
+    }
+
+    fileInput.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        previewEmpty.textContent = 'Đang xử lý ảnh...';
+        lnnFileToDataUrl(file, 1600, 0.82).then(dataUrl => {
+            hidden.value = dataUrl;
+            updatePreview();
+        }).catch(() => {
+            alert('Không đọc được ảnh này, vui lòng thử một ảnh khác (jpg/png).');
+            previewEmpty.textContent = 'Chưa có ảnh';
+        });
+        fileInput.value = '';
+    });
+
+    toggleBtn.addEventListener('click', function () {
+        hidden.classList.toggle('hidden');
+        if (!hidden.classList.contains('hidden')) hidden.focus();
+    });
+
+    hidden.addEventListener('input', updatePreview);
+
+    function reset() {
+        hidden.value = '';
+        hidden.classList.add('hidden');
+        updatePreview();
+    }
+
+    return { updatePreview, reset };
+}
+
+const svcImagePicker = lnnSetupImagePicker('svcImageFile', 'svcImage', 'svcImagePreview', 'svcImagePreviewEmpty', 'svcImageManualToggle');
+const postImagePicker = lnnSetupImagePicker('postImageFile', 'postImage', 'postImagePreview', 'postImagePreviewEmpty', 'postImageManualToggle');
+const featuredImagePicker = lnnSetupImagePicker('featuredImageFile', 'featuredImage', 'featuredImagePreview', 'featuredImagePreviewEmpty', 'featuredImageManualToggle');
+const bannerImagePicker = lnnSetupImagePicker('bannerImageFile', 'bannerImage', 'bannerImagePreview', 'bannerImagePreviewEmpty', 'bannerImageManualToggle');
+const productImagePicker = lnnSetupGalleryPicker('productImageFile', 'productImages', 'productImageThumbs', 'productImageManualToggle', 'productImage');
+
+document.getElementById('addServiceBtn').addEventListener('click', () => {
+    document.getElementById('serviceForm').reset();
+    document.getElementById('svcId').value = '';
+    svcImagePicker.reset();
+    document.getElementById('serviceModalTitle').textContent = 'Thêm dịch vụ';
+    openModal('serviceModal');
+});
+
+function editService(id) {
+    const s = lnnGetServices().find(x => x.id === id);
+    if (!s) return;
+    document.getElementById('svcId').value = s.id;
+    document.getElementById('svcTitle').value = s.title;
+    document.getElementById('svcImage').value = s.image;
+    svcImagePicker.updatePreview();
+    document.getElementById('svcDesc').value = s.desc;
+    document.getElementById('svcDetail').value = s.detail || '';
+    document.getElementById('serviceModalTitle').textContent = 'Sửa dịch vụ';
+    openModal('serviceModal');
+}
+
+function deleteService(id) {
+    if (!confirm('Xóa dịch vụ này? Hành động không thể hoàn tác.')) return;
+    const list = lnnGetServices().filter(s => s.id !== id);
+    lnnSaveServices(list);
+    refreshAll();
+    showToast('Đã xóa dịch vụ.');
+}
+
+document.getElementById('serviceForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const id = document.getElementById('svcId').value;
+    const list = lnnGetServices();
+    const data = {
+        title: document.getElementById('svcTitle').value.trim(),
+        image: document.getElementById('svcImage').value.trim(),
+        desc: document.getElementById('svcDesc').value.trim(),
+        detail: document.getElementById('svcDetail').value.trim()
+    };
+    if (id) {
+        const idx = list.findIndex(s => s.id === id);
+        if (idx > -1) list[idx] = Object.assign({}, list[idx], data);
+    } else {
+        list.unshift(Object.assign({ id: lnnUid('svc'), createdAt: new Date().toISOString().slice(0, 10) }, data));
+    }
+    lnnSaveServices(list);
+    closeModal('serviceModal');
+    refreshAll();
+    showToast('Đã lưu dịch vụ — mục Dịch vụ trên website đã được cập nhật!');
+});
+
+document.getElementById('addPostBtn').addEventListener('click', () => {
+    document.getElementById('postForm').reset();
+    document.getElementById('postId').value = '';
+    postImagePicker.reset();
+    document.getElementById('postDate').value = new Date().toISOString().slice(0, 10);
+    document.getElementById('postModalTitle').textContent = 'Đăng bài viết mới';
+    openModal('postModal');
+});
+
+function editPost(id) {
+    const p = lnnGetPosts().find(x => x.id === id);
+    if (!p) return;
+    document.getElementById('postId').value = p.id;
+    document.getElementById('postTitle').value = p.title;
+    document.getElementById('postTag').value = p.tag || '';
+    document.getElementById('postDate').value = p.date;
+    document.getElementById('postImage').value = p.image;
+    postImagePicker.updatePreview();
+    document.getElementById('postExcerpt').value = p.excerpt;
+    document.getElementById('postContent').value = p.content || '';
+    document.getElementById('postFeatured').checked = !!p.featured;
+    document.getElementById('postModalTitle').textContent = 'Sửa bài viết';
+    openModal('postModal');
+}
+
+function deletePost(id) {
+    if (!confirm('Xóa bài viết này? Hành động không thể hoàn tác.')) return;
+    const list = lnnGetPosts().filter(p => p.id !== id);
+    lnnSavePosts(list);
+    refreshAll();
+    showToast('Đã xóa bài viết.');
+}
+
+document.getElementById('postForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const id = document.getElementById('postId').value;
+    let list = lnnGetPosts();
+    const featured = document.getElementById('postFeatured').checked;
+    const data = {
+        title: document.getElementById('postTitle').value.trim(),
+        tag: document.getElementById('postTag').value.trim(),
+        date: document.getElementById('postDate').value,
+        image: document.getElementById('postImage').value.trim(),
+        excerpt: document.getElementById('postExcerpt').value.trim(),
+        content: document.getElementById('postContent').value.trim(),
+        featured: featured
+    };
+    if (featured) list = list.map(p => Object.assign({}, p, { featured: false }));
+
+    if (id) {
+        const idx = list.findIndex(p => p.id === id);
+        if (idx > -1) list[idx] = Object.assign({}, list[idx], data);
+    } else {
+        list.unshift(Object.assign({ id: lnnUid('post') }, data));
+    }
+    lnnSavePosts(list);
+    closeModal('postModal');
+    refreshAll();
+    showToast('Đã đăng bài viết — mục Blog & Trang chủ đã được cập nhật!');
+});
+
+document.getElementById('exportBtn').addEventListener('click', () => {
+    const payload = {
+        services: lnnGetServices(),
+        groups: lnnGetGroups(),
+        products: lnnGetProducts(),
+        featured: lnnGetFeatured(),
+        banners: lnnGetBanners(),
+        posts: lnnGetPosts(),
+        exportedAt: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'lnn-noidung-' + new Date().toISOString().slice(0, 10) + '.json';
+    a.click();
+    showToast('Đã xuất file JSON.');
+});
+
+document.getElementById('importBtn').addEventListener('click', () => document.getElementById('importFile').click());
+document.getElementById('importFile').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (ev) {
+        try {
+            const data = JSON.parse(ev.target.result);
+            if (data.services) lnnSaveServices(data.services);
+            if (data.groups) lnnSaveGroups(data.groups);
+            if (data.products) lnnSaveProducts(data.products);
+            if (data.featured) lnnSaveFeatured(data.featured);
+            if (data.banners) lnnSaveBanners(data.banners);
+            if (data.posts) lnnSavePosts(data.posts);
+            refreshAll();
+            showToast('Đã nhập dữ liệu thành công!');
+        } catch (err) {
+            alert('File JSON không hợp lệ.');
+        }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+});
+</script>
+</body>
+</html>

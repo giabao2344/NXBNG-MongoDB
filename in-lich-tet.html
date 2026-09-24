@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In Lịch Tết Theo Yêu Cầu - Lịch Nông Nghiệp</title>
+    <meta name="description" content="Dịch vụ in lịch Tết theo yêu cầu: lịch treo tường, lịch Bloc, lịch để bàn. Thiết kế độc quyền, sản xuất trực tiếp, giao hàng đúng hẹn.">
+    <link rel="icon" href="image/x2Mf_logo (1).png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { brand: { green:'#34a853', dark:'#278a41', orange:'#f9a825' } }, fontFamily: { sans:['Be Vietnam Pro','sans-serif'] } } } }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>.section-title { font-size: 32px; font-weight: 800; letter-spacing: -.02em; color: #0f172a; }</style>
+</head>
+<body class="bg-white">
+
+  <header class="bg-white sticky top-0 z-50 shadow-sm px-4 md:px-16 py-4 flex items-center justify-between">
+        <button id="menuBtn" type="button" class="lg:hidden w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition order-last" aria-label="Mở menu" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+
+        <div class="flex items-center">
+    <a href="index.html">
+        <img src="image/x2Mf_logo (1).png" alt="Logo LICH Nông Nghiệp" class="h-12 w-auto object-contain">
+    </a>
+</div>
+        <nav class="hidden lg:flex space-x-8 font-medium text-gray-600">
+            <a href="index.html" class="hover:text-green-600 transition-all">Trang chủ</a>
+            <a href="catalogue.html" class="hover:text-green-600 transition-all">catalogue lịch </a>
+            <a href="dich-vu.html" class="hover:text-green-600 transition-all">Dịch vụ</a>
+            <a href="san-pham.html" class="hover:text-green-600 transition-all">Sản phẩm</a>
+            <a href="in-lich-tet.html" class="text-green-600 border-b-2 border-green-600">In lịch Tết</a>
+            <a href="blog.html" class="hover:text-green-600 transition-all">Blog</a>
+            <a href="About.html" class="hover:text-green-600 transition-all">Về chúng tôi</a>
+        </nav>
+
+        <div class="relative">
+            <button id="searchToggleBtn" type="button" class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 transition" aria-label="Tìm kiếm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </button>
+            <div id="searchPanel" class="hidden absolute right-0 mt-3 w-[92vw] max-w-sm bg-white rounded-2xl shadow-2xl border border-gray-100 z-[999] overflow-hidden">
+                <div class="flex items-center gap-2 px-4 py-3 border-b border-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input id="searchInput" type="text" placeholder="Tìm dịch vụ, sản phẩm, bài viết..." class="flex-1 text-sm outline-none">
+                    <button id="searchCloseBtn" type="button" class="text-gray-300 hover:text-gray-500 text-lg leading-none">✕</button>
+                </div>
+                <div id="searchResults" class="max-h-96 overflow-y-auto"></div>
+            </div>
+        </div>
+        <button class="hidden lg:inline-flex bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-all shadow-md">
+            <a href="lien-he.html" class="text-white">Liên hệ</a>
+        </button>
+    </header>
+
+    <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-4">
+        <nav class="flex flex-col gap-1">
+                <a href="index.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Trang chủ</a>
+                <a href="catalogue.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">catalogue lịch</a>
+                <a href="dich-vu.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Dịch vụ</a>
+                <a href="san-pham.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Sản phẩm</a>
+                <a href="in-lich-tet.html" class="block px-4 py-3 rounded-xl bg-green-50 text-green-600 font-bold">In lịch Tết</a>
+                <a href="blog.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Blog</a>
+                <a href="About.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Về chúng tôi</a>
+        </nav>
+        <a href="lien-he.html" class="mt-3 block text-center bg-green-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-all shadow-md">Liên hệ</a>
+    </div>
+
+
+<section class="container-page py-12 flex flex-col lg:flex-row gap-16">
+    <div class="lg:w-1/2" data-aos="fade-right">
+        <span class="badge-pill bg-green-50 text-brand-green">Dịch Vụ In Ấn Chuyên Nghiệp</span>
+        <h1 class="text-4xl lg:text-6xl font-extrabold mt-6 leading-tight">In Lịch Tết <br><span class="text-brand-green">Theo Yêu Cầu</span></h1>
+        <p class="mt-6 text-lg">Giải pháp quà tặng doanh nghiệp hoàn hảo dịp cuối năm. Chúng tôi cung cấp đa dạng các dòng sản phẩm từ lịch thị trường, thiết kế theo phối cảnh đến lịch độc quyền mang đậm dấu ấn thương hiệu.</p>
+        <div class="mt-10 rounded-[30px] overflow-hidden shadow-2xl">
+            <img src="image/anh1.jpeg" class="w-full h-auto" alt="Mẫu lịch Tết doanh nghiệp">
+        </div>
+    </div>
+
+    <div class="lg:w-1/2" data-aos="fade-left">
+        <div class="bg-white p-10 rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-gray-50">
+            <h3 class="text-2xl font-bold mb-2 text-gray-900">Nhận Báo Giá Nhanh</h3>
+            <p class="mb-8">Điền thông tin để nhận tư vấn và báo giá chi tiết nhất.</p>
+            <form class="space-y-4" onsubmit="return false;">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-2"><label>Họ và tên *</label><input type="text" required placeholder="Nhập họ và tên"></div>
+                    <div class="flex flex-col gap-2"><label>Số điện thoại *</label><input type="tel" required placeholder="Nhập số điện thoại"></div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-2"><label>Email</label><input type="email" placeholder="Nhập email"></div>
+                    <div class="flex flex-col gap-2"><label>Tên công ty</label><input type="text" placeholder="Nhập tên công ty"></div>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label>Sản phẩm cần in *</label>
+                    <select><option>Chọn loại lịch</option><option>Lịch treo tường</option><option>Lịch để bàn</option><option>Lịch Bloc</option></select>
+                </div>
+                <div class="flex flex-col gap-2"><label>Mô tả chi tiết</label><textarea rows="3" placeholder="Số lượng, kích thước, yêu cầu đặc biệt..."></textarea></div>
+                <button type="submit" class="w-full btn-orange !w-full">Gửi Yêu Cầu Ngay</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<section class="bg-slate-50 py-20">
+    <div class="container-page">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <h2 class="section-title">Tại Sao Doanh Nghiệp Nên In Lịch Tết?</h2>
+            <p class="max-w-2xl mx-auto mt-4">Lịch Tết không chỉ là công cụ xem ngày tháng mà còn là đại sứ thương hiệu đồng hành cùng khách hàng 365 ngày trong năm.</p>
+        </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="bg-white p-8 rounded-[30px] text-center shadow-sm" data-aos="fade-up" data-aos-delay="100">
+                <div class="w-12 h-12 bg-green-100 text-brand-green rounded-xl flex items-center justify-center mx-auto mb-4 text-xl">🛡️</div>
+                <h4 class="font-bold mb-2">Tăng nhận diện</h4>
+                <p>Logo thương hiệu luôn hiện diện trong không gian khách hàng.</p>
+            </div>
+            <div class="bg-white p-8 rounded-[30px] text-center shadow-sm" data-aos="fade-up" data-aos-delay="200">
+                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4 text-xl">🤝</div>
+                <h4 class="font-bold mb-2">Gắn kết bền lâu</h4>
+                <p>Món quà tri ân ý nghĩa thể hiện sự trân trọng đối tác.</p>
+            </div>
+            <div class="bg-white p-8 rounded-[30px] text-center shadow-sm" data-aos="fade-up" data-aos-delay="300">
+                <div class="w-12 h-12 bg-orange-100 text-brand-orange rounded-xl flex items-center justify-center mx-auto mb-4 text-xl">📈</div>
+                <h4 class="font-bold mb-2">Tiết kiệm chi phí</h4>
+                <p>Đầu tư một lần, quảng bá thương hiệu suốt 12 tháng.</p>
+            </div>
+            <div class="bg-white p-8 rounded-[30px] text-center shadow-sm" data-aos="fade-up" data-aos-delay="400">
+                <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4 text-xl">🎨</div>
+                <h4 class="font-bold mb-2">Chuyên nghiệp</h4>
+                <p>Thiết kế tinh tế nâng tầm đẳng cấp của doanh nghiệp.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-20 container-page">
+    <h2 class="section-title text-center mb-16" data-aos="fade-up">3 Dòng Sản Phẩm Lịch Tết</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="card p-10" data-aos="zoom-in" data-aos-delay="100">
+            <h3 class="text-xl font-bold mb-4">Lịch Thị Trường</h3>
+            <p class="mb-6">Nhanh - Tối ưu chi phí. Sử dụng mẫu có sẵn, in thông tin doanh nghiệp lên phần chân lịch.</p>
+            <a href="bao-gia.html" class="text-brand-green font-bold">Xem chi tiết →</a>
+        </div>
+        <div class="card p-10" data-aos="zoom-in" data-aos-delay="200">
+            <h3 class="text-xl font-bold mb-4">Lịch Theo Phối Cảnh</h3>
+            <p class="mb-6">Linh hoạt - Branding. Thay đổi hình ảnh, nội dung trên cấu trúc lịch có sẵn theo nhận diện.</p>
+            <a href="bao-gia.html" class="text-brand-green font-bold">Xem chi tiết →</a>
+        </div>
+        <div class="card p-10 !border-brand-green shadow-lg" data-aos="zoom-in" data-aos-delay="300">
+            <h3 class="text-xl font-bold mb-4">Lịch Thiết Kế Độc Quyền</h3>
+            <p class="mb-6">Cao cấp - Duy nhất. Thiết kế mới 100% từ ý tưởng, hình ảnh đến chất liệu riêng biệt.</p>
+            <a href="bao-gia.html" class="text-brand-green font-bold">Xem chi tiết →</a>
+        </div>
+    </div>
+</section>
+
+<section class="bg-slate-50 py-20">
+    <div class="container-page">
+        <h2 class="section-title text-center mb-16" data-aos="fade-up">Các Hình Thức In Lịch Phổ Biến</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div class="card overflow-hidden group" data-aos="fade-up" data-aos-delay="100">
+                <img src="image/Screenshot 2026-05-09 103721.png" alt="Lịch treo tường" class="w-full h-64 object-cover group-hover:scale-105 transition duration-500">
+                <div class="p-8">
+                    <h4 class="text-xl font-bold mb-4">Lịch Treo Tường</h4>
+                    <p class="mb-4">Khổ lớn, hình ảnh rõ nét. Phù hợp tặng khách hàng đại trà, trang trí văn phòng.</p>
+                    <span class="text-xs font-bold text-brand-orange uppercase">Phù hợp nhất: Gia đình, văn phòng</span>
+                </div>
+            </div>
+            <div class="card overflow-hidden group" data-aos="fade-up" data-aos-delay="200">
+                <img src="image/anhlichbloc.png" alt="Lịch Bloc" class="w-full h-64 object-cover group-hover:scale-105 transition duration-500">
+                <div class="p-8">
+                    <h4 class="text-xl font-bold mb-4">Lịch Bloc</h4>
+                    <p class="mb-4">Sang trọng, đẳng cấp. Phù hợp tặng đối tác VIP, khách hàng quan trọng.</p>
+                    <span class="text-xs font-bold text-brand-orange uppercase">Phù hợp nhất: Quà tặng cao cấp</span>
+                </div>
+            </div>
+            <div class="card overflow-hidden group" data-aos="fade-up" data-aos-delay="300">
+                <img src="image/lichban.png" alt="Lịch để bàn" class="w-full h-64 object-cover group-hover:scale-105 transition duration-500">
+                <div class="p-8">
+                    <h4 class="text-xl font-bold mb-4">Lịch Để Bàn</h4>
+                    <p class="mb-4">Tiện lợi, tích hợp note. Phù hợp nhân viên văn phòng, đối tác doanh nghiệp.</p>
+                    <span class="text-xs font-bold text-brand-orange uppercase">Phù hợp nhất: Nhân viên, đối tác</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-20 container-page">
+    <div class="flex flex-col lg:flex-row gap-20">
+        <div class="lg:w-1/2" data-aos="fade-right">
+            <h2 class="text-3xl font-bold mb-10">Chất Liệu Giấy Thường Dùng</h2>
+            <div class="space-y-8">
+                <div class="flex gap-6">
+                    <div class="w-12 h-12 bg-green-50 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-brand-green">01</div>
+                    <div><h4 class="font-bold text-lg mb-2">Giấy Couche</h4><p>Bề mặt bóng mịn, bắt màu tốt, hình ảnh rực rỡ sắc nét. Phổ biến nhất cho lịch treo tường.</p></div>
+                </div>
+                <div class="flex gap-6">
+                    <div class="w-12 h-12 bg-green-50 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-brand-green">02</div>
+                    <div><h4 class="font-bold text-lg mb-2">Giấy Bristol / Ivory</h4><p>Độ cứng cao, bề mặt hơi nhám, sang trọng. Thường dùng cho lịch để bàn hoặc đế lịch Bloc.</p></div>
+                </div>
+                <div class="flex gap-6">
+                    <div class="w-12 h-12 bg-green-50 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-brand-green">03</div>
+                    <div><h4 class="font-bold text-lg mb-2">Giấy Mỹ Thuật</h4><p>Có vân, mùi thơm nhẹ, đẳng cấp nhất. Dành riêng cho các mẫu lịch thiết kế độc quyền.</p></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="lg:w-1/2 relative" data-aos="fade-left">
+            <h2 class="text-3xl font-bold mb-10">Quy Trình In Chuyên Nghiệp</h2>
+            <div class="step-line"></div>
+            <div class="space-y-10">
+                <div class="relative pl-12 flex items-center"><div class="absolute left-0 w-10 h-10 bg-brand-green text-white rounded-full flex items-center justify-center font-bold z-10">1</div><p class="font-bold text-gray-800">Tiếp nhận yêu cầu & Tư vấn giải pháp</p></div>
+                <div class="relative pl-12 flex items-center"><div class="absolute left-0 w-10 h-10 bg-brand-green text-white rounded-full flex items-center justify-center font-bold z-10">2</div><p class="font-bold text-gray-800">Thiết kế mẫu & Kiểm tra file kỹ thuật</p></div>
+                <div class="relative pl-12 flex items-center"><div class="absolute left-0 w-10 h-10 bg-brand-green text-white rounded-full flex items-center justify-center font-bold z-10">3</div><p class="font-bold text-gray-800">Sản xuất & In ấn Offset chất lượng cao</p></div>
+                <div class="relative pl-12 flex items-center"><div class="absolute left-0 w-10 h-10 bg-brand-green text-white rounded-full flex items-center justify-center font-bold z-10">4</div><p class="font-bold text-gray-800">Gia công hoàn thiện & Kiểm tra chất lượng (QC)</p></div>
+                <div class="relative pl-12 flex items-center"><div class="absolute left-0 w-10 h-10 bg-brand-green text-white rounded-full flex items-center justify-center font-bold z-10">5</div><p class="font-bold text-gray-800">Đóng gói & Giao hàng tận nơi</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-brand-green py-20 text-center text-white">
+    <div class="container-page" data-aos="zoom-in">
+        <h2 class="text-white text-3xl md:text-4xl font-bold mb-6">Bạn Đã Sẵn Sàng Cho Mùa Lịch Tết?</h2>
+        <p class="!text-white opacity-90 mb-10 max-w-xl mx-auto text-lg">Liên hệ ngay để nhận ưu đãi chiết khấu lên đến 30% cho các đơn hàng đặt sớm trong tháng này.</p>
+        <a href="lien-he.html" class="btn-orange !text-xl">Nhận báo giá & Tư vấn miễn phí</a>
+    </div>
+</section>
+
+<footer class="bg-white border-t border-gray-100 pt-16 pb-8 px-4 md:px-16">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            <div class="col-span-1 md:col-span-1">
+              <div class="flex items-center">
+                <a href="index.html">
+             <img src="image/x2Mf_logo (1).png" alt="Logo LICH Nông Nghiệp" class="h-12 w-auto object-contain">
+                 </a>
+            </div>
+                <p class="text-gray-500 text-sm">Giải pháp in ấn chuyên nghiệp cho nông nghiệp và doanh nghiệp.</p>
+            </div>
+            <div>
+                <h5 class="font-bold mb-6">Liên kết nhanh</h5>
+                <ul class="space-y-4 text-gray-500 text-sm">
+                    <li><a href="index.html" class="hover:text-green-600">Trang chủ</a></li>
+                    <li><a href="catalogue.html" class="hover:text-green-600">catalogue lịch</a></li>
+                    <li><a href="dich-vu.html" class="hover:text-green-600">Dịch vụ</a></li>
+                    <li><a href="san-pham.html" class="hover:text-green-600">Sản phẩm</a></li>
+                    <li><a href="blog.html" class="hover:text-green-600">In Lịch Tết</a></li>
+                    <li><a href="blog.html" class="hover:text-green-600">Blog</a></li>
+                    <li><a href="About.html" class="hover:text-green-600">về chúng tôi</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-6">Thông tin liên hệ</h5>
+                <ul class="space-y-4 text-gray-500 text-sm">
+                    <li> Xưởng: Số 54, Ngõ 459 phố Bạch Mai, TP.Hà Nội </li>
+                    <li>0976 585 945 - 0972 666 111 - 0396 294 628</li>
+                    <li>Ketoan.inbaobinn2022@gmail.com</li>
+                </ul>
+            </div>
+            <div>
+    <h5 class="font-bold mb-6">Theo dõi chúng tôi</h5>
+    <div class="flex space-x-4">
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/share/1EkdKF6Cta/?mibextid=wwXIfr" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-green-600 transition-all cursor-pointer p-2.5">
+            <img src="https://cdn.simpleicons.org/facebook/1877F2" alt="Facebook" class="w-full h-full object-contain">
+        </a>
+
+        <!-- TikTok -->
+        <a href="https://www.tiktok.com/@lichnongnghiep?_r=1&_t=ZS-99nEB0zeRcN" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-green-600 transition-all cursor-pointer p-2.5">
+            <img src="https://cdn.simpleicons.org/tiktok/000000" alt="TikTok" class="w-full h-full object-contain">
+        </a>
+
+        <!-- Zalo -->
+        <a href="https://zalo.me/0972666111" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-green-600 transition-all cursor-pointer p-2.5">
+            <img src="https://cdn.simpleicons.org/zalo/0068FF" alt="Zalo" class="w-full h-full object-contain">
+        </a>
+    </div>
+</div>
+        <div class="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-400 text-xs">
+            <p>© 2026 LICH nông nghiệp. Tất cả quyền được bảo lưu.</p>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+                <a href="#">Chính sách bảo mật</a>
+                <a href="#">Điều khoản dịch vụ</a>
+            </div>
+        </div>
+    </footer>
+
+<div class="floating-actions">
+    <a href="tel:0976585945" class="floating-phone" aria-label="Gọi điện"><svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.61 21 3 13.39 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/></svg></a>
+    <a href="https://zalo.me/0972666111" target="_blank" rel="noopener" class="floating-zalo" aria-label="Chat Zalo"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo" class="w-7 h-7"></a>
+    <a href="https://www.facebook.com/share/1EkdKF6Cta/?mibextid=wwXIfr" target="_blank" rel="noopener" class="floating-messenger" aria-label="Chat Messenger"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.477 2 2 6.145 2 11.258c0 2.908 1.462 5.497 3.746 7.158V22l3.418-1.875c.875.243 1.8.375 2.836.375 5.523 0 10-4.145 10-9.258S17.523 2 12 2zm1.091 12.116l-2.582-2.753-5.045 2.753 5.545-5.889 2.582 2.753 5.045-2.753-5.545 5.889z"/></svg></a>
+</div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="script.js"></script>
+    <script src="config.js"></script>
+    <script src="data.js"></script>
+    <script src="mongo-sync.js"></script>
+    <script src="search.js"></script>
+</body>
+</html>

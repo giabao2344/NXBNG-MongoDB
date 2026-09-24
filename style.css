@@ -1,0 +1,211 @@
+/* =========================================================
+   LỊCH NÔNG NGHIỆP — SHARED DESIGN SYSTEM
+   Dùng chung cho toàn bộ website để đảm bảo đồng bộ giao diện
+   ========================================================= */
+
+:root {
+    --brand-green: #34a853;
+    --brand-green-dark: #278a41;
+    --brand-orange: #f9a825;
+    --brand-orange-dark: #e08e00;
+    --ink-900: #0f172a;
+    --ink-700: #1e293b;
+    --ink-500: #64748b;
+    --ink-300: #cbd5e1;
+    --surface: #fcfdfc;
+}
+
+* { scroll-behavior: smooth; }
+
+html, body {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    color: var(--ink-700);
+    background-color: #ffffff;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Typography scale (thanh mảnh, đồng bộ toàn site) ---------- */
+p, li, label, .text-body {
+    font-size: 14.5px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--ink-500);
+}
+h1, h2, h3, h4, h5, h6 {
+    color: var(--ink-900);
+    letter-spacing: -0.02em;
+    font-weight: 800;
+}
+strong { font-weight: 600; color: var(--ink-700); }
+
+/* ---------- Layout helpers ---------- */
+.container-page {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+@media (min-width: 1024px) {
+    .container-page { padding-left: 3rem; padding-right: 3rem; }
+}
+.section-pad { padding-top: 88px; padding-bottom: 88px; }
+@media (max-width: 768px) {
+    .section-pad { padding-top: 56px; padding-bottom: 56px; }
+    h1 { font-size: 2.1rem !important; }
+}
+
+.text-brand-green { color: var(--brand-green); }
+.bg-brand-green { background-color: var(--brand-green); }
+.text-brand-orange { color: var(--brand-orange); }
+.bg-brand-orange { background-color: var(--brand-orange); }
+.bg-light-green { background-color: #eaf7ee; }
+
+/* ---------- Header / Navigation ---------- */
+.site-header { border-bottom: 1px solid #f1f5f9; }
+.nav-link {
+    position: relative;
+    color: #475569;
+    font-weight: 500;
+    transition: color .25s ease;
+}
+.nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: -6px;
+    width: 0; height: 2px;
+    background: var(--brand-green);
+    transition: width .25s ease;
+}
+.nav-link:hover { color: var(--brand-green); }
+.nav-link:hover::after { width: 100%; }
+.nav-link.active { color: var(--brand-green); font-weight: 700; }
+.nav-link.active::after { width: 100%; }
+
+#mobileMenu { transition: max-height .3s ease, opacity .3s ease; }
+
+/* ---------- Buttons ---------- */
+.btn-primary {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    background: var(--brand-green);
+    color: #fff !important;
+    font-weight: 600;
+    padding: .65rem 1.5rem;
+    border-radius: .75rem;
+    box-shadow: 0 6px 16px rgba(52,168,83,.25);
+    transition: all .25s ease;
+}
+.btn-primary:hover { background: var(--brand-green-dark); transform: translateY(-2px); box-shadow: 0 10px 22px rgba(52,168,83,.32); }
+
+.btn-orange {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    background: var(--brand-orange);
+    color: #fff !important;
+    font-weight: 700;
+    padding: 1rem 2.25rem;
+    border-radius: 1rem;
+    box-shadow: 0 10px 24px rgba(249,168,37,.28);
+    transition: all .25s ease;
+}
+.btn-orange:hover { background: var(--brand-orange-dark); transform: translateY(-2px) scale(1.02); }
+
+.btn-outline {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    border: 2px solid var(--brand-green);
+    color: var(--brand-green) !important;
+    font-weight: 700;
+    padding: .95rem 2.1rem;
+    border-radius: 1rem;
+    transition: all .25s ease;
+    background: #fff;
+}
+.btn-outline:hover { background: #eaf7ee; }
+
+/* ---------- Cards ---------- */
+.card {
+    background: #fff;
+    border: 1px solid #f1f5f9;
+    border-radius: 1.75rem;
+    transition: transform .35s ease, box-shadow .35s ease;
+}
+.card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(15,23,42,.08); }
+
+.hover-card { transition: all .3s ease; height: 100%; display: flex; flex-direction: column; }
+.hover-card:hover { transform: translateY(-5px); }
+
+.aspect-ratio-box { position: relative; width: 100%; padding-top: 72%; overflow: hidden; border-radius: 1.25rem; background: #f3f4f6; }
+.aspect-ratio-box img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.hover-card:hover .aspect-ratio-box img { transform: scale(1.08); }
+
+.line-clamp-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 3.4rem; }
+.line-clamp-desc { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-height: 4.4rem; }
+
+/* ---------- Banner slider ---------- */
+#banner-img { transition: opacity .5s ease-in-out; }
+.hero-gradient { background: linear-gradient(90deg, rgba(0,0,0,.78) 0%, rgba(0,0,0,.25) 100%); }
+.dot { transition: all .3s ease; cursor: pointer; }
+
+/* ---------- Timeline (in-lich-tet.html) ---------- */
+.step-line { position: absolute; left: 20px; top: 40px; bottom: 0; width: 1px; background: #e2e8f0; z-index: 0; }
+
+/* ---------- Forms ---------- */
+input, select, textarea {
+    font-size: 13.5px;
+    border: 1px solid #e2e8f0;
+    border-radius: .9rem;
+    padding: .8rem 1rem;
+    transition: border-color .2s ease, box-shadow .2s ease;
+    background: #f8fafc;
+}
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--brand-green);
+    box-shadow: 0 0 0 3px rgba(52,168,83,.15);
+    background: #fff;
+}
+
+/* ---------- Ô tìm kiếm trên header (không viền, nằm gọn trong dropdown) ---------- */
+#searchInput {
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    background: transparent;
+}
+#searchInput:focus {
+    box-shadow: none;
+    border-color: transparent;
+    background: transparent;
+}
+
+/* ---------- Footer ---------- */
+.site-footer a { color: var(--ink-500); transition: color .2s ease; }
+.site-footer a:hover { color: var(--brand-green); }
+.social-icon {
+    width: 40px; height: 40px; border-radius: 999px;
+    background: #f1f5f9; display: flex; align-items: center; justify-content: center;
+    transition: all .25s ease; color: var(--ink-500); font-weight: 700; font-size: 13px;
+}
+.social-icon:hover { background: var(--brand-green); color: #fff !important; transform: translateY(-3px); }
+
+/* ---------- Floating contact buttons ---------- */
+.floating-actions { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 14px; z-index: 100; }
+.floating-actions a {
+    width: 54px; height: 54px; border-radius: 999px; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 10px 24px rgba(15,23,42,.2); transition: transform .25s ease;
+}
+.floating-actions a:hover { transform: scale(1.1); }
+.floating-zalo { background: #0068ff; }
+.floating-messenger { background: linear-gradient(135deg,#00c6ff,#7b2ff7); }
+.floating-phone { background: var(--brand-orange); animation: pulse-phone 2s infinite; }
+@keyframes pulse-phone {
+    0% { box-shadow: 0 0 0 0 rgba(249,168,37,.5); }
+    70% { box-shadow: 0 0 0 14px rgba(249,168,37,0); }
+    100% { box-shadow: 0 0 0 0 rgba(249,168,37,0); }
+}
+
+/* ---------- Misc ---------- */
+.badge-pill { font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: .35rem .9rem; border-radius: 999px; }
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--brand-green); }

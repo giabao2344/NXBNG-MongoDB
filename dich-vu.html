@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dịch Vụ In Ấn & Bao Bì - Lịch Nông Nghiệp</title>
+    <meta name="description" content="Giải pháp sản xuất bao bì và ấn phẩm cho doanh nghiệp: in hộp, sổ quà tặng, túi giấy, tờ rơi, card visit, poster.">
+    <link rel="icon" href="image/x2Mf_logo (1).png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { brand: { green:'#34a853', dark:'#278a41', orange:'#f9a825' } }, fontFamily: { sans:['Be Vietnam Pro','sans-serif'] } } } }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .hero-img-container { border-radius: 40px; overflow: hidden; }
+        .product-modal-backdrop { background: rgba(15,23,42,.6); backdrop-filter: blur(2px); }
+    </style>
+</head>
+<body class="bg-white">
+
+  <header class="bg-white sticky top-0 z-50 shadow-sm px-4 md:px-16 py-4 flex items-center justify-between">
+        <button id="menuBtn" type="button" class="lg:hidden w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition order-last" aria-label="Mở menu" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+
+        <div class="flex items-center">
+    <a href="index.html">
+        <img src="image/x2Mf_logo (1).png" alt="Logo LICH Nông Nghiệp" class="h-12 w-auto object-contain">
+    </a>
+</div>
+        <nav class="hidden lg:flex space-x-8 font-medium text-gray-600">
+            <a href="index.html" class="hover:text-green-600 transition-all">Trang chủ</a>
+            <a href="catalogue.html" class="hover:text-green-600 transition-all">catalogue lịch </a>
+            <a href="dich-vu.html" class="text-green-600 border-b-2 border-green-600">Dịch vụ</a>
+            <a href="san-pham.html" class="hover:text-green-600 transition-all">Sản phẩm</a>
+            <a href="in-lich-tet.html" class="hover:text-green-600 transition-all">In lịch Tết</a>
+            <a href="blog.html" class="hover:text-green-600 transition-all">Blog</a>
+            <a href="About.html" class="hover:text-green-600 transition-all">Về chúng tôi</a>
+        </nav>
+
+        <div class="relative">
+            <button id="searchToggleBtn" type="button" class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 transition" aria-label="Tìm kiếm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </button>
+            <div id="searchPanel" class="hidden absolute right-0 mt-3 w-[92vw] max-w-sm bg-white rounded-2xl shadow-2xl border border-gray-100 z-[999] overflow-hidden">
+                <div class="flex items-center gap-2 px-4 py-3 border-b border-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input id="searchInput" type="text" placeholder="Tìm dịch vụ, sản phẩm, bài viết..." class="flex-1 text-sm outline-none">
+                    <button id="searchCloseBtn" type="button" class="text-gray-300 hover:text-gray-500 text-lg leading-none">✕</button>
+                </div>
+                <div id="searchResults" class="max-h-96 overflow-y-auto"></div>
+            </div>
+        </div>
+        <button class="hidden lg:inline-flex bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-all shadow-md">
+            <a href="lien-he.html" class="text-white">Liên hệ</a>
+        </button>
+    </header>
+
+    <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-4">
+        <nav class="flex flex-col gap-1">
+                <a href="index.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Trang chủ</a>
+                <a href="catalogue.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">catalogue lịch</a>
+                <a href="dich-vu.html" class="block px-4 py-3 rounded-xl bg-green-50 text-green-600 font-bold">Dịch vụ</a>
+                <a href="san-pham.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Sản phẩm</a>
+                <a href="in-lich-tet.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">In lịch Tết</a>
+                <a href="blog.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Blog</a>
+                <a href="About.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Về chúng tôi</a>
+        </nav>
+        <a href="lien-he.html" class="mt-3 block text-center bg-green-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-all shadow-md">Liên hệ</a>
+    </div>
+
+
+
+<section class="container-page py-16 flex flex-col lg:flex-row items-center gap-10" data-aos="fade-right">
+    <div class="lg:w-1/2">
+        <div class="hero-img-container shadow-2xl">
+            <img src="image/anhbiasanpham1.jpg" alt="Bao bì sản phẩm" class="w-full h-auto">
+        </div>
+    </div>
+
+    <div class="lg:w-1/2">
+        <div class="flex items-center text-sm text-gray-400 mb-6 space-x-2">
+            <a href="index.html" class="hover:text-brand-green">Trang chủ</a>
+            <span>&rsaquo;</span>
+            <span class="text-gray-600">Sản phẩm</span>
+        </div>
+
+        <h1 class="text-4xl lg:text-[52px] font-extrabold leading-[1.1] mb-6">
+            Giải Pháp Sản Xuất <br>
+            <span class="text-brand-green">Bao Bì & Ấn Phẩm</span> <br>
+            Cho Doanh Nghiệp
+        </h1>
+
+        <p class="text-[17px] mb-10 leading-relaxed">
+            <strong>Xưởng sản xuất trực tiếp</strong> – nhận gia công theo file thiết kế có sẵn.
+            Chúng tôi hỗ trợ kiểm tra & chỉnh sửa file kỹ lưỡng, đảm bảo chất lượng hoàn hảo khi sản xuất số lượng lớn.
+        </p>
+
+        <a href="lien-he.html" class="btn-orange">Nhận tư vấn ngay</a>
+    </div>
+</section>
+
+<section class="bg-white py-10" data-aos="fade-up">
+    <div class="container-page">
+        <div class="text-center mb-12">
+            <div class="w-16 h-1 bg-brand-orange mx-auto mb-6"></div>
+            <p class="text-gray-500 max-w-2xl mx-auto text-lg">
+                Khám phá các dòng sản phẩm bao bì và ấn phẩm chất lượng cao được gia công tỉ mỉ từ Lịch Nông Nghiệp.
+            </p>
+        </div>
+
+        <!-- Tab dịch vụ -->
+        <div id="serviceTabs" class="flex flex-wrap gap-2 border-b border-gray-100 mb-8"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <!-- Sidebar: mục sản phẩm của dịch vụ đang chọn -->
+            <div class="lg:col-span-1">
+                <div id="serviceInfoCard" class="mb-5"></div>
+                <div id="groupSidebar" class="bg-white border border-gray-100 rounded-2xl overflow-hidden divide-y divide-gray-50"></div>
+            </div>
+
+            <!-- Lưới sản phẩm của mục sản phẩm đang chọn -->
+            <div class="lg:col-span-3">
+                <h3 id="productGroupTitle" class="text-xl font-bold mb-6"></h3>
+                <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== MODAL: CHI TIẾT SẢN PHẨM (nhiều ảnh) ========== -->
+<div id="productDetailModal" class="fixed inset-0 z-[200] hidden product-modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-2xl rounded-[32px] overflow-hidden max-h-[90vh] overflow-y-auto relative">
+        <button onclick="closeProductDetail()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/90 hover:bg-white shadow flex items-center justify-center z-20">✕</button>
+        <div class="relative bg-gray-100">
+            <img id="pdImage" src="" alt="" class="w-full h-72 object-cover bg-gray-100">
+            <button id="pdPrev" onclick="pdShowImage(pdCurrentIndex - 1)" class="hidden absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white shadow flex items-center justify-center text-lg">‹</button>
+            <button id="pdNext" onclick="pdShowImage(pdCurrentIndex + 1)" class="hidden absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white shadow flex items-center justify-center text-lg">›</button>
+            <span id="pdCounter" class="hidden absolute bottom-3 right-3 bg-slate-900/80 text-white text-[11px] font-bold px-2.5 py-1 rounded-full"></span>
+        </div>
+        <div id="pdThumbs" class="hidden flex gap-2 px-8 pt-4 overflow-x-auto"></div>
+        <div class="p-8">
+            <h3 id="pdTitle" class="text-2xl font-extrabold text-slate-900 mb-4"></h3>
+            <p id="pdDesc" class="text-gray-500 leading-relaxed mb-8"></p>
+            <a href="lien-he.html" class="btn-primary !px-8 !py-3">Nhận tư vấn / báo giá sản phẩm này</a>
+        </div>
+    </div>
+</div>
+
+<section class="container-page py-10" data-aos="fade-up">
+    <div class="bg-brand-green rounded-[40px] py-16 px-10 text-center text-white relative overflow-hidden shadow-xl">
+        <div class="absolute inset-0 opacity-10 pointer-events-none">
+            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0 100 L100 0 L100 100 Z" fill="white"></path></svg>
+        </div>
+        <div class="relative z-10">
+            <h2 class="text-white text-3xl md:text-5xl font-bold mb-6">Bạn Cần Báo Giá Sản Xuất Số Lượng Lớn?</h2>
+            <p class="!text-white opacity-90 max-w-3xl mx-auto mb-10 leading-relaxed text-base md:text-lg">
+                Liên hệ với chúng tôi để được tư vấn chất liệu, quy cách đóng gói và nhận báo giá chi tiết nhất cho dự án của bạn.
+            </p>
+            <a href="bao-gia.html" class="btn-orange !text-xl">Nhận báo giá ngay</a>
+        </div>
+    </div>
+</section>
+
+<footer class="bg-white border-t border-gray-100 pt-16 pb-8 px-4 md:px-16">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            <div class="col-span-1 md:col-span-1">
+              <div class="flex items-center">
+                <a href="index.html">
+             <img src="image/x2Mf_logo (1).png" alt="Logo LICH Nông Nghiệp" class="h-12 w-auto object-contain">
+                 </a>
+            </div>
+                <p class="text-gray-500 text-sm">Giải pháp in ấn chuyên nghiệp cho nông nghiệp và doanh nghiệp.</p>
+            </div>
+            <div>
+                <h5 class="font-bold mb-6">Liên kết nhanh</h5>
+                <ul class="space-y-4 text-gray-500 text-sm">
+                    <li><a href="index.html" class="hover:text-green-600">Trang chủ</a></li>
+                    <li><a href="catalogue.html" class="hover:text-green-600">catalogue lịch</a></li>
+                    <li><a href="dich-vu.html" class="hover:text-green-600">Dịch vụ</a></li>
+                    <li><a href="san-pham.html" class="hover:text-green-600">Sản phẩm</a></li>
+                    <li><a href="blog.html" class="hover:text-green-600">In Lịch Tết</a></li>
+                    <li><a href="blog.html" class="hover:text-green-600">Blog</a></li>
+                    <li><a href="About.html" class="hover:text-green-600">về chúng tôi</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold mb-6">Thông tin liên hệ</h5>
+                <ul class="space-y-4 text-gray-500 text-sm">
+                    <li> Văn phòng: Nhà lô 4, tập thể Tin học, phường Cầu Giấy, TP.Hà Nội</li>
+                    <li> Xưởng: Số 54, Ngõ 459 phố Bạch Mai, TP.Hà Nội </li>
+                    <li>0976 585 945 - 0972 666 111 - 0396 294 628</li>
+                    <li>Ketoan.inbaobinn2022@gmail.com</li>
+                </ul>
+            </div>
+            <div>
+    <h5 class="font-bold mb-6">Theo dõi chúng tôi</h5>
+    <div class="flex space-x-4">
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/share/1EkdKF6Cta/?mibextid=wwXIfr" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-green-600 transition-all cursor-pointer p-2.5">
+            <img src="https://cdn.simpleicons.org/facebook/1877F2" alt="Facebook" class="w-full h-full object-contain">
+        </a>
+
+        <!-- TikTok -->
+        <a href="https://www.tiktok.com/@lichnongnghiep?_r=1&_t=ZS-99nEB0zeRcN" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-green-600 transition-all cursor-pointer p-2.5">
+            <img src="https://cdn.simpleicons.org/tiktok/000000" alt="TikTok" class="w-full h-full object-contain">
+        </a>
+
+        <!-- Zalo -->
+        <a href="https://zalo.me/0972666111" target="_blank" rel="noopener" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-green-600 transition-all cursor-pointer p-2.5">
+            <img src="https://cdn.simpleicons.org/zalo/0068FF" alt="Zalo" class="w-full h-full object-contain">
+        </a>
+    </div>
+</div>
+        <div class="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-400 text-xs">
+            <p>© 2026 LICH nông nghiệp. Tất cả quyền được bảo lưu.</p>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+                <a href="#">Chính sách bảo mật</a>
+                <a href="#">Điều khoản dịch vụ</a>
+            </div>
+        </div>
+    </footer>
+
+<div class="floating-actions">
+    <a href="tel:0976585945" class="floating-phone" aria-label="Gọi điện"><svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.61 21 3 13.39 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/></svg></a>
+    <a href="https://zalo.me/0972666111" target="_blank" rel="noopener" class="floating-zalo" aria-label="Chat Zalo"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo" class="w-7 h-7"></a>
+    <a href="https://www.facebook.com/share/1EkdKF6Cta/?mibextid=wwXIfr" target="_blank" rel="noopener" class="floating-messenger" aria-label="Chat Messenger"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.477 2 2 6.145 2 11.258c0 2.908 1.462 5.497 3.746 7.158V22l3.418-1.875c.875.243 1.8.375 2.836.375 5.523 0 10-4.145 10-9.258S17.523 2 12 2zm1.091 12.116l-2.582-2.753-5.045 2.753 5.545-5.889 2.582 2.753 5.045-2.753-5.545 5.889z"/></svg></a>
+</div>
+
+<script src="config.js"></script>
+    <script src="data.js"></script>
+    <script src="mongo-sync.js"></script>
+<script>
+    let lnnActiveServiceId = null;
+    let lnnActiveGroupId = null;
+
+    function lnnSelectService(serviceId) {
+        lnnActiveServiceId = serviceId;
+        const groups = lnnGetGroupsByService(serviceId);
+        lnnActiveGroupId = groups[0] ? groups[0].id : null;
+        lnnRenderServiceTabs();
+        lnnRenderServiceInfo();
+        lnnRenderGroupSidebar();
+        lnnRenderProductGrid();
+    }
+
+    function lnnSelectGroup(groupId) {
+        lnnActiveGroupId = groupId;
+        lnnRenderGroupSidebar();
+        lnnRenderProductGrid();
+    }
+
+    function lnnRenderServiceTabs() {
+        const services = lnnGetServices();
+        const wrap = document.getElementById('serviceTabs');
+        wrap.innerHTML = services.map(s => `
+            <button onclick="lnnSelectService('${s.id}')"
+                class="px-5 py-3 text-sm font-bold rounded-t-xl transition-all ${s.id === lnnActiveServiceId ? 'text-brand-green border-b-2 border-brand-green bg-green-50/50' : 'text-gray-500 hover:text-brand-green'}">
+                ${lnnEscape(s.title)}
+            </button>`).join('') || '<p class="text-gray-400 text-sm py-4">Chưa có dịch vụ nào — hãy thêm trong trang Admin.</p>';
+    }
+
+    function lnnRenderServiceInfo() {
+        const s = lnnGetServiceById(lnnActiveServiceId);
+        const el = document.getElementById('serviceInfoCard');
+        if (!s) { el.innerHTML = ''; return; }
+        el.innerHTML = `
+            <div class="rounded-2xl overflow-hidden border border-gray-100">
+                <img src="${lnnEscape(s.image)}" alt="${lnnEscape(s.title)}" class="w-full h-36 object-cover" onerror="this.style.opacity=0.3">
+                <div class="p-4">
+                    <h4 class="font-bold mb-1">${lnnEscape(s.title)}</h4>
+                    <p class="text-xs text-gray-500 mb-3 leading-relaxed">${lnnEscape(s.desc || '')}</p>
+                    <a href="dich-vu-chi-tiet.html?id=${encodeURIComponent(s.id)}" class="text-brand-green text-xs font-bold hover:underline">Xem mô tả chi tiết dịch vụ →</a>
+                </div>
+            </div>`;
+    }
+
+    function lnnRenderGroupSidebar() {
+        const groups = lnnGetGroupsByService(lnnActiveServiceId);
+        const el = document.getElementById('groupSidebar');
+        el.innerHTML = groups.map(g => `
+            <button onclick="lnnSelectGroup('${g.id}')" class="w-full text-left px-5 py-4 text-sm font-semibold transition-colors flex items-center justify-between ${g.id === lnnActiveGroupId ? 'text-brand-green bg-green-50' : 'text-gray-700 hover:bg-gray-50'}">
+                <span>${lnnEscape(g.title)}</span>
+                <span class="text-gray-300">&rsaquo;</span>
+            </button>`).join('') || '<p class="text-gray-400 text-sm px-5 py-6">Dịch vụ này chưa có mục sản phẩm nào.</p>';
+    }
+
+    function lnnRenderProductGrid() {
+        const group = lnnGetGroupById(lnnActiveGroupId);
+        document.getElementById('productGroupTitle').textContent = group ? group.title : 'Chọn một mục sản phẩm bên trái';
+        const products = lnnActiveGroupId ? lnnGetProductsByGroup(lnnActiveGroupId) : [];
+        const el = document.getElementById('productGrid');
+        el.innerHTML = products.map(p => {
+            const imgs = lnnProductImages(p);
+            const cover = imgs[0] || '';
+            return `
+            <div class="card p-4 cursor-pointer" onclick='dvOpenProduct(${JSON.stringify(p).replace(/'/g, "&#39;")})'>
+                <div class="relative mb-4">
+                    <img src="${lnnEscape(cover)}" alt="${lnnEscape(p.title)}" class="rounded-xl w-full h-40 object-cover bg-gray-100" onerror="this.style.opacity=0.3">
+                    ${imgs.length > 1 ? `<span class="absolute bottom-2 right-2 bg-slate-900/80 text-white text-[10px] font-bold px-2 py-1 rounded-full">🖼️ ${imgs.length} ảnh</span>` : ''}
+                </div>
+                <h4 class="font-bold mb-1">${lnnEscape(p.title)}</h4>
+                <p class="text-xs text-gray-500 leading-relaxed">${lnnEscape(p.desc || '')}</p>
+            </div>`;
+        }).join('') || '<p class="text-gray-400 col-span-full text-center py-16">Chưa có sản phẩm nào trong mục này — hãy thêm trong trang Admin.</p>';
+    }
+
+    /* ---------- Modal chi tiết sản phẩm: thư viện nhiều ảnh ---------- */
+    let pdImages = [];
+    let pdCurrentIndex = 0;
+
+    function dvOpenProduct(p) {
+        pdImages = lnnProductImages(p);
+        pdCurrentIndex = 0;
+        document.getElementById('pdTitle').textContent = p.title || '';
+        document.getElementById('pdDesc').textContent = p.desc || 'Đang cập nhật mô tả chi tiết.';
+        pdRenderThumbs();
+        pdShowImage(0);
+        document.getElementById('productDetailModal').classList.remove('hidden');
+    }
+
+    function pdShowImage(index) {
+        if (!pdImages.length) return;
+        pdCurrentIndex = (index + pdImages.length) % pdImages.length;
+        document.getElementById('pdImage').src = pdImages[pdCurrentIndex];
+        document.getElementById('pdImage').alt = document.getElementById('pdTitle').textContent;
+        const multi = pdImages.length > 1;
+        document.getElementById('pdPrev').classList.toggle('hidden', !multi);
+        document.getElementById('pdNext').classList.toggle('hidden', !multi);
+        const counter = document.getElementById('pdCounter');
+        counter.classList.toggle('hidden', !multi);
+        if (multi) counter.textContent = (pdCurrentIndex + 1) + ' / ' + pdImages.length;
+        document.querySelectorAll('#pdThumbs .pd-thumb').forEach((elx, i) => {
+            elx.classList.toggle('ring-2', i === pdCurrentIndex);
+            elx.classList.toggle('ring-brand-green', i === pdCurrentIndex);
+            elx.classList.toggle('opacity-50', i !== pdCurrentIndex);
+        });
+    }
+
+    function pdRenderThumbs() {
+        const wrap = document.getElementById('pdThumbs');
+        if (pdImages.length <= 1) { wrap.classList.add('hidden'); wrap.innerHTML = ''; return; }
+        wrap.classList.remove('hidden');
+        wrap.innerHTML = pdImages.map((src, i) => `
+            <img src="${lnnEscape(src)}" onclick="pdShowImage(${i})" class="pd-thumb w-16 h-16 rounded-xl object-cover bg-gray-100 cursor-pointer shrink-0 opacity-50" onerror="this.style.opacity=0.2">`).join('');
+    }
+
+    function closeProductDetail() {
+        document.getElementById('productDetailModal').classList.add('hidden');
+    }
+    document.getElementById('productDetailModal').addEventListener('click', (e) => {
+        if (e.target.id === 'productDetailModal') closeProductDetail();
+    });
+
+    (function init() {
+        const services = lnnGetServices();
+        if (services[0]) lnnSelectService(services[0].id);
+        else { lnnRenderServiceTabs(); lnnRenderGroupSidebar(); lnnRenderProductGrid(); }
+    })();
+</script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="script.js"></script>
+    <script src="search.js"></script>
+</body>
+</html> 
