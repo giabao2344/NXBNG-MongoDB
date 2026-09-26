@@ -1,4 +1,4 @@
-```js
+
 const dns = require('dns');
 
 // Dùng Google DNS để xử lý MongoDB Atlas SRV
@@ -664,4 +664,4 @@ mongoose
     process.exit(1);
 
   });
-```
+
