@@ -717,14 +717,16 @@ function deleteProduct(id) {
     showToast('Đã xóa sản phẩm.');
 }
 
-document.getElementById('productForm').addEventListener('submit', function (e) {
+document.getElementById('productForm').addEventListener('submit', async function (e) {
     e.preventDefault();
     const images = productImagePicker.getImages();
     if (!images.length) { alert('Vui lòng thêm ít nhất 1 ảnh cho sản phẩm.'); return; }
+
     const id = document.getElementById('productId').value;
     const list = lnnGetProducts();
     const customYear = document.getElementById('productYearCustom').value.trim();
     const year = customYear || document.getElementById('productYear').value || '2026';
+
     const data = {
         groupId: document.getElementById('productGroupId').value,
         title: document.getElementById('productTitle').value.trim(),
@@ -733,17 +735,27 @@ document.getElementById('productForm').addEventListener('submit', function (e) {
         desc: document.getElementById('productDesc').value.trim(),
         year: year
     };
+
     if (id) {
         const idx = list.findIndex(p => p.id === id);
         if (idx > -1) list[idx] = Object.assign({}, list[idx], data);
     } else {
         list.push(Object.assign({ id: lnnUid('prod') }, data));
     }
-    lnnSaveProducts(list);
-    closeModal('productModal');
-    renderProductListInModal();
-    refreshAll();
-    showToast('Đã lưu sản phẩm — trang Dịch vụ / Sản phẩm đã được cập nhật!');
+
+    try {
+        await lnnSaveProducts(list);
+        closeModal('productModal');
+        renderProductListInModal();
+        refreshAll();
+        showToast('Đã lưu sản phẩm vào MongoDB — website sẽ đồng bộ dữ liệu mới!');
+    } catch (error) {
+        console.error('Lỗi lưu sản phẩm vào MongoDB:', error);
+
+        // Lấy lại dữ liệu từ localStorage trước đó để tránh giao diện tưởng đã lưu.
+        // MongoDB chưa nhận được dữ liệu nên không đóng form.
+        alert('Không thể lưu sản phẩm vào MongoDB.\n\n' + (error.message || 'Vui lòng kiểm tra API localhost:3000.'));
+    }
 });
 
 /* ---------- Chọn NHIỀU ảnh từ máy + xem trước dạng thư viện ảnh (dùng cho Sản phẩm) ---------- */

@@ -1,4 +1,4 @@
-// Địa chỉ backend MongoDB API.
-// Nếu backend chạy cùng domain, dùng '/api'. Nếu khác domain, điền URL đầy đủ.
-// Ví dụ: 'https://api.innongnghiep.com'
-window.LNN_API_BASE = '';
+// Địa chỉ backend MongoDB API khi chạy local.
+// Khi deploy API lên hosting, đổi thành URL API thật, ví dụ:
+// window.LNN_API_BASE = 'https://api.innongnghiep.com';
+window.LNN_API_BASE = 'http://localhost:3000';

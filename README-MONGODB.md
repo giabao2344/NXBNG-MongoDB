@@ -59,3 +59,17 @@ Commit/push cả website lên GitHub Pages.
 ## Lưu ý ảnh
 Ảnh sản phẩm đang dùng đường dẫn trong thư mục `image/`. Khi deploy GitHub Pages, các ảnh này đi cùng website.
 Ảnh upload mới từ Admin hiện vẫn theo cơ chế base64/localStorage của hệ thống cũ; không nên upload hàng trăm ảnh lớn trực tiếp vào MongoDB. Nếu muốn, bước tiếp theo nên chuyển ảnh upload sang Cloudinary/S3/Cloudflare R2 và MongoDB chỉ lưu URL ảnh.
+
+## Deploy API lên Render
+
+- Root Directory: `server`
+- Build Command: `npm install`
+- Start Command: `npm start`
+- Health Check Path: `/api/health`
+- Environment variables:
+  - `MONGODB_URI` = MongoDB Atlas connection string
+  - `CORS_ORIGIN` = `https://innongnghiep.com,https://www.innongnghiep.com`
+  - `PORT` = `10000`
+
+Sau khi Render cấp URL API, sửa `config.js` thành URL đó. Khi đã gắn subdomain `api.innongnghiep.com`, dùng:
+`window.LNN_API_BASE = 'https://api.innongnghiep.com';`

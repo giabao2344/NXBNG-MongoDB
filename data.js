@@ -286,13 +286,26 @@ function lnnFileToDataUrl(file, maxWidth, quality) {
 function lnnRemoteSave(collection, list) {
     try {
         const base = (window.LNN_API_BASE || '').replace(/\/$/, '');
-        if (!base) return;
-        fetch(base + '/api/data/' + encodeURIComponent(collection), {
+        if (!base || !window.fetch) return Promise.resolve({ skipped: true });
+
+        return fetch(base + '/api/data/' + encodeURIComponent(collection), {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ data: list || [] })
-        }).catch(() => {});
-    } catch (e) {}
+        }).then(async response => {
+            if (!response.ok) {
+                let message = 'API lưu dữ liệu lỗi (' + response.status + ')';
+                try {
+                    const body = await response.json();
+                    if (body && body.error) message = body.error;
+                } catch (_) {}
+                throw new Error(message);
+            }
+            return response.json();
+        });
+    } catch (e) {
+        return Promise.reject(e);
+    }
 }
 
 /* ---------- Dịch vụ ---------- */
@@ -311,7 +324,7 @@ function lnnGetServices() {
 
 function lnnSaveServices(list) {
     localStorage.setItem(LNN_KEYS.services, JSON.stringify(list || []));
-    lnnRemoteSave('services', list || []);
+    return lnnRemoteSave('services', list || []);
 }
 
 function lnnGetServiceById(id) {
@@ -334,7 +347,7 @@ function lnnGetGroups() {
 
 function lnnSaveGroups(list) {
     localStorage.setItem(LNN_KEYS.groups, JSON.stringify(list || []));
-    lnnRemoteSave('groups', list || []);
+    return lnnRemoteSave('groups', list || []);
 }
 
 function lnnGetGroupsByService(serviceId) {
@@ -360,8 +373,9 @@ function lnnGetProducts() {
 }
 
 function lnnSaveProducts(list) {
-    localStorage.setItem(LNN_KEYS.products, JSON.stringify(list || []));
-    lnnRemoteSave('products', list || []);
+    const safeList = list || [];
+    localStorage.setItem(LNN_KEYS.products, JSON.stringify(safeList));
+    return lnnRemoteSave('products', safeList);
 }
 
 /* year (tùy chọn): nếu truyền vào ('2026', '2027'...) chỉ trả về sản phẩm của đúng năm đó.
@@ -396,7 +410,7 @@ function lnnGetFeatured() {
 
 function lnnSaveFeatured(list) {
     localStorage.setItem(LNN_KEYS.featured, JSON.stringify(list || []));
-    lnnRemoteSave('featured', list || []);
+    return lnnRemoteSave('featured', list || []);
 }
 
 function lnnGetFeaturedById(id) {
@@ -420,7 +434,7 @@ function lnnGetBanners() {
 
 function lnnSaveBanners(list) {
     localStorage.setItem(LNN_KEYS.banners, JSON.stringify(list || []));
-    lnnRemoteSave('banners', list || []);
+    return lnnRemoteSave('banners', list || []);
 }
 
 function lnnGetBannerById(id) {
@@ -465,7 +479,7 @@ function lnnGetPosts() {
 
 function lnnSavePosts(list) {
     localStorage.setItem(LNN_KEYS.posts, JSON.stringify(list || []));
-    lnnRemoteSave('posts', list || []);
+    return lnnRemoteSave('posts', list || []);
 }
 
 function lnnGetPostById(id) {
