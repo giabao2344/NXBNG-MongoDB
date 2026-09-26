@@ -1,53 +1,163 @@
-/* LNN MongoDB bridge
-   - Lấy dữ liệu từ MongoDB về localStorage trước khi trang render.
-   - Nếu dữ liệu remote khác dữ liệu local, cập nhật localStorage và tải lại 1 lần.
-   - Các hàm lnnSave* trong data.js đồng thời PUT dữ liệu lên MongoDB.
-*/
+
 (function () {
-  const base = (window.LNN_API_BASE || '').replace(/\/$/, '');
-  if (!base || !window.fetch) return;
 
-  const SYNC_KEY = 'lnn_mongo_sync_version';
+  const base = (window.LNN_API_BASE || '')
+    .replace(/\/$/, '');
 
-  function same(a, b) {
-    try { return JSON.stringify(a) === JSON.stringify(b); } catch (_) { return false; }
+  // Không có API thì bỏ qua
+  if (!base || !window.fetch) {
+    return;
   }
 
-  fetch(base + '/api/bootstrap', { cache: 'no-store' })
-    .then(r => r.ok ? r.json() : Promise.reject(new Error('API ' + r.status)))
-    .then(remote => {
-      if (!remote || !remote.data) return;
-      const d = remote.data;
-      let changed = false;
-      const map = {
-        services: 'lnn_services',
-        groups: 'lnn_groups',
-        products: 'lnn_products',
-        posts: 'lnn_posts',
-        featured: 'lnn_featured',
-        banners: 'lnn_banners'
-      };
+  const map = {
+    services: 'lnn_services',
+    groups: 'lnn_groups',
+    products: 'lnn_products',
+    posts: 'lnn_posts',
+    featured: 'lnn_featured',
+    banners: 'lnn_banners'
+  };
 
-      Object.keys(map).forEach(k => {
-        if (!Array.isArray(d[k])) return;
-        const key = map[k];
-        let local = null;
-        try { local = JSON.parse(localStorage.getItem(key) || 'null'); } catch (_) {}
-        if (!same(local, d[k])) {
-          localStorage.setItem(key, JSON.stringify(d[k]));
-          changed = true;
-        }
-      });
+  function same(a, b) {
+    try {
+      return JSON.stringify(a) === JSON.stringify(b);
+    } catch (_) {
+      return false;
+    }
+  }
 
-      const version = String(remote.updatedAt || '');
-      const previous = localStorage.getItem(SYNC_KEY);
-      if (version) localStorage.setItem(SYNC_KEY, version);
+  // =====================================================
+  // Lấy dữ liệu từ MongoDB
+  // =====================================================
 
-      if (changed && previous !== version) {
-        location.reload();
+  fetch(base + '/api/bootstrap', {
+    cache: 'no-store'
+  })
+
+  .then(response => {
+
+    if (!response.ok) {
+      throw new Error('API ' + response.status);
+    }
+
+    return response.json();
+
+  })
+
+  .then(remote => {
+
+    if (!remote || !remote.data) {
+      console.warn(
+        'MongoDB API không trả về data'
+      );
+
+      return;
+    }
+
+    const data = remote.data;
+
+    let changed = false;
+
+    // ===================================================
+    // Đồng bộ từng loại dữ liệu
+    // ===================================================
+
+    Object.keys(map).forEach(key => {
+
+      if (!Array.isArray(data[key])) {
+        return;
       }
-    })
-    .catch(() => {
-      // Backend chưa cấu hình/không online: website vẫn hoạt động bằng localStorage.
+
+      const localStorageKey = map[key];
+
+      let local = null;
+
+      try {
+
+        local = JSON.parse(
+          localStorage.getItem(localStorageKey) || 'null'
+        );
+
+      } catch (_) {
+
+        local = null;
+
+      }
+
+      // Nếu MongoDB khác localStorage
+      if (!same(local, data[key])) {
+
+        localStorage.setItem(
+          localStorageKey,
+          JSON.stringify(data[key])
+        );
+
+        changed = true;
+
+        console.log(
+          '[MongoDB] Đã đồng bộ:',
+          key,
+          '=>',
+          data[key].length,
+          'items'
+        );
+      }
+
     });
+
+    // ===================================================
+    // Lưu thời gian đồng bộ
+    // ===================================================
+
+    if (remote.updatedAt) {
+
+      localStorage.setItem(
+        'lnn_mongo_sync_version',
+        String(remote.updatedAt)
+      );
+
+    }
+
+    // ===================================================
+    // QUAN TRỌNG
+    // ===================================================
+    // Nếu localStorage vừa được thay đổi,
+    // reload trang để giao diện đọc dữ liệu mới.
+    //
+    // Không kiểm tra previous !== version nữa.
+    // Vì dữ liệu có thể thay đổi trong localStorage
+    // trong khi updatedAt vẫn giống nhau.
+
+    if (changed) {
+
+      console.log(
+        '[MongoDB] Dữ liệu đã thay đổi -> reload trang'
+      );
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
+
+    } else {
+
+      console.log(
+        '[MongoDB] Dữ liệu localStorage đã đồng bộ'
+      );
+
+    }
+
+  })
+
+  .catch(error => {
+
+    console.warn(
+      '[MongoDB] Không thể đồng bộ dữ liệu:',
+      error.message
+    );
+
+    // Backend không hoạt động thì website
+    // vẫn tiếp tục chạy bằng localStorage.
+
+  });
+
 })();
