@@ -135,7 +135,7 @@
                 <h5 class="font-bold mb-6">Thông tin liên hệ</h5>
                 <ul class="space-y-4 text-gray-500 text-sm">
                     <li> Xưởng: Số 54, Ngõ 459 phố Bạch Mai, TP.Hà Nội </li>
-                    <li>0976 585 945 - 0972 666 111 - 0396 294 628</li>
+                    <li>0972 666 111 - 0396 294 628 - 0976 585 945</li>
                     <li>Ketoan.inbaobinn2022@gmail.com</li>
                 </ul>
             </div>
@@ -181,7 +181,7 @@
                 featWrap.innerHTML = `
                     <div class="flex flex-col lg:flex-row bg-white rounded-[40px] overflow-hidden shadow-sm border border-gray-100 group" data-aos="fade-up">
                         <div class="lg:w-2/3 overflow-hidden">
-                            <img src="${lnnEscape(featured.image)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-1000" alt="${lnnEscape(featured.title)}" onerror="this.style.opacity=0.3">
+                            <img src="${lnnEscape(featured.image)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-1000" alt="${lnnEscape(featured.title)}" onerror="this.style.opacity=0.3" data-page-image-slot="0">
                         </div>
                         <div class="lg:w-1/3 p-12 flex flex-col justify-center">
                             <span class="post-meta mb-4 block font-medium text-brand-orange uppercase tracking-widest">${lnnEscape(featured.tag || 'Nổi bật')}</span>
@@ -201,7 +201,7 @@
                 <div class="hover-card group cursor-pointer" data-aos="fade-up">
                     <a href="post.html?id=${encodeURIComponent(p.id)}" class="block">
                         <div class="aspect-ratio-box mb-5">
-                            <img src="${lnnEscape(p.image)}" alt="${lnnEscape(p.title)}" onerror="this.style.opacity=0.3">
+                            <img src="${lnnEscape(p.image)}" alt="${lnnEscape(p.title)}" onerror="this.style.opacity=0.3" data-page-image-slot="1">
                         </div>
                         <div class="flex items-center text-xs text-gray-400 mb-3 font-medium">
                             <span class="mr-2">📅</span> ${lnnFormatDate(p.date)}
@@ -230,5 +230,6 @@
     </script>
     <script src="search.js"></script>
     <script src="script.js"></script>
+<script src="page-images.js"></script>
 </body>
 </html>

@@ -15,7 +15,8 @@
     products: 'lnn_products',
     posts: 'lnn_posts',
     featured: 'lnn_featured',
-    banners: 'lnn_banners'
+    banners: 'lnn_banners',
+    pageImages: 'lnn_pageImages'
   };
 
   function same(a, b) {

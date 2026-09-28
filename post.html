@@ -144,7 +144,7 @@
                 <h5 class="font-bold mb-6">Thông tin liên hệ</h5>
                 <ul class="space-y-4 text-gray-500 text-sm">
                     <li> Xưởng: Số 54, Ngõ 459 phố Bạch Mai, TP.Hà Nội </li>
-                    <li>0976 585 945 - 0972 666 111 - 0396 294 628</li>
+                    <li>0972 666 111 - 0396 294 628 - 0976 585 945</li>
                     <li>Ketoan.inbaobinn2022@gmail.com</li>
                 </ul>
             </div>
@@ -225,7 +225,7 @@
             relatedEl.innerHTML = others.map(p => `
                 <a href="post.html?id=${encodeURIComponent(p.id)}" class="block group">
                     <div class="aspect-ratio-box mb-3">
-                        <img src="${lnnEscape(p.image)}" alt="${lnnEscape(p.title)}" onerror="this.style.opacity=0.3">
+                        <img src="${lnnEscape(p.image)}" alt="${lnnEscape(p.title)}" onerror="this.style.opacity=0.3" data-page-image-slot="0">
                     </div>
                     <p class="text-xs text-gray-400 mb-1">${lnnFormatDate(p.date)}</p>
                     <h4 class="font-bold text-sm group-hover:text-green-600 transition line-clamp-2">${lnnEscape(p.title)}</h4>
@@ -234,5 +234,6 @@
     </script>
     <script src="script.js"></script>
     <script src="search.js"></script>
+<script src="page-images.js"></script>
 </body>
 </html>

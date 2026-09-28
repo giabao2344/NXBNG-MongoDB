@@ -72,7 +72,7 @@
 <section class="px-4 md:px-8 py-4">
     <div class="relative h-[420px] md:h-[560px] rounded-[2rem] overflow-hidden bg-slate-900 group" data-aos="fade-up">
         <img id="banner-img" src="image/banner-tet-2027.jpg"
-             class="absolute inset-0 w-full h-full object-cover opacity-60" alt="Xưởng in ấn Lịch Nông Nghiệp">
+             class="absolute inset-0 w-full h-full object-cover opacity-60" alt="Xưởng in ấn Lịch Nông Nghiệp" data-page-image-slot="0">
 
         <div class="absolute inset-0 hero-gradient flex items-center px-8 md:px-20">
             <div class="max-w-2xl text-white">
@@ -122,28 +122,28 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         <div class="group cursor-pointer">
             <div class="bg-gray-100 rounded-3xl overflow-hidden mb-4 aspect-square">
-                <img src="image/29.jpg" alt="In lịch quyển" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <img src="image/29.jpg" alt="In lịch quyển" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" data-page-image-slot="1">
             </div>
             <h3 class="font-bold text-lg">In lịch quyển</h3>
             <p class="text-sm mt-2">Thiết kế và in ấn lịch quyển chuyên nghiệp</p>
         </div>
         <div class="group cursor-pointer">
             <div class="bg-gray-100 rounded-3xl overflow-hidden mb-4 aspect-square">
-                <img src="image/anhsanpham1.jpg" alt="In hộp cứng" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <img src="image/anhsanpham1.jpg" alt="In hộp cứng" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" data-page-image-slot="2">
             </div>
             <h3 class="font-bold text-lg">In hộp cứng</h3>
             <p class="text-sm mt-2">Hộp cứng sản phẩm đẹp mắt, bảo vệ sản phẩm hiệu quả</p>
         </div>
         <div class="group cursor-pointer">
             <div class="bg-gray-100 rounded-3xl overflow-hidden mb-4 aspect-square">
-                <img src="image/bia2.jpg" alt="Ấn phẩm Tết" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <img src="image/bia2.jpg" alt="Ấn phẩm Tết" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" data-page-image-slot="3">
             </div>
             <h3 class="font-bold text-lg">Ấn phẩm Tết</h3>
             <p class="text-sm mt-2">Ấn phẩm Tết – lưu giữ sắc xuân và không khí đoàn viên ngày đầu năm</p>
         </div>
         <div class="group cursor-pointer">
             <div class="bg-gray-100 rounded-3xl overflow-hidden mb-4 aspect-square">
-                <img src="image/sanphamtui.png" alt="In túi giấy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <img src="image/sanphamtui.png" alt="In túi giấy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" data-page-image-slot="4">
             </div>
             <h3 class="font-bold text-lg">In túi giấy/túi nilon</h3>
             <p class="text-sm mt-2">Túi giấy, túi nilon in logo thương hiệu</p>
@@ -266,7 +266,7 @@
                 <h5 class="font-bold mb-6">Thông tin liên hệ</h5>
                 <ul class="space-y-4 text-gray-500 text-sm">
                     <li> Xưởng: Số 54, Ngõ 459 phố Bạch Mai, TP.Hà Nội </li>
-                    <li>0976 585 945 - 0972 666 111 - 0396 294 628</li>
+                    <li>0972 666 111 - 0396 294 628 - 0976 585 945</li>
                     <li>Ketoan.inbaobinn2022@gmail.com</li>
                 </ul>
             </div>
@@ -299,7 +299,7 @@
     </footer>
 
 <div class="floating-actions">
-    <a href="tel:0976585945" class="floating-phone" aria-label="Gọi điện">
+    <a href="tel:0972666111" class="floating-phone" aria-label="Gọi điện">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.61 21 3 13.39 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/></svg>
     </a>
     <a href="https://zalo.me/0972666111" target="_blank" rel="noopener" class="floating-zalo" aria-label="Chat Zalo">
@@ -322,7 +322,7 @@
         el.innerHTML = items.map((f, i) => `
             <div class="group cursor-pointer" data-aos="fade-up" data-aos-delay="${i * 80}">
                 <div class="bg-gray-100 rounded-3xl overflow-hidden mb-4 aspect-square">
-                    <img src="${lnnEscape(f.image)}" alt="${lnnEscape(f.title)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.style.opacity=0.3">
+                    <img src="${lnnEscape(f.image)}" alt="${lnnEscape(f.title)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.style.opacity=0.3" data-page-image-slot="5">
                 </div>
                 <h3 class="font-bold text-base leading-snug">${lnnEscape(f.title)}</h3>
             </div>`).join('') || '<p class="col-span-full text-center text-gray-400 py-10">Chưa có sản phẩm nổi bật nào — hãy thêm trong trang Admin.</p>';
@@ -337,7 +337,7 @@
             <div class="hover-card group cursor-pointer" data-aos="fade-up" data-aos-delay="${i * 100}">
                 <a href="post.html?id=${encodeURIComponent(p.id)}" class="block">
                     <div class="aspect-ratio-box mb-5">
-                        <img src="${lnnEscape(p.image)}" alt="${lnnEscape(p.title)}" onerror="this.style.opacity=0.3">
+                        <img src="${lnnEscape(p.image)}" alt="${lnnEscape(p.title)}" onerror="this.style.opacity=0.3" data-page-image-slot="6">
                     </div>
                     <div class="flex items-center text-xs text-gray-400 mb-3 font-medium">
                         <span class="mr-2">📅</span> ${lnnFormatDate(p.date)}
@@ -358,5 +358,6 @@
 </script>
 <script src="script.js"></script>
     <script src="search.js"></script>
+<script src="page-images.js"></script>
 </body>
 </html>

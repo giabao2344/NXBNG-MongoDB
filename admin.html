@@ -118,6 +118,7 @@
             <button class="tab-btn" data-tab="featured">🗓️ Nổi bật trang chủ</button>
             <button class="tab-btn" data-tab="banners">🖼️ Banner trang chủ</button>
             <button class="tab-btn" data-tab="posts">📰 Bài viết Blog</button>
+            <button class="tab-btn" data-tab="tet-images">🧧 Ảnh In Lịch Tết</button>
         </div>
 
         <section id="tab-services">
@@ -172,6 +173,21 @@
             </div>
             <div id="postList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
         </section>
+<section id="tab-tet-images" class="hidden">
+<h2 class="text-2xl font-bold mb-2">🧧 Chỉnh sửa ảnh trang In Lịch Tết</h2>
+<p class="text-gray-500 mb-5">Chọn một vị trí bên dưới để thêm nhiều ảnh, thay ảnh, đặt ảnh chính hoặc xóa ảnh. Sau khi chỉnh sửa, nhấn Lưu ảnh.</p>
+<div id="tetImageCards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"></div>
+<section class="admin-card p-6 mt-8" id="staticImageManager">
+<h2 class="text-xl font-bold mb-2">🖼️ Thêm / sửa / xóa ảnh theo vị trí</h2>
+<p class="text-sm text-gray-500 mb-4">Thêm, sửa hoặc xóa ảnh của từng vị trí trên website (bao gồm ảnh In Lịch Tết Theo Yêu Cầu). Có thể tải nhiều ảnh và chọn ảnh chính.</p>
+<label class="block font-semibold text-sm mb-2">Chọn trang</label><select id="pageImagePage" class="w-full mb-4"></select>
+<label class="block font-semibold text-sm mb-2">Chọn vị trí ảnh</label><select id="pageImageSlot" class="w-full mb-4"></select>
+<div id="pageImageThumbs" class="flex flex-wrap gap-3 mb-3"></div>
+<input id="pageImageFiles" type="file" accept="image/*" multiple class="block mb-3 w-full">
+<div class="flex gap-2 mb-4"><input id="pageImageUrl" class="flex-1" placeholder="Đường dẫn ảnh (không bắt buộc)"><button type="button" id="pageImageAddUrl" class="btn-outline">+ Thêm URL</button></div>
+<div class="flex gap-3"><button type="button" id="pageImageSave" class="btn-primary">Lưu ảnh</button><button type="button" id="pageImageReset" class="btn-outline">Khôi phục ảnh gốc</button></div>
+<p id="pageImageStatus" class="text-sm mt-3 text-gray-500"></p>
+</section></section>
     </main>
 </div>
 
@@ -196,12 +212,13 @@
                         <span id="svcImagePreviewEmpty" class="text-[10px] text-gray-400 text-center px-1">Chưa có ảnh</span>
                     </div>
                     <div class="flex-1">
-                        <input type="file" id="svcImageFile" accept="image/*" class="hidden">
+                        <input type="file" id="svcImageFile" accept="image/*" multiple class="hidden">
                         <button type="button" onclick="document.getElementById('svcImageFile').click()" class="btn-outline !py-2 !px-4 text-sm w-full">📤 Chọn ảnh từ máy</button>
-                        <button type="button" id="svcImageManualToggle" class="text-[11px] text-gray-400 hover:text-brand-green mt-2 underline block">hoặc nhập đường dẫn ảnh có sẵn</button>
+                        <button type="button" id="svcImageManualToggle" title="Bấm để mở ô nhập, bấm lại để thêm ảnh" class="text-[11px] text-gray-400 hover:text-brand-green mt-2 underline block">hoặc nhập đường dẫn ảnh có sẵn</button>
                     </div>
                 </div>
-                <input type="text" id="svcImage" required placeholder="image/ten-anh.jpg" class="w-full mt-3 hidden">
+                <input type="hidden" id="svcImages" value="[]"><div id="svcImageThumbs" class="flex flex-wrap gap-3 mt-3"></div><p class="text-xs text-gray-500 mt-2">Có thể chọn nhiều ảnh; bấm ★ để chọn ảnh chính, ✕ để xóa ảnh.</p>
+                <input type="text" id="svcImage" placeholder="image/ten-anh.jpg" class="w-full mt-3 hidden">
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Mô tả ngắn (hiển thị ở danh sách) *</label>
@@ -238,12 +255,13 @@
                         <span id="featuredImagePreviewEmpty" class="text-[10px] text-gray-400 text-center px-1">Chưa có ảnh</span>
                     </div>
                     <div class="flex-1">
-                        <input type="file" id="featuredImageFile" accept="image/*" class="hidden">
+                        <input type="file" id="featuredImageFile" accept="image/*" multiple class="hidden">
                         <button type="button" onclick="document.getElementById('featuredImageFile').click()" class="btn-outline !py-2 !px-4 text-sm w-full">📤 Chọn ảnh từ máy</button>
-                        <button type="button" id="featuredImageManualToggle" class="text-[11px] text-gray-400 hover:text-brand-green mt-2 underline block">hoặc nhập đường dẫn ảnh có sẵn</button>
+                        <button type="button" id="featuredImageManualToggle" title="Bấm để mở ô nhập, bấm lại để thêm ảnh" class="text-[11px] text-gray-400 hover:text-brand-green mt-2 underline block">hoặc nhập đường dẫn ảnh có sẵn</button>
                     </div>
                 </div>
-                <input type="text" id="featuredImage" required placeholder="image/ten-anh.jpg" class="w-full mt-3 hidden">
+                <input type="hidden" id="featuredImages" value="[]"><div id="featuredImageThumbs" class="flex flex-wrap gap-3 mt-3"></div><p class="text-xs text-gray-500 mt-2">Có thể chọn nhiều ảnh; bấm ★ để chọn ảnh chính, ✕ để xóa ảnh.</p>
+                <input type="text" id="featuredImage" placeholder="image/ten-anh.jpg" class="w-full mt-3 hidden">
             </div>
             <button type="submit" class="w-full btn-primary !w-full !py-3">Lưu sản phẩm nổi bật</button>
         </form>
@@ -267,12 +285,13 @@
                         <span id="bannerImagePreviewEmpty" class="text-[10px] text-gray-400 text-center px-1">Chưa có ảnh</span>
                     </div>
                     <div class="flex-1">
-                        <input type="file" id="bannerImageFile" accept="image/*" class="hidden">
+                        <input type="file" id="bannerImageFile" accept="image/*" multiple class="hidden">
                         <button type="button" onclick="document.getElementById('bannerImageFile').click()" class="btn-outline !py-2 !px-4 text-sm w-full">📤 Chọn ảnh từ máy</button>
-                        <button type="button" id="bannerImageManualToggle" class="text-[11px] text-gray-400 hover:text-brand-green mt-2 underline block">hoặc nhập đường dẫn ảnh có sẵn</button>
+                        <button type="button" id="bannerImageManualToggle" title="Bấm để mở ô nhập, bấm lại để thêm ảnh" class="text-[11px] text-gray-400 hover:text-brand-green mt-2 underline block">hoặc nhập đường dẫn ảnh có sẵn</button>
                     </div>
                 </div>
-                <input type="text" id="bannerImage" required placeholder="image/ten-anh.jpg" class="w-full mt-3 hidden">
+                <input type="hidden" id="bannerImages" value="[]"><div id="bannerImageThumbs" class="flex flex-wrap gap-3 mt-3"></div><p class="text-xs text-gray-500 mt-2">Có thể chọn nhiều ảnh; bấm ★ để chọn ảnh chính, ✕ để xóa ảnh.</p>
+                <input type="text" id="bannerImage" placeholder="image/ten-anh.jpg" class="w-full mt-3 hidden">
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Tiêu đề hiển thị trên banner *</label>
@@ -317,12 +336,13 @@
                         <span id="postImagePreviewEmpty" class="text-[10px] text-gray-400 text-center px-1">Chưa có ảnh</span>
                     </div>
                     <div class="flex-1">
-                        <input type="file" id="postImageFile" accept="image/*" class="hidden">
+                        <input type="file" id="postImageFile" accept="image/*" multiple class="hidden">
                         <button type="button" onclick="document.getElementById('postImageFile').click()" class="btn-outline !py-2 !px-4 text-sm w-full">📤 Chọn ảnh từ máy</button>
-                        <button type="button" id="postImageManualToggle" class="text-[11px] text-gray-400 hover:text-brand-green mt-2 underline block">hoặc nhập đường dẫn ảnh có sẵn</button>
+                        <button type="button" id="postImageManualToggle" title="Bấm để mở ô nhập, bấm lại để thêm ảnh" class="text-[11px] text-gray-400 hover:text-brand-green mt-2 underline block">hoặc nhập đường dẫn ảnh có sẵn</button>
                     </div>
                 </div>
-                <input type="text" id="postImage" required placeholder="image/ten-anh.jpg" class="w-full mt-3 hidden">
+                <input type="hidden" id="postImages" value="[]"><div id="postImageThumbs" class="flex flex-wrap gap-3 mt-3"></div><p class="text-xs text-gray-500 mt-2">Có thể chọn nhiều ảnh; bấm ★ để chọn ảnh chính, ✕ để xóa ảnh.</p>
+                <input type="text" id="postImage" placeholder="image/ten-anh.jpg" class="w-full mt-3 hidden">
             </div>
             <div>
                 <label class="block text-xs font-bold uppercase text-gray-400 mb-2">Mô tả ngắn (excerpt) *</label>
@@ -470,6 +490,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         document.getElementById('tab-featured').classList.toggle('hidden', tab !== 'featured');
         document.getElementById('tab-banners').classList.toggle('hidden', tab !== 'banners');
         document.getElementById('tab-posts').classList.toggle('hidden', tab !== 'posts');
+        document.getElementById('tab-tet-images').classList.toggle('hidden', tab !== 'tet-images');
     });
 });
 
@@ -797,10 +818,9 @@ function lnnSetupGalleryPicker(fileInputId, hiddenInputId, thumbsWrapId, manualT
 
     if (manualToggle && manualInput) {
         manualToggle.addEventListener('click', function () {
-            manualInput.classList.toggle('hidden');
-            if (!manualInput.classList.contains('hidden')) { manualInput.focus(); return; }
+            if (manualInput.classList.contains('hidden')) { manualInput.classList.remove('hidden'); manualInput.focus(); return; }
             const val = manualInput.value.trim();
-            if (val) { images.push(val); manualInput.value = ''; sync(); }
+            if (val) { images.push(val); manualInput.value = ''; sync(); } else { manualInput.classList.add('hidden'); }
         });
     }
 
@@ -849,8 +869,7 @@ function editFeatured(id) {
     if (!f) return;
     document.getElementById('featuredId').value = f.id;
     document.getElementById('featuredTitle').value = f.title;
-    document.getElementById('featuredImage').value = f.image;
-    featuredImagePicker.updatePreview();
+    featuredImagePicker.setImages((f.images && f.images.length) ? f.images : (f.image ? [f.image] : []));
     document.getElementById('featuredModalTitle').textContent = 'Sửa sản phẩm nổi bật';
     openModal('featuredModal');
 }
@@ -864,11 +883,13 @@ function deleteFeatured(id) {
 
 document.getElementById('featuredForm').addEventListener('submit', function (e) {
     e.preventDefault();
+    if (!featuredImagePicker.getImages().length) { alert('Vui lòng thêm ít nhất một ảnh.'); return; }
     const id = document.getElementById('featuredId').value;
     const list = lnnGetFeatured();
     const data = {
         title: document.getElementById('featuredTitle').value.trim(),
-        image: document.getElementById('featuredImage').value.trim()
+        image: featuredImagePicker.getImages()[0] || '',
+        images: featuredImagePicker.getImages()
     };
     if (id) {
         const idx = list.findIndex(f => f.id === id);
@@ -913,8 +934,7 @@ function editBanner(id) {
     const b = lnnGetBannerById(id);
     if (!b) return;
     document.getElementById('bannerId').value = b.id;
-    document.getElementById('bannerImage').value = b.image;
-    bannerImagePicker.updatePreview();
+    bannerImagePicker.setImages((b.images && b.images.length) ? b.images : (b.image ? [b.image] : []));
     document.getElementById('bannerTitle').value = b.title || '';
     document.getElementById('bannerLink').value = b.link || '';
     document.getElementById('bannerModalTitle').textContent = 'Sửa banner';
@@ -930,10 +950,12 @@ function deleteBanner(id) {
 
 document.getElementById('bannerForm').addEventListener('submit', function (e) {
     e.preventDefault();
+    if (!bannerImagePicker.getImages().length) { alert('Vui lòng thêm ít nhất một ảnh.'); return; }
     const id = document.getElementById('bannerId').value;
     const list = lnnGetBanners();
     const data = {
-        image: document.getElementById('bannerImage').value.trim(),
+        image: bannerImagePicker.getImages()[0] || '',
+        images: bannerImagePicker.getImages(),
         title: document.getElementById('bannerTitle').value.trim(),
         link: document.getElementById('bannerLink').value.trim()
     };
@@ -1007,10 +1029,10 @@ function lnnSetupImagePicker(fileInputId, hiddenInputId, previewImgId, previewEm
     return { updatePreview, reset };
 }
 
-const svcImagePicker = lnnSetupImagePicker('svcImageFile', 'svcImage', 'svcImagePreview', 'svcImagePreviewEmpty', 'svcImageManualToggle');
-const postImagePicker = lnnSetupImagePicker('postImageFile', 'postImage', 'postImagePreview', 'postImagePreviewEmpty', 'postImageManualToggle');
-const featuredImagePicker = lnnSetupImagePicker('featuredImageFile', 'featuredImage', 'featuredImagePreview', 'featuredImagePreviewEmpty', 'featuredImageManualToggle');
-const bannerImagePicker = lnnSetupImagePicker('bannerImageFile', 'bannerImage', 'bannerImagePreview', 'bannerImagePreviewEmpty', 'bannerImageManualToggle');
+const svcImagePicker = lnnSetupGalleryPicker('svcImageFile', 'svcImages', 'svcImageThumbs', 'svcImageManualToggle', 'svcImage');
+const postImagePicker = lnnSetupGalleryPicker('postImageFile', 'postImages', 'postImageThumbs', 'postImageManualToggle', 'postImage');
+const featuredImagePicker = lnnSetupGalleryPicker('featuredImageFile', 'featuredImages', 'featuredImageThumbs', 'featuredImageManualToggle', 'featuredImage');
+const bannerImagePicker = lnnSetupGalleryPicker('bannerImageFile', 'bannerImages', 'bannerImageThumbs', 'bannerImageManualToggle', 'bannerImage');
 const productImagePicker = lnnSetupGalleryPicker('productImageFile', 'productImages', 'productImageThumbs', 'productImageManualToggle', 'productImage');
 
 document.getElementById('addServiceBtn').addEventListener('click', () => {
@@ -1026,8 +1048,7 @@ function editService(id) {
     if (!s) return;
     document.getElementById('svcId').value = s.id;
     document.getElementById('svcTitle').value = s.title;
-    document.getElementById('svcImage').value = s.image;
-    svcImagePicker.updatePreview();
+    svcImagePicker.setImages((s.images && s.images.length) ? s.images : (s.image ? [s.image] : []));
     document.getElementById('svcDesc').value = s.desc;
     document.getElementById('svcDetail').value = s.detail || '';
     document.getElementById('serviceModalTitle').textContent = 'Sửa dịch vụ';
@@ -1044,11 +1065,13 @@ function deleteService(id) {
 
 document.getElementById('serviceForm').addEventListener('submit', function (e) {
     e.preventDefault();
+    if (!svcImagePicker.getImages().length) { alert('Vui lòng thêm ít nhất một ảnh.'); return; }
     const id = document.getElementById('svcId').value;
     const list = lnnGetServices();
     const data = {
         title: document.getElementById('svcTitle').value.trim(),
-        image: document.getElementById('svcImage').value.trim(),
+        image: svcImagePicker.getImages()[0] || '',
+        images: svcImagePicker.getImages(),
         desc: document.getElementById('svcDesc').value.trim(),
         detail: document.getElementById('svcDetail').value.trim()
     };
@@ -1080,8 +1103,7 @@ function editPost(id) {
     document.getElementById('postTitle').value = p.title;
     document.getElementById('postTag').value = p.tag || '';
     document.getElementById('postDate').value = p.date;
-    document.getElementById('postImage').value = p.image;
-    postImagePicker.updatePreview();
+    postImagePicker.setImages((p.images && p.images.length) ? p.images : (p.image ? [p.image] : []));
     document.getElementById('postExcerpt').value = p.excerpt;
     document.getElementById('postContent').value = p.content || '';
     document.getElementById('postFeatured').checked = !!p.featured;
@@ -1099,6 +1121,7 @@ function deletePost(id) {
 
 document.getElementById('postForm').addEventListener('submit', function (e) {
     e.preventDefault();
+    if (!postImagePicker.getImages().length) { alert('Vui lòng thêm ít nhất một ảnh.'); return; }
     const id = document.getElementById('postId').value;
     let list = lnnGetPosts();
     const featured = document.getElementById('postFeatured').checked;
@@ -1106,7 +1129,8 @@ document.getElementById('postForm').addEventListener('submit', function (e) {
         title: document.getElementById('postTitle').value.trim(),
         tag: document.getElementById('postTag').value.trim(),
         date: document.getElementById('postDate').value,
-        image: document.getElementById('postImage').value.trim(),
+        image: postImagePicker.getImages()[0] || '',
+        images: postImagePicker.getImages(),
         excerpt: document.getElementById('postExcerpt').value.trim(),
         content: document.getElementById('postContent').value.trim(),
         featured: featured
@@ -1166,6 +1190,34 @@ document.getElementById('importFile').addEventListener('change', function (e) {
     reader.readAsText(file);
     e.target.value = '';
 });
+</script>
+<script src="page-image-manifest.js"></script>
+<script>
+/* Quản lý các ảnh HTML tĩnh, đồng bộ cùng MongoDB. */
+(function () {
+ const manifest = window.LNN_PAGE_IMAGE_MANIFEST || {};
+ const page = document.getElementById('pageImagePage'), slot = document.getElementById('pageImageSlot');
+ if (!page || !Object.keys(manifest).length) return;
+ const thumbs = document.getElementById('pageImageThumbs'), status = document.getElementById('pageImageStatus');
+ let selected = [];
+ const key = () => page.value + ':' + slot.value;
+ const getAll = () => { try { return JSON.parse(localStorage.getItem('lnn_pageImages') || '[]'); } catch(e) { return []; } };
+ function draw() { thumbs.innerHTML = selected.map((src,i) => `<div class="relative w-28 rounded-xl border p-1"><img src="${lnnEscape(src)}" class="h-24 w-full object-cover rounded"><div class="flex justify-between mt-1"><button type="button" data-main="${i}" title="Ảnh chính">${i===0?'★ Chính':'☆ Chính'}</button><button type="button" data-remove="${i}" class="text-red-600">✕ Xóa</button></div></div>`).join('') || '<p class="text-sm text-gray-400">Chưa có ảnh.</p>'; }
+ thumbs.addEventListener('click', e => { const rm=e.target.closest('[data-remove]'), main=e.target.closest('[data-main]'); if(rm)selected.splice(Number(rm.dataset.remove),1); if(main){ const x=selected.splice(Number(main.dataset.main),1)[0];selected.unshift(x); }draw(); });
+ function loadSlot() { const item=getAll().find(x=>x.key===key()); selected=item ? item.images.slice() : [manifest[page.value][Number(slot.value)].src]; draw(); }
+ function loadPage() { slot.innerHTML=manifest[page.value].map((item,i)=>`<option value="${i}">${lnnEscape(item.label)}</option>`).join(''); loadSlot(); }
+ page.innerHTML=Object.keys(manifest).map(name=>`<option value="${name}">${name}</option>`).join('');
+ page.addEventListener('change',loadPage); slot.addEventListener('change',loadSlot);page.value='in-lich-tet.html';loadPage();
+ const cards=document.getElementById('tetImageCards');
+ const tetSlots=manifest['in-lich-tet.html']||[];
+ function renderTetCards(){const saved=getAll();cards.innerHTML=tetSlots.map((item,i)=>{const entry=saved.find(x=>x.key==='in-lich-tet.html:'+i);const imgs=entry?entry.images:[item.src];return `<div class="bg-white border rounded-2xl p-4 shadow-sm"><img src="${lnnEscape(imgs[0]||item.src)}" alt="${lnnEscape(item.label)}" class="w-full h-36 object-cover rounded-xl mb-3"><h3 class="font-bold text-sm mb-1">${lnnEscape(item.label.split(' — ')[0])}</h3><p class="text-xs text-gray-500 mb-3">${imgs.length} ảnh</p><button type="button" class="btn-primary w-full !py-2" data-tet-slot="${i}">✏️ Thêm / sửa / xóa ảnh</button></div>`}).join('');}
+ cards.addEventListener('click',e=>{const btn=e.target.closest('[data-tet-slot]');if(!btn)return;page.value='in-lich-tet.html';loadPage();slot.value=btn.dataset.tetSlot;loadSlot();document.getElementById('staticImageManager').scrollIntoView({behavior:'smooth',block:'center'});});
+ renderTetCards();
+ document.getElementById('pageImageFiles').addEventListener('change',async e=>{ const files=[...e.target.files]; status.textContent='Đang tải '+files.length+' ảnh...'; const results=await Promise.allSettled(files.map(f=>lnnUploadImage(f,1600,.82))); for(const r of results)if(r.status==='fulfilled')selected.push(r.value);draw();status.textContent=results.filter(x=>x.status==='fulfilled').length+' ảnh đã tải.';e.target.value=''; });
+ document.getElementById('pageImageAddUrl').addEventListener('click',()=>{const input=document.getElementById('pageImageUrl');if(input.value.trim()){selected.push(input.value.trim());input.value='';draw();}});
+ async function save(reset) { const all=getAll().filter(x=>x.key!==key());if(!reset){if(!selected.length){alert('Hãy thêm ít nhất một ảnh hoặc chọn Khôi phục ảnh gốc.');return;}all.push({key:key(),images:selected.slice()});}status.textContent='Đang lưu...';try{ const base=(window.LNN_API_BASE||'').replace(/\/$/,'');if(base){const r=await fetch(base+'/api/data/pageImages',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:all})});if(!r.ok)throw Error('API '+r.status);}localStorage.setItem('lnn_pageImages',JSON.stringify(all));status.textContent='Đã lưu. Tải lại trang để xem thay đổi.';if(reset)loadSlot();renderTetCards();}catch(e){status.textContent='Lưu thất bại: '+e.message;} }
+ document.getElementById('pageImageSave').addEventListener('click',()=>save(false));document.getElementById('pageImageReset').addEventListener('click',()=>save(true));
+})();
 </script>
 </body>
 </html>

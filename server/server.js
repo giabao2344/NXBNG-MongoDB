@@ -92,6 +92,7 @@ const siteDataSchema = new mongoose.Schema(
       type: Array,
       default: []
     },
+    pageImages: { type: Array, default: [] },
 
     updatedAt: {
       type: Date,
@@ -131,7 +132,8 @@ const collections = [
   'products',
   'posts',
   'featured',
-  'banners'
+  'banners',
+  'pageImages'
 ];
 
 // ==================================================
