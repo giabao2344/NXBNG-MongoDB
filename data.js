@@ -282,6 +282,49 @@ function lnnFileToDataUrl(file, maxWidth, quality) {
 }
 
 
+/* ---------- Ghi cache localStorage an toàn ----------
+   localStorage chỉ là bộ nhớ đệm (~5MB). Nếu đầy thì bỏ qua, dữ liệu gốc nằm ở MongoDB. */
+window.__lnnMem = window.__lnnMem || {};
+function lnnSafeSetItem(key, value) {
+    window.__lnnMem[key] = value; // luôn giữ bản mới nhất trong RAM
+    try {
+        localStorage.setItem(key, value);
+        return true;
+    } catch (e) {
+        console.warn('[LNN] localStorage đầy, dùng bộ nhớ tạm cho', key);
+        return false;
+    }
+}
+function lnnSafeGetItem(key) {
+    if (Object.prototype.hasOwnProperty.call(window.__lnnMem, key)) return window.__lnnMem[key];
+    return localStorage.getItem(key);
+}
+
+/* ---------- Tải ảnh lên server (MongoDB) -> trả về URL ngắn ----------
+   Nếu chưa cấu hình LNN_API_BASE thì quay về base64 như cũ. */
+function lnnUploadImage(file, maxWidth, quality) {
+    const base = (window.LNN_API_BASE || '').replace(/\/$/, '');
+    if (!base || !window.fetch) return lnnFileToDataUrl(file, maxWidth, quality);
+
+    return lnnFileToDataUrl(file, maxWidth, quality).then(dataUrl =>
+        fetch(dataUrl).then(r => r.blob()).then(blob =>
+            fetch(base + '/api/images', {
+                method: 'POST',
+                headers: { 'Content-Type': blob.type || 'image/jpeg' },
+                body: blob
+            })
+        )
+    ).then(async res => {
+        if (!res.ok) {
+            let msg = 'Upload ảnh lỗi (' + res.status + ')';
+            try { const b = await res.json(); if (b && b.error) msg = b.error; } catch (_) {}
+            throw new Error(msg);
+        }
+        return res.json();
+    }).then(body => body.url);
+}
+
+
 /* ---------- Đồng bộ MongoDB (tùy chọn, dùng qua REST API) ---------- */
 function lnnRemoteSave(collection, list) {
     try {
@@ -311,9 +354,9 @@ function lnnRemoteSave(collection, list) {
 /* ---------- Dịch vụ ---------- */
 function lnnGetServices() {
     try {
-        const raw = localStorage.getItem(LNN_KEYS.services);
+        const raw = lnnSafeGetItem(LNN_KEYS.services);
         if (raw === null) {
-            localStorage.setItem(LNN_KEYS.services, JSON.stringify(LNN_DEFAULT_SERVICES));
+            lnnSafeSetItem(LNN_KEYS.services, JSON.stringify(LNN_DEFAULT_SERVICES));
             return LNN_DEFAULT_SERVICES.slice();
         }
         return JSON.parse(raw) || [];
@@ -323,7 +366,7 @@ function lnnGetServices() {
 }
 
 function lnnSaveServices(list) {
-    localStorage.setItem(LNN_KEYS.services, JSON.stringify(list || []));
+    lnnSafeSetItem(LNN_KEYS.services, JSON.stringify(list || []));
     return lnnRemoteSave('services', list || []);
 }
 
@@ -334,9 +377,9 @@ function lnnGetServiceById(id) {
 /* ---------- Mục sản phẩm (thuộc 1 dịch vụ) ---------- */
 function lnnGetGroups() {
     try {
-        const raw = localStorage.getItem(LNN_KEYS.groups);
+        const raw = lnnSafeGetItem(LNN_KEYS.groups);
         if (raw === null) {
-            localStorage.setItem(LNN_KEYS.groups, JSON.stringify(LNN_DEFAULT_GROUPS));
+            lnnSafeSetItem(LNN_KEYS.groups, JSON.stringify(LNN_DEFAULT_GROUPS));
             return LNN_DEFAULT_GROUPS.slice();
         }
         return JSON.parse(raw) || [];
@@ -346,7 +389,7 @@ function lnnGetGroups() {
 }
 
 function lnnSaveGroups(list) {
-    localStorage.setItem(LNN_KEYS.groups, JSON.stringify(list || []));
+    lnnSafeSetItem(LNN_KEYS.groups, JSON.stringify(list || []));
     return lnnRemoteSave('groups', list || []);
 }
 
@@ -361,9 +404,9 @@ function lnnGetGroupById(id) {
 /* ---------- Sản phẩm (thuộc 1 mục sản phẩm) ---------- */
 function lnnGetProducts() {
     try {
-        const raw = localStorage.getItem(LNN_KEYS.products);
+        const raw = lnnSafeGetItem(LNN_KEYS.products);
         if (raw === null) {
-            localStorage.setItem(LNN_KEYS.products, JSON.stringify(LNN_DEFAULT_PRODUCTS));
+            lnnSafeSetItem(LNN_KEYS.products, JSON.stringify(LNN_DEFAULT_PRODUCTS));
             return LNN_DEFAULT_PRODUCTS.slice();
         }
         return JSON.parse(raw) || [];
@@ -374,7 +417,7 @@ function lnnGetProducts() {
 
 function lnnSaveProducts(list) {
     const safeList = list || [];
-    localStorage.setItem(LNN_KEYS.products, JSON.stringify(safeList));
+    lnnSafeSetItem(LNN_KEYS.products, JSON.stringify(safeList));
     return lnnRemoteSave('products', safeList);
 }
 
@@ -397,9 +440,9 @@ function lnnGetProductYears() {
 /* ---------- Sản phẩm nổi bật trang chủ (mục "Lịch Mới 2027") ---------- */
 function lnnGetFeatured() {
     try {
-        const raw = localStorage.getItem(LNN_KEYS.featured);
+        const raw = lnnSafeGetItem(LNN_KEYS.featured);
         if (raw === null) {
-            localStorage.setItem(LNN_KEYS.featured, JSON.stringify(LNN_DEFAULT_FEATURED));
+            lnnSafeSetItem(LNN_KEYS.featured, JSON.stringify(LNN_DEFAULT_FEATURED));
             return LNN_DEFAULT_FEATURED.slice();
         }
         return JSON.parse(raw) || [];
@@ -409,7 +452,7 @@ function lnnGetFeatured() {
 }
 
 function lnnSaveFeatured(list) {
-    localStorage.setItem(LNN_KEYS.featured, JSON.stringify(list || []));
+    lnnSafeSetItem(LNN_KEYS.featured, JSON.stringify(list || []));
     return lnnRemoteSave('featured', list || []);
 }
 
@@ -420,9 +463,9 @@ function lnnGetFeaturedById(id) {
 /* ---------- Banner trang chủ (slide ảnh lớn, quản lý trong Admin) ---------- */
 function lnnGetBanners() {
     try {
-        const raw = localStorage.getItem(LNN_KEYS.banners);
+        const raw = lnnSafeGetItem(LNN_KEYS.banners);
         if (raw === null) {
-            localStorage.setItem(LNN_KEYS.banners, JSON.stringify(LNN_DEFAULT_BANNERS));
+            lnnSafeSetItem(LNN_KEYS.banners, JSON.stringify(LNN_DEFAULT_BANNERS));
             return LNN_DEFAULT_BANNERS.slice();
         }
         const list = JSON.parse(raw);
@@ -433,7 +476,7 @@ function lnnGetBanners() {
 }
 
 function lnnSaveBanners(list) {
-    localStorage.setItem(LNN_KEYS.banners, JSON.stringify(list || []));
+    lnnSafeSetItem(LNN_KEYS.banners, JSON.stringify(list || []));
     return lnnRemoteSave('banners', list || []);
 }
 
@@ -466,9 +509,9 @@ function lnnDeleteGroupCascade(groupId) {
 /* ---------- Bài viết Blog ---------- */
 function lnnGetPosts() {
     try {
-        const raw = localStorage.getItem(LNN_KEYS.posts);
+        const raw = lnnSafeGetItem(LNN_KEYS.posts);
         if (raw === null) {
-            localStorage.setItem(LNN_KEYS.posts, JSON.stringify(LNN_DEFAULT_POSTS));
+            lnnSafeSetItem(LNN_KEYS.posts, JSON.stringify(LNN_DEFAULT_POSTS));
             return LNN_DEFAULT_POSTS.slice();
         }
         return JSON.parse(raw) || [];
@@ -478,7 +521,7 @@ function lnnGetPosts() {
 }
 
 function lnnSavePosts(list) {
-    localStorage.setItem(LNN_KEYS.posts, JSON.stringify(list || []));
+    lnnSafeSetItem(LNN_KEYS.posts, JSON.stringify(list || []));
     return lnnRemoteSave('posts', list || []);
 }
 

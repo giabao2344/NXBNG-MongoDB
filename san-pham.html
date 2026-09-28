@@ -20,6 +20,16 @@
         .service-pill.active { background: #0f172a; color: #fff; border-color: #0f172a; }
         .product-modal-backdrop { background: rgba(15,23,42,.6); backdrop-filter: blur(2px); }
     </style>
+
+<style>
+/* Facebook-like fullscreen image viewer */
+#imageViewer.image-viewer-open { display: block; }
+#imageViewerStage { touch-action: none; }
+#imageViewerImage.is-zoomed { cursor: grab; }
+#imageViewerImage.is-zoomed:active { cursor: grabbing; }
+body.image-viewer-lock { overflow: hidden !important; }
+</style>
+
 </head>
 <body class="bg-white">
 
@@ -187,7 +197,7 @@
         <button onclick="closeProductDetail()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/90 hover:bg-white shadow flex items-center justify-center z-20">✕</button>
 
         <div class="relative bg-gray-100">
-            <img id="pdImage" src="" alt="" class="w-full h-72 object-cover bg-gray-100">
+            <img id="pdImage" src="" alt="" class="w-full h-72 object-contain bg-gray-100 cursor-zoom-in">
             <button id="pdPrev" onclick="pdShowImage(pdCurrentIndex - 1)" class="hidden absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white shadow flex items-center justify-center text-lg">‹</button>
             <button id="pdNext" onclick="pdShowImage(pdCurrentIndex + 1)" class="hidden absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white shadow flex items-center justify-center text-lg">›</button>
             <span id="pdCounter" class="hidden absolute bottom-3 right-3 bg-slate-900/80 text-white text-[11px] font-bold px-2.5 py-1 rounded-full"></span>
@@ -200,6 +210,24 @@
             <p id="pdDesc" class="text-gray-500 leading-relaxed mb-8"></p>
             <a href="lien-he.html" class="btn-primary !px-8 !py-3">Nhận tư vấn / báo giá sản phẩm này</a>
         </div>
+    </div>
+</div>
+
+<!-- ========== FULLSCREEN IMAGE VIEWER ========== -->
+<div id="imageViewer" class="fixed inset-0 z-[500] hidden bg-black/95 select-none" role="dialog" aria-modal="true" aria-label="Xem ảnh toàn màn hình">
+    <button id="imageViewerClose" type="button" aria-label="Đóng" class="absolute top-5 right-5 z-30 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white text-2xl flex items-center justify-center backdrop-blur transition">×</button>
+    <button id="imageViewerPrev" type="button" aria-label="Ảnh trước" class="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-30 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-white/20 text-white text-4xl leading-none flex items-center justify-center backdrop-blur transition">‹</button>
+    <button id="imageViewerNext" type="button" aria-label="Ảnh tiếp theo" class="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-30 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-white/20 text-white text-4xl leading-none flex items-center justify-center backdrop-blur transition">›</button>
+
+    <div id="imageViewerStage" class="absolute inset-0 flex items-center justify-center p-4 md:p-12 overflow-hidden">
+        <img id="imageViewerImage" src="" alt="" class="max-w-full max-h-full w-auto h-auto object-contain rounded-sm cursor-zoom-in transition-transform duration-200" draggable="false">
+    </div>
+
+    <div class="absolute left-1/2 -translate-x-1/2 bottom-5 z-30 flex items-center gap-2 bg-black/50 rounded-full px-2 py-2 backdrop-blur">
+        <button id="imageViewerZoomOut" type="button" aria-label="Thu nhỏ" class="w-9 h-9 rounded-full text-white hover:bg-white/15 text-xl">−</button>
+        <span id="imageViewerCounter" class="min-w-16 text-center text-white text-sm font-semibold"></span>
+        <button id="imageViewerZoomIn" type="button" aria-label="Phóng to" class="w-9 h-9 rounded-full text-white hover:bg-white/15 text-xl">+</button>
+        <button id="imageViewerReset" type="button" aria-label="Đặt lại kích thước" class="px-3 h-9 rounded-full text-white hover:bg-white/15 text-xs font-semibold">Đặt lại</button>
     </div>
 </div>
 
@@ -390,6 +418,110 @@
         wrap.innerHTML = pdImages.map((src, i) => `
             <img src="${lnnEscape(src)}" onclick="pdShowImage(${i})" class="pd-thumb w-16 h-16 rounded-xl object-cover bg-gray-100 cursor-pointer shrink-0 opacity-50" onerror="this.style.opacity=0.2">`).join('');
     }
+
+
+    /* ---------- Viewer ảnh toàn màn hình kiểu Facebook ---------- */
+    let ivZoom = 1;
+    let ivStartX = 0;
+    let ivStartY = 0;
+    let ivMoveX = 0;
+    let ivMoveY = 0;
+    let ivDragging = false;
+
+    function ivOpen(index = pdCurrentIndex) {
+        if (!pdImages.length) return;
+        pdCurrentIndex = (index + pdImages.length) % pdImages.length;
+        ivZoom = 1;
+        ivMoveX = 0;
+        ivMoveY = 0;
+        const viewer = document.getElementById('imageViewer');
+        viewer.classList.remove('hidden');
+        viewer.classList.add('image-viewer-open');
+        document.body.classList.add('image-viewer-lock');
+        ivRender();
+    }
+
+    function ivClose() {
+        const viewer = document.getElementById('imageViewer');
+        viewer.classList.add('hidden');
+        viewer.classList.remove('image-viewer-open');
+        document.body.classList.remove('image-viewer-lock');
+        ivZoom = 1;
+        ivMoveX = 0;
+        ivMoveY = 0;
+    }
+
+    function ivRender() {
+        if (!pdImages.length) return;
+        const img = document.getElementById('imageViewerImage');
+        img.src = pdImages[pdCurrentIndex];
+        img.alt = document.getElementById('pdTitle').textContent || 'Ảnh sản phẩm';
+        img.style.transform = `translate(${ivMoveX}px, ${ivMoveY}px) scale(${ivZoom})`;
+        img.classList.toggle('is-zoomed', ivZoom > 1);
+        document.getElementById('imageViewerCounter').textContent = `${pdCurrentIndex + 1} / ${pdImages.length}`;
+        document.getElementById('imageViewerPrev').classList.toggle('hidden', pdImages.length <= 1);
+        document.getElementById('imageViewerNext').classList.toggle('hidden', pdImages.length <= 1);
+    }
+
+    function ivGo(delta) {
+        if (!pdImages.length) return;
+        pdCurrentIndex = (pdCurrentIndex + delta + pdImages.length) % pdImages.length;
+        ivZoom = 1;
+        ivMoveX = 0;
+        ivMoveY = 0;
+        pdShowImage(pdCurrentIndex);
+        ivRender();
+    }
+
+    function ivSetZoom(value) {
+        ivZoom = Math.max(1, Math.min(4, value));
+        if (ivZoom === 1) { ivMoveX = 0; ivMoveY = 0; }
+        ivRender();
+    }
+
+    document.getElementById('pdImage').addEventListener('click', () => ivOpen(pdCurrentIndex));
+    document.getElementById('imageViewerClose').addEventListener('click', ivClose);
+    document.getElementById('imageViewerPrev').addEventListener('click', () => ivGo(-1));
+    document.getElementById('imageViewerNext').addEventListener('click', () => ivGo(1));
+    document.getElementById('imageViewerZoomIn').addEventListener('click', () => ivSetZoom(ivZoom + 0.5));
+    document.getElementById('imageViewerZoomOut').addEventListener('click', () => ivSetZoom(ivZoom - 0.5));
+    document.getElementById('imageViewerReset').addEventListener('click', () => ivSetZoom(1));
+    document.getElementById('imageViewerStage').addEventListener('click', (e) => {
+        if (e.target.id === 'imageViewerStage') ivClose();
+    });
+    document.getElementById('imageViewerImage').addEventListener('dblclick', () => {
+        ivSetZoom(ivZoom > 1 ? 1 : 2);
+    });
+    document.getElementById('imageViewerImage').addEventListener('wheel', (e) => {
+        e.preventDefault();
+        ivSetZoom(ivZoom + (e.deltaY < 0 ? 0.25 : -0.25));
+    }, { passive: false });
+
+    document.getElementById('imageViewerImage').addEventListener('pointerdown', (e) => {
+        if (ivZoom <= 1) return;
+        ivDragging = true;
+        ivStartX = e.clientX - ivMoveX;
+        ivStartY = e.clientY - ivMoveY;
+        e.currentTarget.setPointerCapture(e.pointerId);
+    });
+    document.getElementById('imageViewerImage').addEventListener('pointermove', (e) => {
+        if (!ivDragging) return;
+        ivMoveX = e.clientX - ivStartX;
+        ivMoveY = e.clientY - ivStartY;
+        ivRender();
+    });
+    document.getElementById('imageViewerImage').addEventListener('pointerup', () => { ivDragging = false; });
+    document.getElementById('imageViewerImage').addEventListener('pointercancel', () => { ivDragging = false; });
+
+    document.addEventListener('keydown', (e) => {
+        const viewer = document.getElementById('imageViewer');
+        if (viewer.classList.contains('hidden')) return;
+        if (e.key === 'Escape') ivClose();
+        else if (e.key === 'ArrowLeft') ivGo(-1);
+        else if (e.key === 'ArrowRight') ivGo(1);
+        else if (e.key === '+' || e.key === '=') ivSetZoom(ivZoom + 0.5);
+        else if (e.key === '-') ivSetZoom(ivZoom - 0.5);
+    });
 
     function closeProductDetail() {
         document.getElementById('productDetailModal').classList.add('hidden');

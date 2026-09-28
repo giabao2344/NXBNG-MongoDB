@@ -785,10 +785,12 @@ function lnnSetupGalleryPicker(fileInputId, hiddenInputId, thumbsWrapId, manualT
     fileInput.addEventListener('change', function (e) {
         const files = Array.from(e.target.files || []);
         if (!files.length) return;
-        Promise.all(files.map(f => lnnFileToDataUrl(f, 1600, 0.82).catch(() => null)))
+        const errors = [];
+        Promise.all(files.map(f => lnnUploadImage(f, 1600, 0.82).catch(err => { errors.push(err.message || 'lỗi'); return null; })))
             .then(results => {
-                results.filter(Boolean).forEach(dataUrl => images.push(dataUrl));
+                results.filter(Boolean).forEach(url => images.push(url));
                 sync();
+                if (errors.length) alert('Có ' + errors.length + ' ảnh không tải lên được:\n' + errors[0]);
             });
         fileInput.value = '';
     });
@@ -979,11 +981,11 @@ function lnnSetupImagePicker(fileInputId, hiddenInputId, previewImgId, previewEm
         const file = e.target.files[0];
         if (!file) return;
         previewEmpty.textContent = 'Đang xử lý ảnh...';
-        lnnFileToDataUrl(file, 1600, 0.82).then(dataUrl => {
+        lnnUploadImage(file, 1600, 0.82).then(dataUrl => {
             hidden.value = dataUrl;
             updatePreview();
-        }).catch(() => {
-            alert('Không đọc được ảnh này, vui lòng thử một ảnh khác (jpg/png).');
+        }).catch(err => {
+            alert('Không tải được ảnh: ' + ((err && err.message) || 'vui lòng thử ảnh khác (jpg/png).'));
             previewEmpty.textContent = 'Chưa có ảnh';
         });
         fileInput.value = '';

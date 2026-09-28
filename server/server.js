@@ -45,6 +45,12 @@ app.use(express.json({
   limit: '10mb'
 }));
 
+// Ảnh upload dạng nhị phân (đã nén phía trình duyệt)
+const rawImage = express.raw({
+  type: ['image/*'],
+  limit: '8mb'
+});
+
 // ===============================
 // MONGOOSE SCHEMA
 // ===============================
@@ -101,6 +107,22 @@ const SiteData = mongoose.model(
   'SiteData',
   siteDataSchema
 );
+
+// ===============================
+// ẢNH (lưu riêng trong MongoDB, sản phẩm chỉ giữ đường dẫn)
+// ===============================
+
+const imageSchema = new mongoose.Schema(
+  {
+    contentType: { type: String, required: true },
+    data: { type: Buffer, required: true },
+    size: Number,
+    createdAt: { type: Date, default: Date.now }
+  },
+  { collection: 'site_images' }
+);
+
+const SiteImage = mongoose.model('SiteImage', imageSchema);
 
 // Các trường dữ liệu được phép đồng bộ
 const collections = [
@@ -188,6 +210,56 @@ app.get('/api/debug', async (_req, res) => {
       error: 'Không thể kiểm tra MongoDB',
       message: err.message
     });
+  }
+});
+
+// ==================================================
+// API UPLOAD ẢNH
+// ==================================================
+// POST /api/images  (body = file ảnh, Content-Type: image/*)
+// => { ok: true, url: 'https://.../api/images/<id>' }
+
+app.post('/api/images', rawImage, async (req, res) => {
+  try {
+    if (!Buffer.isBuffer(req.body) || !req.body.length) {
+      return res.status(400).json({ error: 'Không nhận được dữ liệu ảnh' });
+    }
+
+    const contentType = req.headers['content-type'] || 'image/jpeg';
+
+    const img = await SiteImage.create({
+      contentType,
+      data: req.body,
+      size: req.body.length
+    });
+
+    const proto = req.headers['x-forwarded-proto'] || req.protocol;
+    const url = proto + '://' + req.get('host') + '/api/images/' + img._id;
+
+    res.json({ ok: true, id: String(img._id), url });
+  } catch (err) {
+    console.error('Upload image error:', err);
+    res.status(500).json({ error: 'Không thể lưu ảnh', message: err.message });
+  }
+});
+
+app.get('/api/images/:id', async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(404).end();
+    }
+
+    const img = await SiteImage.findById(req.params.id).lean();
+
+    if (!img) return res.status(404).end();
+
+    res.set('Content-Type', img.contentType);
+    res.set('Cache-Control', 'public, max-age=31536000, immutable');
+    res.set('Cross-Origin-Resource-Policy', 'cross-origin');
+    res.send(img.data.buffer ? Buffer.from(img.data.buffer) : img.data);
+  } catch (err) {
+    console.error('Get image error:', err);
+    res.status(500).end();
   }
 });
 
